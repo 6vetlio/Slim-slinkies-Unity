@@ -28,12 +28,30 @@ public class HudController : MonoBehaviour
         TMP_Text newMoneyPopupPrefab,
         Transform newMoneyPopupParent)
     {
-        moneyText = newMoneyText;
-        passengersText = newPassengersText;
-        incomeText = newIncomeText;
-        onboardVipText = newOnboardVipText;
-        moneyPopupPrefab = newMoneyPopupPrefab;
-        moneyPopupParent = newMoneyPopupParent;
+        if (moneyText == null)
+        {
+            moneyText = newMoneyText;
+        }
+        if (passengersText == null)
+        {
+            passengersText = newPassengersText;
+        }
+        if (incomeText == null)
+        {
+            incomeText = newIncomeText;
+        }
+        if (onboardVipText == null)
+        {
+            onboardVipText = newOnboardVipText;
+        }
+        if (moneyPopupPrefab == null)
+        {
+            moneyPopupPrefab = newMoneyPopupPrefab;
+        }
+        if (moneyPopupParent == null)
+        {
+            moneyPopupParent = newMoneyPopupParent;
+        }
         TrySubscribeToGameManager();
         Refresh();
     }

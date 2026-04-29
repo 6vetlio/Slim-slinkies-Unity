@@ -28,11 +28,26 @@ public class VipMarkerUI : MonoBehaviour
             travelButton.onClick.RemoveListener(HandleTravelClicked);
         }
 
-        nameText = newNameText;
-        destinationText = newDestinationText;
-        timerText = newTimerText;
-        portraitImage = newPortraitImage;
-        travelButton = newTravelButton;
+        if (nameText == null)
+        {
+            nameText = newNameText;
+        }
+        if (destinationText == null)
+        {
+            destinationText = newDestinationText;
+        }
+        if (timerText == null)
+        {
+            timerText = newTimerText;
+        }
+        if (portraitImage == null)
+        {
+            portraitImage = newPortraitImage;
+        }
+        if (travelButton == null)
+        {
+            travelButton = newTravelButton;
+        }
         followStationInWorld = newFollowStationInWorld;
 
         if (travelButton != null)

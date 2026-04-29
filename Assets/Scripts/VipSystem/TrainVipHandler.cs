@@ -5,7 +5,8 @@ public class TrainVipHandler : MonoBehaviour
     [SerializeField] private Transform trainTransform;
     [SerializeField] private float travelSpeed = 8f;
     [SerializeField] private Station startingStation;
-    [SerializeField] private bool moveTrainTransform = true;
+    [SerializeField] private bool moveTrainTransform = false;
+    [SerializeField] private bool debugVipLogs = true;
 
     public Station CurrentStation { get; private set; }
     public Station TargetStation { get; private set; }
@@ -13,8 +14,14 @@ public class TrainVipHandler : MonoBehaviour
 
     public void Configure(Transform newTrainTransform, Station newStartingStation, bool shouldMoveTrainTransform)
     {
-        trainTransform = newTrainTransform;
-        startingStation = newStartingStation;
+        if (trainTransform == null)
+        {
+            trainTransform = newTrainTransform;
+        }
+        if (startingStation == null)
+        {
+            startingStation = newStartingStation;
+        }
         moveTrainTransform = shouldMoveTrainTransform;
 
         if (startingStation != null && GameManager.Instance != null)
@@ -25,18 +32,16 @@ public class TrainVipHandler : MonoBehaviour
 
     private void Start()
     {
+        moveTrainTransform = false;
+
         if (trainTransform == null)
         {
             trainTransform = transform;
         }
 
-        if (startingStation != null)
+        if (startingStation != null && GameManager.Instance != null)
         {
             ArriveAtStation(startingStation);
-            if (moveTrainTransform && trainTransform != null)
-            {
-                trainTransform.position = startingStation.transform.position;
-            }
         }
     }
 
@@ -62,22 +67,40 @@ public class TrainVipHandler : MonoBehaviour
     {
         if (station == null || station == CurrentStation)
         {
+            if (debugVipLogs)
+            {
+                Debug.Log("TrainVipHandler: RequestTravelTo ignored | requested=" + (station != null ? station.DisplayName : "null") + " | current=" + (CurrentStation != null ? CurrentStation.DisplayName : "none"));
+            }
             return;
         }
 
         TargetStation = station;
+
+        if (debugVipLogs)
+        {
+            Debug.Log("TrainVipHandler: target station set | target=" + TargetStation.DisplayName + " | current=" + (CurrentStation != null ? CurrentStation.DisplayName : "none"));
+        }
     }
 
     public void ArriveAtStation(Station station)
     {
         if (station == null || GameManager.Instance == null)
         {
+            if (debugVipLogs)
+            {
+                Debug.LogWarning("TrainVipHandler: ArriveAtStation ignored | station=" + (station != null ? station.DisplayName : "null") + " | gameManager=" + (GameManager.Instance != null ? "present" : "missing"));
+            }
             return;
         }
 
         CurrentStation = station;
         TargetStation = null;
         GameManager.Instance.SetCurrentStation(station);
+
+        if (debugVipLogs)
+        {
+            Debug.Log("TrainVipHandler: arrived at station | current=" + CurrentStation.DisplayName + " | stationId=" + CurrentStation.StationId);
+        }
 
         if (GameManager.Instance.TryDeliverOnboardVipAtStation(station.StationId, out VipPassenger deliveredVip))
         {

@@ -1,21 +1,77 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TransportSwitcher : MonoBehaviour
 {
     public GameObject trainImage;
     public GameObject hyperloopImage;
+    public GameObject tubeLayer;
+
+    public GameObject GetActiveTransportVisual()
+    {
+        if (hyperloopImage != null && hyperloopImage.activeInHierarchy)
+        {
+            return hyperloopImage;
+        }
+
+        return trainImage;
+    }
+
+    private void Start()
+    {
+        SwitchToTrain();
+    }
 
     public void SwitchToTrain()
     {
-        trainImage.SetActive(true);
-        hyperloopImage.SetActive(false);
+        if (trainImage != null)
+        {
+            trainImage.SetActive(true);
+            SetTransportVisualsActive(trainImage, true);
+        }
+
+        if (hyperloopImage != null)
+        {
+            hyperloopImage.SetActive(false);
+        }
+
+        if (tubeLayer != null)
+        {
+            tubeLayer.SetActive(false);
+        }
     }
 
     public void SwitchToHyperloop()
     {
-        Debug.Log("train: " + trainImage.name + " hyperloop: " + hyperloopImage.name);
-        trainImage.SetActive(false);
-        hyperloopImage.SetActive(true);
-        Debug.Log("hyperloop active: " + hyperloopImage.activeSelf);
+        if (trainImage != null)
+        {
+            trainImage.SetActive(true);
+            SetTransportVisualsActive(trainImage, false);
+        }
+
+        if (hyperloopImage != null)
+        {
+            hyperloopImage.SetActive(true);
+        }
+
+        if (tubeLayer != null)
+        {
+            tubeLayer.SetActive(true);
+        }
+    }
+
+    private void SetTransportVisualsActive(GameObject transportObject, bool active)
+    {
+        Image image = transportObject.GetComponent<Image>();
+        if (image != null)
+        {
+            image.enabled = active;
+        }
+
+        SpriteRenderer spriteRenderer = transportObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.enabled = active;
+        }
     }
 }

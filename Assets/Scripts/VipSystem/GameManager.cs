@@ -16,12 +16,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int regularPassengers = 50;
     [SerializeField] private float revenuePerPassengerPerSecond = 1f;
 
+    [Header("Upgrade")]
+    [SerializeField] private float upgradeCost = 1000f;
+    [SerializeField] private int upgradedPassengerCount = 150;
+
     [Header("Train State")]
     [SerializeField] private string currentStationId = "";
 
     public float Money { get; private set; }
     public int RegularPassengers => regularPassengers;
     public float PassiveIncomePerSecond => regularPassengers * revenuePerPassengerPerSecond;
+    public float UpgradeCost => upgradeCost;
+    public bool HasUpgraded { get; private set; }
+    public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost;
     public string CurrentStationId => currentStationId;
     public VipPassenger CurrentOnboardVip { get; private set; }
     public IReadOnlyList<VipPassenger> WaitingVips => waitingVips;
@@ -53,6 +60,12 @@ public class GameManager : MonoBehaviour
 
     public void SetVipTimersPaused(bool paused)
     {
+        if (HasUpgraded)
+        {
+            VipTimersPaused = false;
+            return;
+        }
+
         VipTimersPaused = paused;
     }
 
@@ -147,6 +160,21 @@ public class GameManager : MonoBehaviour
     {
         revenuePerPassengerPerSecond = Mathf.Max(0f, newRevenuePerPassenger);
         MoneyChanged?.Invoke();
+    }
+
+    public bool TryBuyUpgrade()
+    {
+        if (!CanBuyUpgrade)
+        {
+            return false;
+        }
+
+        Money -= upgradeCost;
+        regularPassengers = Mathf.Max(0, upgradedPassengerCount);
+        HasUpgraded = true;
+        SetVipTimersPaused(false);
+        MoneyChanged?.Invoke();
+        return true;
     }
 
     private void AddPassiveIncome(float deltaTime)

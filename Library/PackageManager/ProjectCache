@@ -1,6 +1,6 @@
 m_ProjectFiles:
   m_ManifestFileStatus:
-    m_FilePath: /Users/6vetlio/My project (1)/Packages/manifest.json
+    m_FilePath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Packages/manifest.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
@@ -8,7 +8,7 @@ m_ProjectFiles:
       ticks: 639122729410000000
     m_Hash: 4095357824
   m_LockFileStatus:
-    m_FilePath: /Users/6vetlio/My project (1)/Packages/packages-lock.json
+    m_FilePath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
@@ -19,7 +19,7 @@ m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
   m_LocalFileStatus: []
-m_ProjectPath: /Users/6vetlio/My project (1)/Packages
+m_ProjectPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Packages
 m_EditorVersion: 6000.0.62f1 (f99f05b3e950)
 m_ResolvedPackages:
 - packageId: com.gamelovers.mcp-unity@https://github.com/CoderGamester/mcp-unity.git
@@ -27,7 +27,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.2.0
   source: 5
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.gamelovers.mcp-unity@6e5904b0eb78
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.gamelovers.mcp-unity@6e5904b0eb78
   assetPath: Packages/com.gamelovers.mcp-unity
   name: com.gamelovers.mcp-unity
   displayName: MCP Unity Server
@@ -119,7 +119,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.2d.sprite@897b7eecf04e
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.2d.sprite@897b7eecf04e
   assetPath: Packages/com.unity.2d.sprite
   name: com.unity.2d.sprite
   displayName: 2D Sprite
@@ -198,7 +198,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 2.10.0
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.collab-proxy@1e5e48aff19d
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.collab-proxy@1e5e48aff19d
   assetPath: Packages/com.unity.collab-proxy
   name: com.unity.collab-proxy
   displayName: Unity Version Control
@@ -398,7 +398,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.2
   source: 2
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.feature.development@767aadbc6eb7
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.feature.development@767aadbc6eb7
   assetPath: Packages/com.unity.feature.development
   name: com.unity.feature.development
   displayName: Engineering
@@ -508,7 +508,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.14.2
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.inputsystem@be6c4fd0abf5
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.inputsystem@be6c4fd0abf5
   assetPath: Packages/com.unity.inputsystem
   name: com.unity.inputsystem
   displayName: Input System
@@ -673,7 +673,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.multiplayer.center@f3fb577b3546
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.multiplayer.center@f3fb577b3546
   assetPath: Packages/com.unity.multiplayer.center
   name: com.unity.multiplayer.center
   displayName: Multiplayer Center
@@ -766,7 +766,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.8.9
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.timeline@6b9e48457ddb
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.timeline@6b9e48457ddb
   assetPath: Packages/com.unity.timeline
   name: com.unity.timeline
   displayName: Timeline
@@ -969,7 +969,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 2.0.0
   source: 2
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.ugui@befc7af3e8e5
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.ugui@befc7af3e8e5
   assetPath: Packages/com.unity.ugui
   name: com.unity.ugui
   displayName: Unity UI
@@ -1064,7 +1064,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.9.7
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.visualscripting@6279e2b7c485
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.visualscripting@6279e2b7c485
   assetPath: Packages/com.unity.visualscripting
   name: com.unity.visualscripting
   displayName: Visual Scripting
@@ -3929,7 +3929,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 2.0.25
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.ide.visualstudio@74aa435fc4bb
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.ide.visualstudio@74aa435fc4bb
   assetPath: Packages/com.unity.ide.visualstudio
   name: com.unity.ide.visualstudio
   displayName: Visual Studio Editor
@@ -4046,7 +4046,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 3.0.38
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.ide.rider@1f60b3138684
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.ide.rider@1f60b3138684
   assetPath: Packages/com.unity.ide.rider
   name: com.unity.ide.rider
   displayName: JetBrains Rider Editor
@@ -4180,7 +4180,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 1.0.0
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.editorcoroutines@7d48783e7b8c
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.editorcoroutines@7d48783e7b8c
   assetPath: Packages/com.unity.editorcoroutines
   name: com.unity.editorcoroutines
   displayName: Editor Coroutines
@@ -4270,7 +4270,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 1.2.3
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.performance.profile-analyzer@a68e7bc84997
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.performance.profile-analyzer@a68e7bc84997
   assetPath: Packages/com.unity.performance.profile-analyzer
   name: com.unity.performance.profile-analyzer
   displayName: Profile Analyzer
@@ -4376,7 +4376,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 1.6.0
   source: 2
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.test-framework@da1fb3d479aa
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.test-framework@da1fb3d479aa
   assetPath: Packages/com.unity.test-framework
   name: com.unity.test-framework
   displayName: Test Framework
@@ -4465,7 +4465,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 1.2.6
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.testtools.codecoverage@205a02cbcb39
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.testtools.codecoverage@205a02cbcb39
   assetPath: Packages/com.unity.testtools.codecoverage
   name: com.unity.testtools.codecoverage
   displayName: Code Coverage
@@ -4601,7 +4601,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 3.2.1
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.nuget.newtonsoft-json@74deb55db2a0
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.nuget.newtonsoft-json@74deb55db2a0
   assetPath: Packages/com.unity.nuget.newtonsoft-json
   name: com.unity.nuget.newtonsoft-json
   displayName: Newtonsoft Json
@@ -4662,7 +4662,7 @@ m_ResolvedPackages:
       violations: []
   hideInEditor: 1
   entitlements:
-    licensingModel: 0
+    licensingModel: 1
   isAssetStorePackage: 0
   datePublishedTicks: 638186318800000000
   documentationUrl: 
@@ -4703,7 +4703,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 2.1.0
   source: 1
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.settings-manager@41738c275190
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.settings-manager@41738c275190
   assetPath: Packages/com.unity.settings-manager
   name: com.unity.settings-manager
   displayName: Settings Manager
@@ -4791,7 +4791,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 2.0.5
   source: 2
-  resolvedPath: /Users/6vetlio/My project (1)/Library/PackageCache/com.unity.ext.nunit@031a54704bff
+  resolvedPath: /Users/6vetlio/My project (1)/Slim slinkies Unity/Library/PackageCache/com.unity.ext.nunit@031a54704bff
   assetPath: Packages/com.unity.ext.nunit
   name: com.unity.ext.nunit
   displayName: Custom NUnit

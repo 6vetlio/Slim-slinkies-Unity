@@ -27,8 +27,8 @@ public class VipSpawnManager : MonoBehaviour
     [SerializeField] private float chanceToAllowThirdVip = 0.15f;
 
     [Header("VIP Rules")]
-    [SerializeField] private float pickupSeconds = 20f;
-    [SerializeField] private float deliverySeconds = 35f;
+    [SerializeField] private float pickupSeconds = 60f;
+    [SerializeField] private float deliverySeconds = 90f;
     [SerializeField] private int deliveryReward = 350;
     [SerializeField] private int missedPickupPenalty = 100;
     [SerializeField] private int missedDeliveryPenalty = 250;
@@ -39,9 +39,18 @@ public class VipSpawnManager : MonoBehaviour
 
     public void Configure(Station[] newStations, VipMarkerUI newMarkerPrefab, Transform newMarkerParent)
     {
-        stations = newStations;
-        markerPrefab = newMarkerPrefab;
-        markerParent = newMarkerParent;
+        if (stations == null || stations.Length == 0)
+        {
+            stations = newStations;
+        }
+        if (markerPrefab == null)
+        {
+            markerPrefab = newMarkerPrefab;
+        }
+        if (markerParent == null)
+        {
+            markerParent = newMarkerParent;
+        }
         TrySubscribeToGameManager();
         RebuildMarkersForWaitingVips();
     }

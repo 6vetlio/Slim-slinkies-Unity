@@ -12,13 +12,17 @@ public class MapStopController : MonoBehaviour
     [SerializeField] private GameObject mapRoot;
     [SerializeField] private Button openMapButton;
     [SerializeField] private VipSpawnManager vipSpawnManager;
+    [SerializeField] private MapVisualizer mapVisualizer;
     [SerializeField] private bool spawnVipWhenMapOpens = true;
 
     [Header("UI")]
     [SerializeField] private GameObject popupText;
+    [SerializeField] private bool debugMapLogs = true;
 
     private Station pendingArrivalStation;
     private bool mapOpen;
+    private TrainMover subscribedTrainMover;
+    private bool subscribedToStationClicks;
 
     public void Configure(
         TrainMover newTrainMover,
@@ -26,23 +30,43 @@ public class MapStopController : MonoBehaviour
         Station newStartingStation,
         GameObject newMapRoot,
         VipSpawnManager newVipSpawnManager,
-        Button newOpenMapButton = null)
+        Button newOpenMapButton = null,
+        MapVisualizer newMapVisualizer = null)
     {
-        if (trainMover != null)
-        {
-            trainMover.ReachedStationStop -= HandleTrainReachedStop;
-        }
+        UnsubscribeFromTrainMover();
 
-        trainMover = newTrainMover;
-        trainVipHandler = newTrainVipHandler;
-        startingStation = newStartingStation;
-        mapRoot = newMapRoot;
-        vipSpawnManager = newVipSpawnManager;
-        openMapButton = newOpenMapButton;
+        if (trainMover == null)
+        {
+            trainMover = newTrainMover;
+        }
+        if (trainVipHandler == null)
+        {
+            trainVipHandler = newTrainVipHandler;
+        }
+        if (startingStation == null)
+        {
+            startingStation = newStartingStation;
+        }
+        if (mapRoot == null)
+        {
+            mapRoot = newMapRoot;
+        }
+        if (vipSpawnManager == null)
+        {
+            vipSpawnManager = newVipSpawnManager;
+        }
+        if (openMapButton == null)
+        {
+            openMapButton = newOpenMapButton;
+        }
+        if (mapVisualizer == null)
+        {
+            mapVisualizer = newMapVisualizer;
+        }
 
         if (isActiveAndEnabled && trainMover != null)
         {
-            trainMover.ReachedStationStop += HandleTrainReachedStop;
+            SubscribeToTrainMover();
         }
 
         if (mapRoot != null)
@@ -68,23 +92,15 @@ public class MapStopController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (trainMover != null)
-        {
-            trainMover.ReachedStationStop += HandleTrainReachedStop;
-        }
-
-        Station.Clicked += HandleStationClicked;
+        SubscribeToTrainMover();
+        SubscribeToStationClicks();
         ConfigureMapButton();
     }
 
     private void OnDisable()
     {
-        if (trainMover != null)
-        {
-            trainMover.ReachedStationStop -= HandleTrainReachedStop;
-        }
-
-        Station.Clicked -= HandleStationClicked;
+        UnsubscribeFromTrainMover();
+        UnsubscribeFromStationClicks();
 
         if (openMapButton != null)
         {
@@ -97,9 +113,66 @@ public class MapStopController : MonoBehaviour
         if (startingStation != null && trainVipHandler != null)
         {
             trainVipHandler.ArriveAtStation(startingStation);
+            Debug.Log("Starting station: " + startingStation.DisplayName);
         }
 
         RefreshDockedState();
+    }
+
+    private void SubscribeToTrainMover()
+    {
+        if (trainMover == null || subscribedTrainMover == trainMover)
+        {
+            return;
+        }
+
+        if (subscribedTrainMover != null)
+        {
+            subscribedTrainMover.ReachedStationStop -= HandleTrainReachedStop;
+        }
+
+        trainMover.ReachedStationStop -= HandleTrainReachedStop;
+        trainMover.ReachedStationStop += HandleTrainReachedStop;
+        subscribedTrainMover = trainMover;
+
+        if (debugMapLogs)
+        {
+            Debug.Log("MapStopController: subscribed to TrainMover arrival event | trainMover=" + trainMover.name);
+        }
+    }
+
+    private void UnsubscribeFromTrainMover()
+    {
+        if (subscribedTrainMover == null)
+        {
+            return;
+        }
+
+        subscribedTrainMover.ReachedStationStop -= HandleTrainReachedStop;
+        subscribedTrainMover = null;
+    }
+
+    private void SubscribeToStationClicks()
+    {
+        if (subscribedToStationClicks)
+        {
+            return;
+        }
+
+        Station.Clicked -= HandleStationClicked;
+        Station.Clicked += HandleStationClicked;
+        subscribedToStationClicks = true;
+    }
+
+    private void UnsubscribeFromStationClicks()
+    {
+        if (!subscribedToStationClicks)
+        {
+            return;
+        }
+
+        Station.Clicked -= HandleStationClicked;
+        subscribedToStationClicks = false;
     }
 
     public void CloseMapWithoutDeparting()
@@ -109,6 +182,16 @@ public class MapStopController : MonoBehaviour
 
     private void HandleTrainReachedStop()
     {
+        if (debugMapLogs)
+        {
+            Debug.Log("MapStopController: train reached stop event | pendingArrivalStation=" + (pendingArrivalStation != null ? pendingArrivalStation.DisplayName : "none") + " | moverStatus=" + (trainMover != null ? trainMover.MovementStatus.ToString() : "missing"));
+        }
+
+        if (trainMover != null)
+        {
+            trainMover.ForceStationary();
+        }
+
         if (pendingArrivalStation != null && trainVipHandler != null)
         {
             trainVipHandler.ArriveAtStation(pendingArrivalStation);
@@ -122,20 +205,88 @@ public class MapStopController : MonoBehaviour
     {
         if (!mapOpen || station == null || trainMover == null)
         {
+            if (debugMapLogs)
+            {
+                Debug.Log("MapStopController: station click ignored | mapOpen=" + mapOpen + " | station=" + (station != null ? station.DisplayName : "null") + " | trainMover=" + (trainMover != null ? "assigned" : "null"));
+            }
             return;
         }
 
-        // Prevent changing directions while driving
-        if (!trainMover.IsStoppedAtStation)
+        if (debugMapLogs)
         {
+            Debug.Log("MapStopController: station clicked | station=" + station.DisplayName + " | currentStation=" + (trainVipHandler != null && trainVipHandler.CurrentStation != null ? trainVipHandler.CurrentStation.DisplayName : "none") + " | moverStatus=" + trainMover.MovementStatus + " | isStopped=" + trainMover.IsStoppedAtStation);
+        }
+
+        if (IsCurrentStation(station))
+        {
+            if (debugMapLogs)
+            {
+                Debug.Log("MapStopController: clicked current station, closing map without travel | station=" + station.DisplayName + " | stationId=" + station.StationId + " | gameManagerCurrentStationId=" + (GameManager.Instance != null ? GameManager.Instance.CurrentStationId : "missing"));
+            }
+            pendingArrivalStation = null;
+            SetMapOpen(false);
+            return;
+        }
+
+        if (trainMover.MovementStatus == TrainMovementStatus.Travelling)
+        {
+            if (debugMapLogs)
+            {
+                Debug.LogWarning("MapStopController: travel blocked because train is travelling | station=" + station.DisplayName + " | moverStatus=" + trainMover.MovementStatus);
+            }
             ShowPopup("Cannot change destination while train is traveling");
             return;
         }
 
         pendingArrivalStation = station;
-        SetMapOpen(false);
-        trainMover.DepartFromStation();
+        trainMover.TravelTo(station.transform);
+
+        if (trainMover.MovementStatus == TrainMovementStatus.Travelling)
+        {
+            if (debugMapLogs)
+            {
+                Debug.Log("MapStopController: travel accepted, closing map | destination=" + station.DisplayName + " | moverStatus=" + trainMover.MovementStatus);
+            }
+            SetMapOpen(false);
+        }
+        else
+        {
+            if (debugMapLogs)
+            {
+                Debug.LogWarning("MapStopController: travel did not start, keeping map open | destination=" + station.DisplayName + " | moverStatus=" + trainMover.MovementStatus);
+            }
+            pendingArrivalStation = null;
+        }
+
         RefreshDockedState();
+    }
+
+    private bool IsCurrentStation(Station station)
+    {
+        if (station == null)
+        {
+            return false;
+        }
+
+        if (trainVipHandler != null && trainVipHandler.CurrentStation != null)
+        {
+            if (trainVipHandler.CurrentStation == station)
+            {
+                return true;
+            }
+
+            if (!string.IsNullOrEmpty(trainVipHandler.CurrentStation.StationId) && trainVipHandler.CurrentStation.StationId == station.StationId)
+            {
+                return true;
+            }
+        }
+
+        if (GameManager.Instance != null && !string.IsNullOrEmpty(GameManager.Instance.CurrentStationId) && GameManager.Instance.CurrentStationId == station.StationId)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void ShowPopup(string message)
@@ -166,6 +317,16 @@ public class MapStopController : MonoBehaviour
 
     private void OpenMap()
     {
+        if (trainMover != null && trainMover.MovementStatus == TrainMovementStatus.Travelling)
+        {
+            if (debugMapLogs)
+            {
+                Debug.LogWarning("MapStopController: map open blocked because train is travelling | moverStatus=" + trainMover.MovementStatus);
+            }
+            ShowPopup("Train is still traveling");
+            return;
+        }
+
         SetMapOpen(true);
 
         if (vipSpawnManager != null)
@@ -182,6 +343,11 @@ public class MapStopController : MonoBehaviour
     private void SetMapOpen(bool open)
     {
         mapOpen = open;
+
+        if (debugMapLogs)
+        {
+            Debug.Log("MapStopController: map " + (open ? "opened" : "closed") + " | moverStatus=" + (trainMover != null ? trainMover.MovementStatus.ToString() : "missing"));
+        }
 
         if (mapRoot != null)
         {
@@ -206,6 +372,11 @@ public class MapStopController : MonoBehaviour
     private void RefreshDockedState()
     {
         bool isDocked = trainMover != null && trainMover.IsStoppedAtStation;
+
+        if (debugMapLogs)
+        {
+            Debug.Log("MapStopController: refresh docked state | isDocked=" + isDocked + " | moverStatus=" + (trainMover != null ? trainMover.MovementStatus.ToString() : "missing"));
+        }
 
         if (GameManager.Instance != null)
         {

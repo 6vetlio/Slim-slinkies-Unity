@@ -9,7 +9,7 @@ public class UIParallax : MonoBehaviour
     [Range(-2f, 2f)] public float parallaxStrengthX = 0.5f;
     [Range(-2f, 2f)] public float parallaxStrengthY = 0f;
     [Range(-2f, 2f)] public float parallaxStrengthZ = 0.3f;
-    public float scrollMultiplier = 100f;
+    public float scrollMultiplier = 4f;
 
     [Header("Repeat")]
     public bool wrapHorizontally = true;
@@ -42,6 +42,11 @@ public class UIParallax : MonoBehaviour
         _rect = GetComponent<RectTransform>();
         _startLocalPos = _rect.localPosition;
         _lastCamPos = _cam.transform.position;
+
+        if (scrollMultiplier > 20f)
+        {
+            scrollMultiplier = 4f;
+        }
 
         if (buildCopiesOnStart)
         {

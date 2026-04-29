@@ -11,6 +11,7 @@ public class MapVisualizer : MonoBehaviour
 
     private GameObject trainIndicator;
     private RectTransform trainIndicatorRect;
+    private GameObject progressBarLine;
 
     void Start()
     {
@@ -23,9 +24,6 @@ public class MapVisualizer : MonoBehaviour
         {
             trainMover = FindObjectOfType<TrainMover>();
         }
-
-        CreateMapLines();
-        CreateTrainIndicator();
     }
 
     void Update()
@@ -44,11 +42,11 @@ public class MapVisualizer : MonoBehaviour
         if (stations.Length < 2) return;
 
         // Create single horizontal progress bar line
-        GameObject line = new GameObject("ProgressBarLine");
-        line.transform.SetParent(stationsContainer.transform, false);
+        progressBarLine = new GameObject("ProgressBarLine");
+        progressBarLine.transform.SetParent(stationsContainer.transform, false);
 
-        RectTransform lineRect = line.AddComponent<RectTransform>();
-        Image lineImage = line.AddComponent<Image>();
+        RectTransform lineRect = progressBarLine.AddComponent<RectTransform>();
+        Image lineImage = progressBarLine.AddComponent<Image>();
         lineImage.color = new Color(0.5f, 0.5f, 0.5f, 0.8f);
 
         // Horizontal line spanning the width
@@ -119,5 +117,27 @@ public class MapVisualizer : MonoBehaviour
         float indicatorX = Mathf.Lerp(startX, endX, progress);
 
         trainIndicatorRect.anchoredPosition = new Vector2(indicatorX, 0);
+    }
+
+    public void ShowMapElements()
+    {
+        CreateMapLines();
+        CreateTrainIndicator();
+    }
+
+    public void HideMapElements()
+    {
+        if (progressBarLine != null)
+        {
+            Destroy(progressBarLine);
+            progressBarLine = null;
+        }
+
+        if (trainIndicator != null)
+        {
+            Destroy(trainIndicator);
+            trainIndicator = null;
+            trainIndicatorRect = null;
+        }
     }
 }

@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &30515753
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -182,15 +182,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1407083278, guid: 5c66fbd61c6b4426c811c191392c1c6c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.2, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &30515754
@@ -207,8 +207,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainTransform: {fileID: 0}
   travelSpeed: 8
-  startingStation: {fileID: 0}
+  startingStation: {fileID: 2107047262}
   moveTrainTransform: 1
+  debugVipLogs: 1
 --- !u!114 &30515755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,12 +222,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be095042a8a6040dc802644348671616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointA: {fileID: 0}
-  pointB: {fileID: 0}
+  pointA: {fileID: 1747886396}
+  pointB: {fileID: 1496625505}
+  pointC: {fileID: 0}
+  pointD: {fileID: 0}
   speed: 5
+  acceleration: 100
   stopAtPointB: 1
+  travelDuration: 30
+  minimumTravelDistance: 1400
+  moveCameraForParallax: 1
+  cameraTravelDistance: 500
+  cameraZPosition: -10
+  debugMovementLogs: 1
   lockZPosition: 1
   zPosition: 0
+  movementStatus: 0
 --- !u!4 &30515756
 Transform:
   m_ObjectHideFlags: 0
@@ -236,8 +247,8 @@ Transform:
   m_GameObject: {fileID: 30515752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 444, y: 469, z: 0}
+  m_LocalScale: {x: 71.356285, y: 71.356285, z: 71.356285}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1747886396}
@@ -254,8 +265,8 @@ GameObject:
   m_Component:
   - component: {fileID: 50329701}
   - component: {fileID: 50329703}
-  - component: {fileID: 50329702}
   - component: {fileID: 50329704}
+  - component: {fileID: 50329705}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -276,32 +287,12 @@ Transform:
   m_LocalScale: {x: 9.9271, y: 9.9271, z: 9.9271}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 281548935}
   - {fileID: 961768569}
   - {fileID: 1601503649}
   - {fileID: 1034768614}
   - {fileID: 1052705280}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &50329702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50329699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ea6c3ec3b1564c92bb99489a325e799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  passengers: 50
-  revenuePerPassenger: 1
-  passengersText: {fileID: 1158831572}
-  revenueText: {fileID: 156679393}
-  totalText: {fileID: 251815464}
-  upgradeButton: {fileID: 1932048169}
-  switcher: {fileID: 50329703}
 --- !u!114 &50329703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,8 +305,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a8d68edef0654571850ed113dde3c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainImage: {fileID: 0}
+  trainImage: {fileID: 1717746827}
   hyperloopImage: {fileID: 1849960920}
+  tubeLayer: {fileID: 1034499900}
 --- !u!114 &50329704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,10 +320,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0215618352c548d5851a159a519cbe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingMoney: 1000
+  startingMoney: 0
   regularPassengers: 50
   revenuePerPassengerPerSecond: 1
+  upgradeCost: 1000
+  upgradedPassengerCount: 150
   currentStationId: 
+--- !u!114 &50329705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50329699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547b4eeec3944156acbfa4c0146090ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeButton: {fileID: 1932048169}
+  button: {fileID: 1932048171}
+  transportSwitcher: {fileID: 50329703}
 --- !u!1 &57857217
 GameObject:
   m_ObjectHideFlags: 0
@@ -998,7 +1007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &156679392
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1270,7 +1279,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &185929300
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1483,7 +1492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &251815463
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1845,14 +1854,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281548934}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.021736488, y: -0.9635449, z: 0.08260492, w: -0.2535452}
-  m_LocalPosition: {x: -155.51537, y: 39.502453, z: 592.1527}
-  m_LocalScale: {x: 0.10874286, y: 0.10874271, z: 0.1087429}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 652513943}
-  m_Father: {fileID: 50329701}
-  m_LocalEulerAnglesHint: {x: 9.8, y: -209.485, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &281548937
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1895,8 +1903,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 10000000
   field of view: 60
-  orthographic: 0
-  orthographic size: 1000
+  orthographic: 1
+  orthographic size: 175
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1926,10 +1934,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointA: {fileID: 961768569}
   pointB: {fileID: 1601503649}
+  pointC: {fileID: 0}
+  pointD: {fileID: 0}
   speed: 250
+  acceleration: 100
   stopAtPointB: 1
+  travelDuration: 30
+  minimumTravelDistance: 1400
+  moveCameraForParallax: 1
+  cameraTravelDistance: 500
+  cameraZPosition: -10
+  debugMovementLogs: 1
   lockZPosition: 1
   zPosition: 0
+  movementStatus: 0
 --- !u!114 &281548940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1944,8 +1962,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainTransform: {fileID: 0}
   travelSpeed: 8
-  startingStation: {fileID: 0}
+  startingStation: {fileID: 2107047262}
   moveTrainTransform: 0
+  debugVipLogs: 1
 --- !u!1 &288629174
 GameObject:
   m_ObjectHideFlags: 0
@@ -3202,9 +3221,11 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 373856605}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 373856605}
   m_fontMaterial: {fileID: 373856605}
-  m_fontMaterials: []
+  m_fontMaterials:
+  - {fileID: 373856605}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
@@ -3617,6 +3638,7 @@ RectTransform:
   - {fileID: 681175529}
   - {fileID: 1271608307}
   - {fileID: 2145328326}
+  - {fileID: 1717746830}
   - {fileID: 1158831571}
   - {fileID: 156679392}
   - {fileID: 251815463}
@@ -3626,8 +3648,8 @@ RectTransform:
   - {fileID: 1657270770}
   - {fileID: 618777575}
   - {fileID: 1268891330}
-  m_Father: {fileID: 281548935}
-  m_LocalEulerAnglesHint: {x: 11.409, y: 0, z: 0}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -3682,8 +3704,8 @@ Canvas:
   m_GameObject: {fileID: 652513942}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 281548938}
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -4264,9 +4286,11 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 128270015}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 128270015}
   m_fontMaterial: {fileID: 128270015}
-  m_fontMaterials: []
+  m_fontMaterials:
+  - {fileID: 128270015}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
@@ -4660,9 +4684,11 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 1102159186}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 1102159186}
   m_fontMaterial: {fileID: 1102159186}
-  m_fontMaterials: []
+  m_fontMaterials:
+  - {fileID: 1102159186}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281479730
@@ -4800,79 +4826,6 @@ MonoBehaviour:
   copiesLeft: 1
   copiesRight: 1
   destroyOldGeneratedCopies: 1
---- !u!1001 &959757346
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 817313778364922373, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -188
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.3277
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.3277
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.3277
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5303.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -174
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2973.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6743814947703285427, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7300726252688868146, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
-      propertyPath: m_Name
-      value: Enviroment
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e19a19f365fd945af91887bbdc503fbf, type: 3}
 --- !u!1 &961768568
 GameObject:
   m_ObjectHideFlags: 0
@@ -5416,7 +5369,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 266.8622, y: -47.250008}
+  m_AnchoredPosition: {x: 266.8622, y: -18}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1034499902
@@ -5455,6 +5408,7 @@ GameObject:
   - component: {fileID: 1034768614}
   - component: {fileID: 1034768616}
   - component: {fileID: 1034768615}
+  - component: {fileID: 1034768617}
   m_Layer: 0
   m_Name: MapSystems
   m_TagString: Untagged
@@ -5489,14 +5443,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b7032dc74be479f97231191531b2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainMover: {fileID: 0}
-  trainVipHandler: {fileID: 0}
-  startingStation: {fileID: 0}
-  mapRoot: {fileID: 0}
-  openMapButton: {fileID: 0}
-  vipSpawnManager: {fileID: 0}
+  trainMover: {fileID: 1717746829}
+  trainVipHandler: {fileID: 1717746828}
+  startingStation: {fileID: 2107047262}
+  mapRoot: {fileID: 1657270769}
+  openMapButton: {fileID: 1268891333}
+  vipSpawnManager: {fileID: 1034768616}
+  mapVisualizer: {fileID: 1657270773}
   spawnVipWhenMapOpens: 1
-  popupText: {fileID: 0}
+  popupText: {fileID: 808612346}
+  debugMapLogs: 1
 --- !u!114 &1034768616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5509,9 +5465,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705a3d5bfbb7c42e59dbbdefcac654e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stations: []
-  markerPrefab: {fileID: 0}
-  markerParent: {fileID: 0}
+  stations:
+  - {fileID: 2107047262}
+  - {fileID: 153395523}
+  - {fileID: 1050488153}
+  - {fileID: 1927851116}
+  markerPrefab: {fileID: 1608021844}
+  markerParent: {fileID: 1042133552}
   vipProfiles: []
   fallbackNames:
   - Ari Chen
@@ -5524,11 +5484,25 @@ MonoBehaviour:
   maxSpawnInterval: 14
   normalTargetVipCount: 2
   chanceToAllowThirdVip: 0.15
-  pickupSeconds: 20
-  deliverySeconds: 35
+  pickupSeconds: 60
+  deliverySeconds: 90
   deliveryReward: 350
   missedPickupPenalty: 100
   missedDeliveryPenalty: 250
+--- !u!114 &1034768617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034768613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19483ee67d3745fd967728b238de8a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
+  targetCanvas: {fileID: 652513946}
 --- !u!1 &1042133551
 GameObject:
   m_ObjectHideFlags: 0
@@ -6169,7 +6143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1158831571
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6597,7 +6571,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1213059798}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.23164369}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0193418, y: 1.0193418, z: 1.0193418}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6610,7 +6584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.82562256, y: -68.66}
+  m_AnchoredPosition: {x: 122.60106, y: -53.016674}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1213059800
@@ -7492,8 +7466,8 @@ Transform:
   m_GameObject: {fileID: 1496625504}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 10, y: -34, z: 12}
+  m_LocalScale: {x: 3.6269104, y: 0.34362015, z: 0.34362015}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 30515756}
@@ -7634,9 +7608,11 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 547399253}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 547399253}
   m_fontMaterial: {fileID: 547399253}
-  m_fontMaterials: []
+  m_fontMaterials:
+  - {fileID: 547399253}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
@@ -8527,10 +8503,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf93620f72734b49828075a6d563e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stationsContainer: {fileID: 0}
+  stationsContainer: {fileID: 104725436}
   linePrefab: {fileID: 0}
   trainIndicatorPrefab: {fileID: 0}
-  trainMover: {fileID: 0}
+  trainMover: {fileID: 1717746829}
 --- !u!1 &1688500270
 GameObject:
   m_ObjectHideFlags: 0
@@ -8756,6 +8732,8 @@ GameObject:
   - component: {fileID: 1717746829}
   - component: {fileID: 1717746828}
   - component: {fileID: 1717746831}
+  - component: {fileID: 1717746833}
+  - component: {fileID: 1717746832}
   m_Layer: 0
   m_Name: Train
   m_TagString: Untagged
@@ -8777,8 +8755,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainTransform: {fileID: 0}
   travelSpeed: 8
-  startingStation: {fileID: 0}
+  startingStation: {fileID: 2107047262}
   moveTrainTransform: 1
+  debugVipLogs: 1
 --- !u!114 &1717746829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8791,29 +8770,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be095042a8a6040dc802644348671616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointA: {fileID: 0}
-  pointB: {fileID: 0}
+  pointA: {fileID: 1006082686}
+  pointB: {fileID: 1755894158}
+  pointC: {fileID: 0}
+  pointD: {fileID: 0}
   speed: 5
+  acceleration: 100
   stopAtPointB: 1
+  travelDuration: 30
+  minimumTravelDistance: 1400
+  moveCameraForParallax: 1
+  cameraTravelDistance: 500
+  cameraZPosition: -10
+  debugMovementLogs: 1
   lockZPosition: 1
   zPosition: 0
---- !u!4 &1717746830
-Transform:
+  movementStatus: 0
+--- !u!224 &1717746830
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1717746827}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1006082686}
   - {fileID: 1755894158}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 652513943}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 122.60106, y: -78.07604}
+  m_SizeDelta: {x: 546, y: 48}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &1717746831
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8857,18 +8850,56 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 453067159, guid: 952d00fd1730847a18cad792c560ddcb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.481412, y: 0.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1717746832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717746827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 453067159, guid: 952d00fd1730847a18cad792c560ddcb, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1717746833
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717746827}
+  m_CullTransparentMesh: 1
 --- !u!1 &1733142954
 GameObject:
   m_ObjectHideFlags: 0
@@ -9098,7 +9129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1775007926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9111,14 +9142,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b7032dc74be479f97231191531b2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainMover: {fileID: 0}
-  trainVipHandler: {fileID: 0}
-  startingStation: {fileID: 0}
-  mapRoot: {fileID: 0}
-  openMapButton: {fileID: 0}
-  vipSpawnManager: {fileID: 0}
+  trainMover: {fileID: 1717746829}
+  trainVipHandler: {fileID: 1717746828}
+  startingStation: {fileID: 2107047262}
+  mapRoot: {fileID: 1657270769}
+  openMapButton: {fileID: 1268891333}
+  vipSpawnManager: {fileID: 1960200881}
+  mapVisualizer: {fileID: 1657270773}
   spawnVipWhenMapOpens: 1
-  popupText: {fileID: 0}
+  popupText: {fileID: 808612346}
+  debugMapLogs: 1
 --- !u!114 &1775007927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9541,7 +9574,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1849960921
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9550,15 +9583,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1849960920}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 12}
-  m_LocalScale: {x: 3.6269104, y: 0.34362015, z: 0.34362015}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4.4059854, y: 0.39288953, z: 4.4059854}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 652513943}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 10, y: -34}
+  m_AnchoredPosition: {x: 121.8, y: -6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1849960922
@@ -9783,9 +9816,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d60cd0ab6b246dca969cd292df880d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  destinationText: {fileID: 0}
-  timerText: {fileID: 0}
+  nameText: {fileID: 566683707}
+  destinationText: {fileID: 2043984481}
+  timerText: {fileID: 1500973696}
   portraitImage: {fileID: 0}
   travelButton: {fileID: 0}
   worldOffset: {x: 0, y: 1.5, z: 0}
@@ -10085,19 +10118,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1932048172}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 50329702}
-        m_TargetAssemblyTypeName: Economy, Assembly-CSharp
-        m_MethodName: OnUpgradePressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1932048172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10240,9 +10261,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705a3d5bfbb7c42e59dbbdefcac654e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stations: []
-  markerPrefab: {fileID: 0}
-  markerParent: {fileID: 0}
+  stations:
+  - {fileID: 2107047262}
+  - {fileID: 153395523}
+  - {fileID: 1050488153}
+  - {fileID: 1927851116}
+  markerPrefab: {fileID: 1608021844}
+  markerParent: {fileID: 1042133552}
   vipProfiles: []
   fallbackNames:
   - Ari Chen
@@ -10255,8 +10280,8 @@ MonoBehaviour:
   maxSpawnInterval: 14
   normalTargetVipCount: 2
   chanceToAllowThirdVip: 0.15
-  pickupSeconds: 20
-  deliverySeconds: 35
+  pickupSeconds: 60
+  deliverySeconds: 90
   deliveryReward: 350
   missedPickupPenalty: 100
   missedDeliveryPenalty: 250
@@ -10549,9 +10574,11 @@ MonoBehaviour:
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 360688795}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 360688795}
   m_fontMaterial: {fileID: 360688795}
-  m_fontMaterials: []
+  m_fontMaterials:
+  - {fileID: 360688795}
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
@@ -11223,8 +11250,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 50329701}
   - {fileID: 685792368}
-  - {fileID: 959757346}
-  - {fileID: 1717746830}
   - {fileID: 1775007928}
   - {fileID: 2092827430}
   - {fileID: 30515756}
+  - {fileID: 281548935}
+  - {fileID: 652513943}
