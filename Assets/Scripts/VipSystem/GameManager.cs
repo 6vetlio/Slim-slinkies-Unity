@@ -10,31 +10,57 @@ public class GameManager : MonoBehaviour
     public event Action VipsChanged;
     public event Action<VipPassenger, int> VipRewarded;
     public event Action<VipPassenger, int> VipPenalized;
+    public event Action<Station> StationUnlocked;
+    public event Action<string> NotEnoughMoney;
 
     [Header("Economy")]
-    [SerializeField] private float startingMoney = 0f;
-    [SerializeField] private int regularPassengers = 50;
-    [SerializeField] private float revenuePerPassengerPerSecond = 1f;
+    [SerializeField] private float startingMoney = 100f;
+    [SerializeField] private int regularPassengers = 25;
+    [SerializeField] private float revenuePerPassengerPerSecond = 0.5f;
+    [SerializeField] private int passengersGainedPerStation = 10;
 
     [Header("Upgrade")]
-    [SerializeField] private float upgradeCost = 1000f;
-    [SerializeField] private int upgradedPassengerCount = 150;
+    [SerializeField] private float upgradeCost = 8000f;
+    [SerializeField] private int upgradedPassengerCount = 80;
+    [SerializeField] private float upgradedRevenueMultiplier = 2.5f;
 
     [Header("Train State")]
     [SerializeField] private string currentStationId = "";
 
+    [Header("VIP Capacity")]
+    [SerializeField] private int maxOnboardVips = 3;
+
+    private int trainTierPassengerBonus = 0;
+
     public float Money { get; private set; }
     public int RegularPassengers => regularPassengers;
-    public float PassiveIncomePerSecond => regularPassengers * revenuePerPassengerPerSecond;
+    public int EffectivePassengers => regularPassengers + trainTierPassengerBonus;
+    public float PassiveIncomePerSecond 
+    {
+        get
+        {
+            float baseIncome = EffectivePassengers * revenuePerPassengerPerSecond;
+            if (HasUpgraded)
+            {
+                baseIncome *= upgradedRevenueMultiplier;
+            }
+            return baseIncome;
+        }
+    }
     public float UpgradeCost => upgradeCost;
     public bool HasUpgraded { get; private set; }
     public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost;
     public string CurrentStationId => currentStationId;
-    public VipPassenger CurrentOnboardVip { get; private set; }
+    public int MaxOnboardVips => maxOnboardVips;
+
+    // Legacy single-VIP accessor — returns first onboard VIP if any
+    public VipPassenger CurrentOnboardVip => onboardVips.Count > 0 ? onboardVips[0] : null;
+    public IReadOnlyList<VipPassenger> OnboardVips => onboardVips;
     public IReadOnlyList<VipPassenger> WaitingVips => waitingVips;
     public bool VipTimersPaused { get; private set; }
 
     private readonly List<VipPassenger> waitingVips = new List<VipPassenger>();
+    private readonly List<VipPassenger> onboardVips = new List<VipPassenger>();
     private float passiveIncomeBank;
 
     private void Awake()
@@ -113,7 +139,7 @@ public class GameManager : MonoBehaviour
     {
         pickedUpVip = null;
 
-        if (CurrentOnboardVip != null)
+        if (onboardVips.Count >= maxOnboardVips)
         {
             return false;
         }
@@ -126,7 +152,7 @@ public class GameManager : MonoBehaviour
 
         waitingVips.Remove(vip);
         vip.MarkPickedUp();
-        CurrentOnboardVip = vip;
+        onboardVips.Add(vip);
         pickedUpVip = vip;
         VipsChanged?.Invoke();
         return true;
@@ -136,18 +162,21 @@ public class GameManager : MonoBehaviour
     {
         deliveredVip = null;
 
-        if (CurrentOnboardVip == null || CurrentOnboardVip.DestinationStationId != stationId)
+        for (int i = 0; i < onboardVips.Count; i++)
         {
-            return false;
+            if (onboardVips[i].DestinationStationId == stationId)
+            {
+                deliveredVip = onboardVips[i];
+                onboardVips.RemoveAt(i);
+                deliveredVip.MarkDelivered();
+                AddMoney(deliveredVip.DeliveryReward);
+                VipRewarded?.Invoke(deliveredVip, deliveredVip.DeliveryReward);
+                VipsChanged?.Invoke();
+                return true;
+            }
         }
 
-        deliveredVip = CurrentOnboardVip;
-        deliveredVip.MarkDelivered();
-        CurrentOnboardVip = null;
-        AddMoney(deliveredVip.DeliveryReward);
-        VipRewarded?.Invoke(deliveredVip, deliveredVip.DeliveryReward);
-        VipsChanged?.Invoke();
-        return true;
+        return false;
     }
 
     public void IncreaseRegularPassengers(int amount)
@@ -162,10 +191,44 @@ public class GameManager : MonoBehaviour
         MoneyChanged?.Invoke();
     }
 
+    public void SetTrainTierEconomy(int passengerBonus)
+    {
+        trainTierPassengerBonus = Mathf.Max(0, passengerBonus);
+        MoneyChanged?.Invoke();
+    }
+
+    public bool TryUnlockStation(Station station)
+    {
+        if (station == null || station.IsUnlocked)
+        {
+            return false;
+        }
+
+        if (Money < station.UnlockCost)
+        {
+            NotEnoughMoney?.Invoke("Need EUR " + station.UnlockCost + " to unlock " + station.DisplayName);
+            return false;
+        }
+
+        Money -= station.UnlockCost;
+        station.SetUnlocked(true);
+        regularPassengers += passengersGainedPerStation;
+        Debug.Log("[GameManager] Station unlocked: " + station.DisplayName + " | Passengers: " + regularPassengers + " (+" + passengersGainedPerStation + ")");
+        MoneyChanged?.Invoke();
+        StationUnlocked?.Invoke(station);
+        return true;
+    }
+
     public bool TryBuyUpgrade()
     {
-        if (!CanBuyUpgrade)
+        if (HasUpgraded)
         {
+            return false;
+        }
+
+        if (Money < upgradeCost)
+        {
+            NotEnoughMoney?.Invoke("Need EUR " + upgradeCost + " for hyperloop upgrade");
             return false;
         }
 
@@ -209,17 +272,17 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (CurrentOnboardVip != null)
+        for (int i = onboardVips.Count - 1; i >= 0; i--)
         {
-            CurrentOnboardVip.Tick(deltaTime);
+            VipPassenger vip = onboardVips[i];
+            vip.Tick(deltaTime);
 
-            if (CurrentOnboardVip.DeliveryTimeRemaining <= 0f)
+            if (vip.DeliveryTimeRemaining <= 0f)
             {
-                VipPassenger failedVip = CurrentOnboardVip;
-                CurrentOnboardVip = null;
-                failedVip.MarkExpired();
-                ApplyPenalty(failedVip, failedVip.MissedDeliveryPenalty);
-                VipPenalized?.Invoke(failedVip, failedVip.MissedDeliveryPenalty);
+                onboardVips.RemoveAt(i);
+                vip.MarkExpired();
+                ApplyPenalty(vip, vip.MissedDeliveryPenalty);
+                VipPenalized?.Invoke(vip, vip.MissedDeliveryPenalty);
                 changed = true;
             }
         }

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "unity": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\svet\\Documents\\GitHub\\Slim-slinkies-Unity\\Library\\PackageCache\\com.gamelovers.mcp-unity@6e5904b0eb78\\Server~\\build\\index.js"
+      ],
+      "cwd": "C:\\Users\\svet\\Documents\\GitHub\\Slim-slinkies-Unity"
+    }
+  }
+}

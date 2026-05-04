@@ -1,143 +1,298 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MapVisualizer : MonoBehaviour
 {
-    [Header("Settings")]
+    [Header("References")]
     [SerializeField] private GameObject stationsContainer;
-    [SerializeField] private GameObject linePrefab;
-    [SerializeField] private GameObject trainIndicatorPrefab;
     [SerializeField] private TrainMover trainMover;
+    [SerializeField] private TrainVipHandler trainVipHandler;
+    [SerializeField] private VipSpawnManager vipSpawnManager;
+    [SerializeField] private GameObject trainDotObject;
 
-    private GameObject trainIndicator;
-    private RectTransform trainIndicatorRect;
-    private GameObject progressBarLine;
+    [Header("Route Lines")]
+    [SerializeField] private RouteLineUI[] routeLineObjects;
 
-    void Start()
+    [Header("Colors")]
+    [SerializeField] private Color colorUnlocked = new Color(0.10f, 0.45f, 0.60f, 1f);
+    [SerializeField] private Color colorLocked   = new Color(0.20f, 0.20f, 0.22f, 1f);
+    [SerializeField] private Color colorCurrent  = new Color(0.15f, 0.70f, 0.30f, 1f);
+
+    private readonly Dictionary<string, Station>       stationById   = new Dictionary<string, Station>();
+    private readonly Dictionary<string, RectTransform> stationRects  = new Dictionary<string, RectTransform>();
+    private readonly Dictionary<string, Image>         stationImages = new Dictionary<string, Image>();
+    private readonly Dictionary<string, TMP_Text>      costLabels    = new Dictionary<string, TMP_Text>();
+
+    private RectTransform trainDotRect;
+
+    private void Start()
     {
         if (stationsContainer == null)
-        {
             stationsContainer = transform.Find("Stations")?.gameObject;
-        }
 
         if (trainMover == null)
+            trainMover = FindFirstObjectByType<TrainMover>();
+
+        if (trainVipHandler == null)
+            trainVipHandler = FindFirstObjectByType<TrainVipHandler>();
+
+        if (vipSpawnManager == null)
+            vipSpawnManager = FindFirstObjectByType<VipSpawnManager>();
+
+        if (GameManager.Instance != null)
         {
-            trainMover = FindObjectOfType<TrainMover>();
+            GameManager.Instance.StationUnlocked += OnStationUnlocked;
+            GameManager.Instance.VipsChanged += OnCurrentStationChanged;
+        }
+
+        // Position route lines immediately so they don't sit stacked at origin
+        if (stationsContainer != null)
+            BuildNetwork();
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StationUnlocked -= OnStationUnlocked;
+            GameManager.Instance.VipsChanged -= OnCurrentStationChanged;
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (trainIndicator != null && trainMover != null)
-        {
-            UpdateTrainIndicator();
-        }
-    }
-
-    private void CreateMapLines()
-    {
-        if (stationsContainer == null) return;
-
-        var stations = stationsContainer.GetComponentsInChildren<Station>();
-        if (stations.Length < 2) return;
-
-        // Create single horizontal progress bar line
-        progressBarLine = new GameObject("ProgressBarLine");
-        progressBarLine.transform.SetParent(stationsContainer.transform, false);
-
-        RectTransform lineRect = progressBarLine.AddComponent<RectTransform>();
-        Image lineImage = progressBarLine.AddComponent<Image>();
-        lineImage.color = new Color(0.5f, 0.5f, 0.5f, 0.8f);
-
-        // Horizontal line spanning the width
-        lineRect.anchoredPosition = new Vector2(0, 0);
-        lineRect.sizeDelta = new Vector2(700f, 8f);
-        lineRect.pivot = new Vector2(0.5f, 0.5f);
-        lineRect.rotation = Quaternion.Euler(0, 0, 0);
-
-        // Position stations along the line
-        float startX = -300f;
-        float spacing = 200f;
-
-        for (int i = 0; i < stations.Length; i++)
-        {
-            RectTransform stationRect = stations[i].GetComponent<RectTransform>();
-            if (stationRect != null)
-            {
-                stationRect.anchoredPosition = new Vector2(startX + (i * spacing), 0);
-            }
-        }
-    }
-
-    private void CreateTrainIndicator()
-    {
-        if (trainIndicatorPrefab != null)
-        {
-            trainIndicator = Instantiate(trainIndicatorPrefab, stationsContainer.transform);
-        }
-        else
-        {
-            trainIndicator = new GameObject("TrainIndicator");
-            trainIndicator.transform.SetParent(stationsContainer.transform, false);
-
-            trainIndicatorRect = trainIndicator.AddComponent<RectTransform>();
-            trainIndicatorRect.sizeDelta = new Vector2(12f, 12f);
-            trainIndicatorRect.pivot = new Vector2(0.5f, 0.5f);
-
-            Image indicatorImage = trainIndicator.AddComponent<Image>();
-            indicatorImage.color = Color.red;
-        }
-
-        trainIndicatorRect = trainIndicator.GetComponent<RectTransform>();
-    }
-
-    private void UpdateTrainIndicator()
-    {
-        if (trainMover == null)
-        {
-            Debug.Log("MapVisualizer: trainMover is null");
-            return;
-        }
-        if (trainMover.pointA == null || trainMover.pointB == null) return;
-        if (trainIndicatorRect == null) return;
-
-        // Get train position relative to stations
-        Vector3 trainPos = trainMover.transform.position;
-        Vector3 pointAPos = trainMover.pointA.position;
-        Vector3 pointBPos = trainMover.pointB.position;
-
-        // Calculate progress (0 to 1)
-        float totalDistance = Vector3.Distance(pointAPos, pointBPos);
-        float currentDistance = Vector3.Distance(pointAPos, trainPos);
-        float progress = Mathf.Clamp01(currentDistance / totalDistance);
-
-        // Map progress to horizontal line (from -300 to 300)
-        float startX = -300f;
-        float endX = 300f;
-        float indicatorX = Mathf.Lerp(startX, endX, progress);
-
-        trainIndicatorRect.anchoredPosition = new Vector2(indicatorX, 0);
+        if (trainDotRect != null)
+            UpdateTrainDot();
     }
 
     public void ShowMapElements()
     {
-        CreateMapLines();
-        CreateTrainIndicator();
+        BuildNetwork();
+        if (trainDotObject != null)
+        {
+            trainDotRect = trainDotObject.GetComponent<RectTransform>();
+            trainDotObject.SetActive(true);
+            PlaceDotAtCurrentStation();
+        }
     }
 
     public void HideMapElements()
     {
-        if (progressBarLine != null)
+        if (trainDotObject != null)
         {
-            Destroy(progressBarLine);
-            progressBarLine = null;
+            trainDotObject.SetActive(false);
+            trainDotRect = null;
+        }
+    }
+
+    private void BuildNetwork()
+    {
+        if (stationsContainer == null) return;
+
+        stationById.Clear();
+        stationRects.Clear();
+        stationImages.Clear();
+        costLabels.Clear();
+
+        var allStations = new List<Station>();
+        var discovered  = stationsContainer.GetComponentsInChildren<Station>(true);
+
+        foreach (var station in discovered)
+        {
+            string id = station.StationId;
+            stationById[id]   = station;
+            stationRects[id]  = station.GetComponent<RectTransform>();
+            stationImages[id] = station.GetComponent<Image>() ?? station.GetComponentInChildren<Image>();
+            allStations.Add(station);
+            EnsureCostLabel(id, station, stationRects[id]);
+            ApplyStationVisual(id);
         }
 
-        if (trainIndicator != null)
+        if (vipSpawnManager != null)
+            vipSpawnManager.SetStations(allStations.ToArray());
+
+        UpdateRouteLinePositions();
+        MoveConnectionsBehindButtons();
+    }
+
+    public void SyncRoutesNow()
+    {
+        if (stationsContainer != null)
+            BuildNetwork();
+    }
+
+    private void UpdateRouteLinePositions()
+    {
+        if (routeLineObjects == null) return;
+
+        foreach (var routeLine in routeLineObjects)
         {
-            Destroy(trainIndicator);
-            trainIndicator = null;
-            trainIndicatorRect = null;
+            if (routeLine == null) continue;
+
+            if (!stationRects.ContainsKey(routeLine.FromStationId) ||
+                !stationRects.ContainsKey(routeLine.ToStationId)) continue;
+
+            Vector2 posFrom = stationRects[routeLine.FromStationId].anchoredPosition;
+            Vector2 posTo   = stationRects[routeLine.ToStationId].anchoredPosition;
+
+            bool isUnlocked = stationById.TryGetValue(routeLine.FromStationId, out var stA) && stA.IsUnlocked &&
+                              stationById.TryGetValue(routeLine.ToStationId, out var stB) && stB.IsUnlocked;
+
+            routeLine.UpdateVisuals(posFrom, posTo, isUnlocked);
         }
+    }
+
+    private void MoveConnectionsBehindButtons()
+    {
+        int index = 0;
+        foreach (Transform child in stationsContainer.transform)
+        {
+            if (child.GetComponent<RouteLineUI>() != null || child.name.StartsWith("Route_"))
+                child.SetSiblingIndex(index++);
+        }
+    }
+
+    private void PlaceDotAtCurrentStation()
+    {
+        if (trainDotRect == null) return;
+        string curId = trainVipHandler?.CurrentStation?.StationId;
+        if (curId != null && stationRects.ContainsKey(curId))
+            trainDotRect.anchoredPosition = stationRects[curId].anchoredPosition;
+    }
+
+    private void UpdateTrainDot()
+    {
+        if (trainMover == null || trainDotRect == null) return;
+
+        string fromId = trainVipHandler?.CurrentStation?.StationId;
+        string toId   = GetTravelTargetId();
+
+        if (routeLineObjects != null)
+        {
+            foreach (var routeLine in routeLineObjects)
+            {
+                if (routeLine != null)
+                    routeLine.ClearFill();
+            }
+        }
+
+        if (trainMover.MovementStatus != TrainMovementStatus.Travelling || toId == null || fromId == null)
+        {
+            PlaceDotAtCurrentStation();
+            return;
+        }
+
+        float progress = trainMover.TravelProgress;
+
+        if (!stationRects.ContainsKey(fromId) || !stationRects.ContainsKey(toId)) return;
+
+        Vector2 posFrom = stationRects[fromId].anchoredPosition;
+        Vector2 posTo   = stationRects[toId].anchoredPosition;
+
+        trainDotRect.anchoredPosition = Vector2.Lerp(posFrom, posTo, progress);
+
+        if (routeLineObjects != null)
+        {
+            foreach (var routeLine in routeLineObjects)
+            {
+                if (routeLine == null) continue;
+                bool matches = (routeLine.FromStationId == fromId && routeLine.ToStationId == toId) ||
+                               (routeLine.FromStationId == toId && routeLine.ToStationId == fromId);
+                if (!matches) continue;
+
+                bool flip = (routeLine.FromStationId == toId);
+                routeLine.SetFillAmount(progress, flip);
+                break;
+            }
+        }
+    }
+
+    private string GetTravelTargetId()
+    {
+        Transform target = trainMover?.TravelTargetTransform;
+        if (target == null) return null;
+
+        foreach (var kv in stationById)
+        {
+            if (kv.Value != null && kv.Value.transform == target)
+                return kv.Key;
+        }
+
+        return null;
+    }
+
+    private void ApplyStationVisual(string id)
+    {
+        if (!stationById.ContainsKey(id)) return;
+
+        Station station   = stationById[id];
+        bool    isCurrent = trainVipHandler?.CurrentStation?.StationId == id;
+
+        if (stationImages.TryGetValue(id, out var img) && img != null)
+            img.color = isCurrent ? colorCurrent : (station.IsUnlocked ? colorUnlocked : colorLocked);
+
+        if (costLabels.TryGetValue(id, out var label) && label != null)
+        {
+            label.gameObject.SetActive(!station.IsUnlocked);
+            if (!station.IsUnlocked)
+                label.text = "EUR " + station.UnlockCost;
+        }
+    }
+
+    private void OnStationUnlocked(Station station)
+    {
+        ApplyStationVisual(station.StationId);
+        UpdateRouteLinePositions();
+        if (vipSpawnManager != null)
+            vipSpawnManager.SetStations(new List<Station>(stationById.Values).ToArray());
+    }
+
+    private void OnCurrentStationChanged()
+    {
+        // Update all station visuals when current station changes
+        foreach (var id in stationById.Keys)
+        {
+            ApplyStationVisual(id);
+        }
+    }
+
+    private void EnsureCostLabel(string id, Station station, RectTransform parentRT)
+    {
+        if (parentRT == null) return;
+
+        TMP_Text existing = null;
+        foreach (Transform child in parentRT)
+        {
+            if (child.name == "CostLabel")
+            {
+                existing = child.GetComponent<TMP_Text>();
+                break;
+            }
+        }
+
+        if (existing == null)
+        {
+            var go = new GameObject("CostLabel");
+            go.transform.SetParent(parentRT, false);
+
+            var rt = go.AddComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = new Vector2(0f, -22f);
+            rt.offsetMax = new Vector2(0f,  0f);
+
+            go.AddComponent<CanvasRenderer>();
+            existing = go.AddComponent<TextMeshProUGUI>();
+            existing.fontSize  = 11f;
+            existing.alignment = TextAlignmentOptions.Center;
+            existing.color     = new Color(1f, 0.85f, 0.2f);
+        }
+
+        costLabels[id] = existing;
+        existing.gameObject.SetActive(!station.IsUnlocked);
+        if (!station.IsUnlocked)
+            existing.text = "EUR " + station.UnlockCost;
     }
 }

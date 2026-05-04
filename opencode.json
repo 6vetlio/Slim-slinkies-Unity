@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "unity": {
+      "type": "local",
+      "command": [
+        "node",
+        "C:\\Users\\svet\\Documents\\GitHub\\Slim-slinkies-Unity\\Library\\PackageCache\\com.gamelovers.mcp-unity@6e5904b0eb78\\Server~\\build\\index.js"
+      ],
+      "enabled": true
+    }
+  }
+}

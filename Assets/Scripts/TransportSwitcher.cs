@@ -74,4 +74,7 @@ public class TransportSwitcher : MonoBehaviour
             spriteRenderer.enabled = active;
         }
     }
+
+    public bool IsHyperloopActive() =>
+        hyperloopImage != null && hyperloopImage.activeInHierarchy;
 }

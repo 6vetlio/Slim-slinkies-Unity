@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1001622470580252433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6017396793459389792}
+  - component: {fileID: 3761150798593159049}
+  - component: {fileID: 1416176497168474532}
+  - component: {fileID: 8807368514912885225}
+  m_Layer: 0
+  m_Name: MapSystems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6017396793459389792
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001622470580252433}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3761150798593159049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001622470580252433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705a3d5bfbb7c42e59dbbdefcac654e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stations:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  markerPrefab: {fileID: 0}
+  markerParent: {fileID: 0}
+  vipProfiles: []
+  maleFirstNames:
+  - Noah
+  - Liam
+  - Oliver
+  - James
+  - Elijah
+  - Lucas
+  - Mason
+  - Logan
+  - Alexander
+  femaleFirstNames:
+  - Emma
+  - Olivia
+  - Ava
+  - Isabella
+  - Sophia
+  - Mia
+  - Charlotte
+  - Amelia
+  - Harper
+  lastNames:
+  - Smith
+  - Johnson
+  - Williams
+  - Brown
+  - Jones
+  - Garcia
+  - Miller
+  - Davis
+  - Rodriguez
+  - Martinez
+  - Wilson
+  - Anderson
+  - Thomas
+  - Taylor
+  - Moore
+  - Jackson
+  - Lee
+  - Perez
+  firstSpawnDelay: 1.5
+  minSpawnInterval: 8
+  maxSpawnInterval: 14
+  normalTargetVipCount: 2
+  chanceToAllowThirdVip: 0.15
+  pickupSeconds: 60
+  deliverySeconds: 90
+  baseDeliveryReward: 250
+  rewardPerStationDistance: 100
+  missedPickupPenalty: 100
+  missedDeliveryPenalty: 250
+--- !u!114 &1416176497168474532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001622470580252433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b7032dc74be479f97231191531b2bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainMover: {fileID: 0}
+  trainVipHandler: {fileID: 0}
+  startingStation: {fileID: 0}
+  mapRoot: {fileID: 0}
+  openMapButton: {fileID: 0}
+  vipSpawnManager: {fileID: 3761150798593159049}
+  mapVisualizer: {fileID: 0}
+  spawnVipWhenMapOpens: 1
+  popupText: {fileID: 0}
+  travelingBlockMessage: "You can't change destination while driving \u2014 this
+    train goes 70 km/h, not 1100!"
+  debugMapLogs: 1
+--- !u!114 &8807368514912885225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001622470580252433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19483ee67d3745fd967728b238de8a99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainMover: {fileID: 0}
+  targetCanvas: {fileID: 0}

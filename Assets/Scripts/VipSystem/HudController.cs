@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -15,10 +16,15 @@ public class HudController : MonoBehaviour
     [SerializeField] private Transform moneyPopupParent;
     [SerializeField] private Color rewardColor = new Color(0.25f, 1f, 0.35f);
     [SerializeField] private Color penaltyColor = new Color(1f, 0.25f, 0.25f);
+    [SerializeField] private Color passiveIncomeColor = new Color(0.5f, 1f, 0.5f);
+    [SerializeField] private Color notEnoughMoneyColor = new Color(1f, 0.5f, 0f);
     [SerializeField] private float popupLifetime = 1.25f;
     [SerializeField] private float popupRiseDistance = 45f;
+    [SerializeField] private float passiveIncomePopupThreshold = 10f;
 
     private bool subscribedToGameManager;
+    private float accumulatedPassiveIncome;
+    private float passivePopupCooldown;
 
     public void Configure(
         TMP_Text newMoneyText,
@@ -70,6 +76,7 @@ public class HudController : MonoBehaviour
             GameManager.Instance.VipsChanged -= Refresh;
             GameManager.Instance.VipRewarded -= HandleVipRewarded;
             GameManager.Instance.VipPenalized -= HandleVipPenalized;
+            GameManager.Instance.NotEnoughMoney -= HandleNotEnoughMoney;
         }
 
         subscribedToGameManager = false;
@@ -79,6 +86,13 @@ public class HudController : MonoBehaviour
     {
         TrySubscribeToGameManager();
         RefreshOnboardVipTimer();
+        TrackPassiveIncome();
+    }
+    
+    private void TrackPassiveIncome()
+    {
+        // Passive income popups disabled per user request
+        // VIP delivery popups are the primary money feedback
     }
 
     public void Refresh()
@@ -95,7 +109,7 @@ public class HudController : MonoBehaviour
 
         if (passengersText != null)
         {
-            passengersText.text = "Passengers: " + GameManager.Instance.RegularPassengers;
+            passengersText.text = "Passengers: " + GameManager.Instance.EffectivePassengers;
         }
 
         if (incomeText != null)
@@ -113,36 +127,72 @@ public class HudController : MonoBehaviour
             return;
         }
 
-        VipPassenger vip = GameManager.Instance.CurrentOnboardVip;
-        if (vip == null)
+        var onboard = GameManager.Instance.OnboardVips;
+        int max = GameManager.Instance.MaxOnboardVips;
+
+        if (onboard.Count == 0)
         {
-            onboardVipText.text = "Onboard VIP: None";
+            onboardVipText.text = "Onboard (0/" + max + "): empty";
             return;
         }
 
-        onboardVipText.text = "VIP: " + vip.PassengerName + " to " + vip.DestinationStationName + " (" + Mathf.CeilToInt(vip.DeliveryTimeRemaining) + "s)";
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Append("Onboard (").Append(onboard.Count).Append('/').Append(max).Append("):\n");
+        for (int i = 0; i < onboard.Count; i++)
+        {
+            VipPassenger vip = onboard[i];
+            sb.Append("  ").Append(vip.PassengerName)
+              .Append(" → ").Append(vip.DestinationStationName)
+              .Append(" (").Append(Mathf.CeilToInt(vip.DeliveryTimeRemaining)).Append("s)");
+            if (i < onboard.Count - 1)
+            {
+                sb.Append('\n');
+            }
+        }
+        onboardVipText.text = sb.ToString();
     }
 
     private void HandleVipRewarded(VipPassenger vip, int amount)
     {
+        Debug.Log("[HudController] VIP Rewarded: " + vip.PassengerName + " EUR " + amount);
         ShowMoneyPopup("+EUR " + amount, rewardColor);
     }
 
     private void HandleVipPenalized(VipPassenger vip, int amount)
     {
+        Debug.Log("[HudController] VIP Penalized: " + vip.PassengerName + " EUR " + amount);
         ShowMoneyPopup("-EUR " + amount, penaltyColor);
+    }
+
+    private void HandleNotEnoughMoney(string message)
+    {
+        Debug.Log("[HudController] Not enough money: " + message);
+        ShowMoneyPopup(message, notEnoughMoneyColor);
     }
 
     private void ShowMoneyPopup(string text, Color color)
     {
         if (moneyPopupPrefab == null)
         {
-            Debug.Log(text);
+            Debug.LogWarning("[HudController] moneyPopupPrefab is null, cannot show popup: " + text);
             return;
+        }
+        
+        if (moneyPopupParent == null)
+        {
+            Debug.LogWarning("[HudController] moneyPopupParent is null, using transform as parent");
         }
 
         Transform parent = moneyPopupParent != null ? moneyPopupParent : transform;
         TMP_Text popup = Instantiate(moneyPopupPrefab, parent);
+        popup.gameObject.SetActive(true);
+        popup.transform.SetAsLastSibling();
+
+        if (moneyText != null && moneyText.font != null)
+        {
+            popup.font = moneyText.font;
+        }
+
         popup.text = text;
         popup.color = color;
         StartCoroutine(AnimatePopup(popup));
@@ -179,6 +229,7 @@ public class HudController : MonoBehaviour
         GameManager.Instance.VipsChanged += Refresh;
         GameManager.Instance.VipRewarded += HandleVipRewarded;
         GameManager.Instance.VipPenalized += HandleVipPenalized;
+        GameManager.Instance.NotEnoughMoney += HandleNotEnoughMoney;
         subscribedToGameManager = true;
     }
 }

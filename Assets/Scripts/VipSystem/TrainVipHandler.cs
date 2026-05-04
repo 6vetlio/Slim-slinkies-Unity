@@ -6,7 +6,12 @@ public class TrainVipHandler : MonoBehaviour
     [SerializeField] private float travelSpeed = 8f;
     [SerializeField] private Station startingStation;
     [SerializeField] private bool moveTrainTransform = false;
-    [SerializeField] private bool debugVipLogs = true;
+    [SerializeField] private bool debugVipLogs = false;
+    
+    [Header("VIP Particle Effects")]
+    [SerializeField] private GameObject pickupFXPrefab;
+    [SerializeField] private GameObject deliveryFXPrefab;
+    [SerializeField] private GameObject expiredFXPrefab;
 
     public Station CurrentStation { get; private set; }
     public Station TargetStation { get; private set; }
@@ -102,15 +107,27 @@ public class TrainVipHandler : MonoBehaviour
             Debug.Log("TrainVipHandler: arrived at station | current=" + CurrentStation.DisplayName + " | stationId=" + CurrentStation.StationId);
         }
 
-        if (GameManager.Instance.TryDeliverOnboardVipAtStation(station.StationId, out VipPassenger deliveredVip))
+        while (GameManager.Instance.TryDeliverOnboardVipAtStation(station.StationId, out VipPassenger deliveredVip))
         {
             Debug.Log("Delivered VIP " + deliveredVip.PassengerName + " to " + station.DisplayName);
-            return;
+            SpawnFX(deliveryFXPrefab, station.transform.position);
         }
 
-        if (GameManager.Instance.TryPickupVipAtStation(station.StationId, out VipPassenger pickedUpVip))
+        while (GameManager.Instance.TryPickupVipAtStation(station.StationId, out VipPassenger pickedUpVip))
         {
             Debug.Log("Picked up VIP " + pickedUpVip.PassengerName + " at " + station.DisplayName);
+            SpawnFX(pickupFXPrefab, station.transform.position);
         }
+    }
+    
+    private void SpawnFX(GameObject fxPrefab, Vector3 position)
+    {
+        if (fxPrefab == null)
+        {
+            return;
+        }
+        
+        GameObject fx = Instantiate(fxPrefab, position, Quaternion.identity);
+        Destroy(fx, 2f); // Auto-destroy after 2 seconds
     }
 }

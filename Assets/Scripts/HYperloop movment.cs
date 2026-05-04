@@ -17,14 +17,18 @@ public class TrainMover : MonoBehaviour
     public float speed = 900f;
     public float acceleration = 1200f;
     public bool stopAtPointB = true;
-    public float travelDuration = 7f;
+    public float normalTrainDuration = 25f;
+    public float hyperloopDuration = 5f;
+    public float referenceWorldDistance = 2500f;
+    public float minTravelDurationFactor = 0.45f;
+    public float maxTravelDurationFactor = 3.25f;
     public float minimumTravelDistance = 1400f;
     public bool moveCameraForParallax = true;
     public float cameraTravelDistance = 500f;
     public float cameraZPosition = -10f;
     public bool debugMovementLogs = true;
-    public float visualTravelScreenDistance = 28f;
-    public float visualTravelVerticalBob = 3f;
+    public float visualTravelScreenDistance = 0f;
+    public float visualTravelVerticalBob = 0f;
 
     [Header("2D Lock")]
     public bool lockZPosition = true;
@@ -54,6 +58,8 @@ public class TrainMover : MonoBehaviour
 
     public TrainMovementStatus MovementStatus => movementStatus;
     public bool IsStoppedAtStation => movementStatus != TrainMovementStatus.Travelling;
+    public float TravelProgress => (activeTravelDuration > 0f && target != null) ? Mathf.Clamp01(travelElapsed / activeTravelDuration) : 0f;
+    public Transform TravelTargetTransform => target;
 
     void Start()
     {
@@ -137,7 +143,6 @@ public class TrainMover : MonoBehaviour
             movingObject.position = cameraPosition;
         }
         
-        pointA.position = transform.position;
         target = null;
         movementStatus = TrainMovementStatus.Stationary;
         initialized = true;
@@ -227,7 +232,12 @@ public class TrainMover : MonoBehaviour
         movingObjectTargetPosition.y = movingObjectStartPosition.y;
         movingObjectTargetPosition.z = moveCameraForParallax ? cameraZPosition : movingObjectStartPosition.z;
         travelElapsed = 0f;
-        activeTravelDuration = Mathf.Clamp(travelDuration, 6f, 8f);
+        bool isHyperloop = transportSwitcher != null && transportSwitcher.IsHyperloopActive();
+        float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : normalTrainDuration);
+        float legWorldDistance = Vector3.Distance(travelStartPosition, destinationPosition);
+        float refDist = Mathf.Max(1f, referenceWorldDistance);
+        float distanceFactor = Mathf.Clamp(legWorldDistance / refDist, minTravelDurationFactor, maxTravelDurationFactor);
+        activeTravelDuration = Mathf.Max(0.85f, baseLegDuration * distanceFactor);
         speed = Mathf.Max(speed, 300f, movementDistance / activeTravelDuration * 1.2f);
         acceleration = Mathf.Max(acceleration, 500f);
         lastProgressLog = 0f;
@@ -299,6 +309,11 @@ public class TrainMover : MonoBehaviour
     private void ApplyTransportVisualOffset(float progress)
     {
         if (activeTransportVisual == null)
+        {
+            return;
+        }
+
+        if (visualTravelScreenDistance <= 0.001f && visualTravelVerticalBob <= 0.001f)
         {
             return;
         }

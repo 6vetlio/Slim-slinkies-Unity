@@ -11,8 +11,14 @@ public class Station : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Transform markerAnchor;
     [SerializeField] private TrainVipHandler trainHandlerToNotify;
 
+    [Header("Unlock")]
+    [SerializeField] private bool isUnlocked = true;
+    [SerializeField] private int unlockCost = 0;
+
     public string StationId => stationId;
     public string DisplayName => displayName;
+    public bool IsUnlocked => isUnlocked;
+    public int UnlockCost => unlockCost;
     public Vector3 MarkerWorldPosition => markerAnchor != null ? markerAnchor.position : transform.position;
 
     public void Configure(string newStationId, string newDisplayName, TrainVipHandler handlerToNotify = null, Transform newMarkerAnchor = null)
@@ -21,6 +27,16 @@ public class Station : MonoBehaviour, IPointerClickHandler
         displayName = newDisplayName;
         trainHandlerToNotify = handlerToNotify;
         markerAnchor = newMarkerAnchor;
+    }
+
+    public void SetUnlocked(bool unlocked)
+    {
+        isUnlocked = unlocked;
+    }
+
+    public void SetUnlockCost(int cost)
+    {
+        unlockCost = cost;
     }
 
     public void OnPointerClick(PointerEventData eventData)

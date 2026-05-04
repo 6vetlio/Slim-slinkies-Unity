@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,12 +18,17 @@ public class MapStopController : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject popupText;
-    [SerializeField] private bool debugMapLogs = true;
+    [SerializeField] private string travelingBlockMessage = "You can't change destination while driving — this train goes 70 km/h, not 1100!";
+    [SerializeField] private bool debugMapLogs = false;
+
+    [Header("Hide When Map Open")]
+    [SerializeField] private CanvasGroup[] gameplayElementsToHide;
 
     private Station pendingArrivalStation;
     private bool mapOpen;
     private TrainMover subscribedTrainMover;
     private bool subscribedToStationClicks;
+    private CanvasGroup mapCanvasContentGroup;
 
     public void Configure(
         TrainMover newTrainMover,
@@ -69,20 +75,16 @@ public class MapStopController : MonoBehaviour
             SubscribeToTrainMover();
         }
 
-        if (mapRoot != null)
-        {
-            mapRoot.SetActive(false);
-        }
+        EnsureMapCanvasGroup();
+        ApplyMapPanelVisibility(false);
 
         ConfigureMapButton();
     }
 
     private void Awake()
     {
-        if (mapRoot != null)
-        {
-            mapRoot.SetActive(false);
-        }
+        EnsureMapCanvasGroup();
+        ApplyMapPanelVisibility(false);
 
         if (vipSpawnManager != null)
         {
@@ -117,6 +119,55 @@ public class MapStopController : MonoBehaviour
         }
 
         RefreshDockedState();
+        StartCoroutine(SyncMapRoutesDeferred());
+    }
+
+    private IEnumerator SyncMapRoutesDeferred()
+    {
+        yield return null;
+        if (mapVisualizer != null)
+            mapVisualizer.SyncRoutesNow();
+    }
+
+    private void EnsureMapCanvasGroup()
+    {
+        if (mapRoot == null)
+        {
+            return;
+        }
+
+        mapRoot.SetActive(true);
+
+        mapCanvasContentGroup = mapRoot.GetComponent<CanvasGroup>();
+        if (mapCanvasContentGroup == null)
+        {
+            mapCanvasContentGroup = mapRoot.AddComponent<CanvasGroup>();
+        }
+    }
+
+    private void ApplyMapPanelVisibility(bool visible)
+    {
+        if (mapCanvasContentGroup != null)
+        {
+            mapCanvasContentGroup.alpha = visible ? 1f : 0f;
+            mapCanvasContentGroup.interactable = visible;
+            mapCanvasContentGroup.blocksRaycasts = visible;
+        }
+        else if (mapRoot != null)
+        {
+            mapRoot.SetActive(visible);
+        }
+
+        if (gameplayElementsToHide != null)
+        {
+            foreach (var cg in gameplayElementsToHide)
+            {
+                if (cg == null) continue;
+                cg.alpha = visible ? 1f : 0f;
+                cg.interactable = visible;
+                cg.blocksRaycasts = visible;
+            }
+        }
     }
 
     private void SubscribeToTrainMover()
@@ -217,6 +268,15 @@ public class MapStopController : MonoBehaviour
             Debug.Log("MapStopController: station clicked | station=" + station.DisplayName + " | currentStation=" + (trainVipHandler != null && trainVipHandler.CurrentStation != null ? trainVipHandler.CurrentStation.DisplayName : "none") + " | moverStatus=" + trainMover.MovementStatus + " | isStopped=" + trainMover.IsStoppedAtStation);
         }
 
+        if (!station.IsUnlocked)
+        {
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.TryUnlockStation(station);
+            }
+            return;
+        }
+
         if (IsCurrentStation(station))
         {
             if (debugMapLogs)
@@ -234,7 +294,7 @@ public class MapStopController : MonoBehaviour
             {
                 Debug.LogWarning("MapStopController: travel blocked because train is travelling | station=" + station.DisplayName + " | moverStatus=" + trainMover.MovementStatus);
             }
-            ShowPopup("Cannot change destination while train is traveling");
+            ShowPopup(travelingBlockMessage);
             return;
         }
 
@@ -295,14 +355,13 @@ public class MapStopController : MonoBehaviour
         
         if (popupText != null)
         {
+            CancelInvoke(nameof(HidePopup));
             var tmp = popupText.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (tmp != null)
             {
                 tmp.text = message;
             }
             popupText.SetActive(true);
-            
-            // Hide after 2 seconds
             Invoke(nameof(HidePopup), 2f);
         }
     }
@@ -317,16 +376,6 @@ public class MapStopController : MonoBehaviour
 
     private void OpenMap()
     {
-        if (trainMover != null && trainMover.MovementStatus == TrainMovementStatus.Travelling)
-        {
-            if (debugMapLogs)
-            {
-                Debug.LogWarning("MapStopController: map open blocked because train is travelling | moverStatus=" + trainMover.MovementStatus);
-            }
-            ShowPopup("Train is still traveling");
-            return;
-        }
-
         SetMapOpen(true);
 
         if (vipSpawnManager != null)
@@ -349,9 +398,14 @@ public class MapStopController : MonoBehaviour
             Debug.Log("MapStopController: map " + (open ? "opened" : "closed") + " | moverStatus=" + (trainMover != null ? trainMover.MovementStatus.ToString() : "missing"));
         }
 
-        if (mapRoot != null)
+        ApplyMapPanelVisibility(open);
+
+        if (mapVisualizer != null)
         {
-            mapRoot.SetActive(open);
+            if (open)
+                mapVisualizer.ShowMapElements();
+            else
+                mapVisualizer.HideMapElements();
         }
 
         RefreshDockedState();

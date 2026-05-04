@@ -14,6 +14,7 @@ public class VipPassenger
 {
     public string Id { get; private set; }
     public string PassengerName;
+    public bool IsMale;
     public Sprite Portrait;
     public string OriginStationId;
     public string OriginStationName;
@@ -32,6 +33,7 @@ public class VipPassenger
 
     public VipPassenger(
         string passengerName,
+        bool isMale,
         Sprite portrait,
         Station origin,
         Station destination,
@@ -43,6 +45,7 @@ public class VipPassenger
     {
         Id = Guid.NewGuid().ToString("N");
         PassengerName = passengerName;
+        IsMale = isMale;
         Portrait = portrait;
         OriginStationId = origin.StationId;
         OriginStationName = origin.DisplayName;

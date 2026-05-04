@@ -7,16 +7,24 @@ public class VipSpawnManager : MonoBehaviour
     [SerializeField] private Station[] stations;
     [SerializeField] private VipMarkerUI markerPrefab;
     [SerializeField] private Transform markerParent;
+    [SerializeField] private VipMarkerUI[] markerPool;
 
     [Header("VIP Profiles")]
     [SerializeField] private VipProfile[] vipProfiles;
-    [SerializeField] private string[] fallbackNames =
+
+    [Header("Name Generation")]
+    [SerializeField] private string[] maleFirstNames =
     {
-        "Ari Chen",
-        "Maya Vale",
-        "Noah Singh",
-        "Lena Brooks",
-        "Jonas Reed"
+        "Noah", "Liam", "Oliver", "James", "Elijah", "Lucas", "Mason", "Logan", "Alexander"
+    };
+    [SerializeField] private string[] femaleFirstNames =
+    {
+        "Emma", "Olivia", "Ava", "Isabella", "Sophia", "Mia", "Charlotte", "Amelia", "Harper"
+    };
+    [SerializeField] private string[] lastNames =
+    {
+        "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
+        "Martinez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Lee", "Perez"
     };
 
     [Header("Spawn Pacing")]
@@ -29,13 +37,22 @@ public class VipSpawnManager : MonoBehaviour
     [Header("VIP Rules")]
     [SerializeField] private float pickupSeconds = 60f;
     [SerializeField] private float deliverySeconds = 90f;
-    [SerializeField] private int deliveryReward = 350;
+    [SerializeField] private int baseDeliveryReward = 250;
+    [SerializeField] private int rewardPerStationDistance = 100;
     [SerializeField] private int missedPickupPenalty = 100;
     [SerializeField] private int missedDeliveryPenalty = 250;
 
+    private static readonly string[] ExcludedStationIds = { "point_a", "point_b" };
+
     private readonly Dictionary<string, VipMarkerUI> markersByVipId = new Dictionary<string, VipMarkerUI>();
+    private readonly List<VipMarkerUI> availableMarkers = new List<VipMarkerUI>();
     private float spawnTimer;
     private bool subscribedToGameManager;
+
+    public void SetStations(Station[] newStations)
+    {
+        stations = newStations;
+    }
 
     public void Configure(Station[] newStations, VipMarkerUI newMarkerPrefab, Transform newMarkerParent)
     {
@@ -57,10 +74,24 @@ public class VipSpawnManager : MonoBehaviour
 
     private void Start()
     {
+        InitializeMarkerPool();
+        PopulateMapStationsFromScene();
         TrySubscribeToGameManager();
         RefreshStationsIfNeeded();
         RebuildMarkersForWaitingVips();
         spawnTimer = firstSpawnDelay;
+    }
+
+    private void InitializeMarkerPool()
+    {
+        availableMarkers.Clear();
+        if (markerPool == null) return;
+        foreach (VipMarkerUI marker in markerPool)
+        {
+            if (marker == null) continue;
+            marker.gameObject.SetActive(false);
+            availableMarkers.Add(marker);
+        }
     }
 
     private void OnEnable()
@@ -124,17 +155,35 @@ public class VipSpawnManager : MonoBehaviour
         Station destination = GetDifferentStation(origin);
         VipProfile profile = GetRandomProfile();
 
-        string passengerName = profile != null ? profile.passengerName : GetFallbackName();
-        Sprite portrait = profile != null ? profile.portrait : null;
+        bool isMale;
+        string passengerName;
+        Sprite portrait;
+
+        if (profile != null)
+        {
+            passengerName = profile.passengerName;
+            isMale = profile.isMale;
+            portrait = profile.portrait;
+        }
+        else
+        {
+            passengerName = GetFallbackName(out isMale);
+            portrait = null;
+        }
+
+        // Calculate reward based on station distance
+        int stationDistance = CalculateStationDistance(origin, destination);
+        int scaledReward = baseDeliveryReward + (stationDistance * rewardPerStationDistance);
 
         VipPassenger vip = new VipPassenger(
             passengerName,
+            isMale,
             portrait,
             origin,
             destination,
             pickupSeconds,
             deliverySeconds,
-            deliveryReward,
+            scaledReward,
             missedPickupPenalty,
             missedDeliveryPenalty);
 
@@ -160,7 +209,7 @@ public class VipSpawnManager : MonoBehaviour
         for (int i = 0; i < stations.Length; i++)
         {
             Station station = stations[i];
-            if (station == null)
+            if (station == null || !station.IsUnlocked)
             {
                 continue;
             }
@@ -187,7 +236,7 @@ public class VipSpawnManager : MonoBehaviour
 
         for (int i = 0; i < stations.Length; i++)
         {
-            if (stations[i] != null && stations[i] != origin)
+            if (stations[i] != null && stations[i] != origin && stations[i].IsUnlocked)
             {
                 destinationCandidates.Add(stations[i]);
             }
@@ -206,14 +255,33 @@ public class VipSpawnManager : MonoBehaviour
         return vipProfiles[Random.Range(0, vipProfiles.Length)];
     }
 
-    private string GetFallbackName()
+    private string GetFallbackName(out bool isMale)
     {
-        if (fallbackNames == null || fallbackNames.Length == 0)
+        if ((maleFirstNames == null || maleFirstNames.Length == 0) &&
+            (femaleFirstNames == null || femaleFirstNames.Length == 0))
         {
+            isMale = true;
             return "VIP Passenger";
         }
 
-        return fallbackNames[Random.Range(0, fallbackNames.Length)];
+        isMale = Random.value > 0.5f;
+        string[] firstNames = isMale ? maleFirstNames : femaleFirstNames;
+
+        if (firstNames == null || firstNames.Length == 0)
+        {
+            isMale = !isMale;
+            firstNames = isMale ? maleFirstNames : femaleFirstNames;
+        }
+
+        string firstName = firstNames[Random.Range(0, firstNames.Length)];
+
+        if (lastNames != null && lastNames.Length > 0)
+        {
+            string lastName = lastNames[Random.Range(0, lastNames.Length)];
+            return firstName + " " + lastName;
+        }
+
+        return firstName;
     }
 
     private void HandleVipsChanged()
@@ -223,7 +291,7 @@ public class VipSpawnManager : MonoBehaviour
 
     private void RebuildMarkersForWaitingVips()
     {
-        if (GameManager.Instance == null || markerPrefab == null)
+        if (GameManager.Instance == null)
         {
             return;
         }
@@ -251,23 +319,64 @@ public class VipSpawnManager : MonoBehaviour
 
             if (marker != null)
             {
-                Destroy(marker.gameObject);
+                if (markerPool != null && markerPool.Length > 0)
+                {
+                    ReturnMarkerToPool(marker);
+                }
+                else
+                {
+                    Destroy(marker.gameObject);
+                }
             }
         }
     }
 
     private void CreateMarker(VipPassenger vip, Station origin)
     {
-        if (markerPrefab == null || markersByVipId.ContainsKey(vip.Id))
+        if (markersByVipId.ContainsKey(vip.Id))
         {
             return;
         }
 
-        Transform parent = markerParent != null ? markerParent : transform;
-        VipMarkerUI marker = Instantiate(markerPrefab, parent);
+        VipMarkerUI marker = GetMarkerFromPool();
+        if (marker == null && markerPrefab != null)
+        {
+            Transform parent = markerParent != null ? markerParent : transform;
+            marker = Instantiate(markerPrefab, parent);
+        }
+        if (marker == null)
+        {
+            return;
+        }
+
         marker.gameObject.SetActive(true);
         marker.Bind(vip, origin);
         markersByVipId.Add(vip.Id, marker);
+    }
+
+    private VipMarkerUI GetMarkerFromPool()
+    {
+        for (int i = availableMarkers.Count - 1; i >= 0; i--)
+        {
+            VipMarkerUI marker = availableMarkers[i];
+            if (marker != null)
+            {
+                availableMarkers.RemoveAt(i);
+                return marker;
+            }
+            availableMarkers.RemoveAt(i);
+        }
+        return null;
+    }
+
+    private void ReturnMarkerToPool(VipMarkerUI marker)
+    {
+        if (marker == null) return;
+        marker.gameObject.SetActive(false);
+        if (!availableMarkers.Contains(marker))
+        {
+            availableMarkers.Add(marker);
+        }
     }
 
     private Station FindStation(string stationId)
@@ -283,6 +392,53 @@ public class VipSpawnManager : MonoBehaviour
         return null;
     }
 
+    private void PopulateMapStationsFromScene()
+    {
+        Station[] found = FindObjectsByType<Station>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        if (found == null || found.Length == 0)
+        {
+            return;
+        }
+
+        List<Station> list = new List<Station>();
+        for (int i = 0; i < found.Length; i++)
+        {
+            Station s = found[i];
+            if (s == null)
+            {
+                continue;
+            }
+
+            string id = s.StationId;
+            if (string.IsNullOrEmpty(id))
+            {
+                continue;
+            }
+
+            bool skip = false;
+            for (int j = 0; j < ExcludedStationIds.Length; j++)
+            {
+                if (id == ExcludedStationIds[j])
+                {
+                    skip = true;
+                    break;
+                }
+            }
+
+            if (skip)
+            {
+                continue;
+            }
+
+            list.Add(s);
+        }
+
+        if (list.Count >= 2)
+        {
+            stations = list.ToArray();
+        }
+    }
+
     private void RefreshStationsIfNeeded()
     {
         if (stations != null && stations.Length > 0)
@@ -290,7 +446,7 @@ public class VipSpawnManager : MonoBehaviour
             return;
         }
 
-        stations = FindObjectsByType<Station>(FindObjectsSortMode.None);
+        stations = FindObjectsByType<Station>(FindObjectsInactive.Include, FindObjectsSortMode.None);
     }
 
     private void TrySubscribeToGameManager()
@@ -302,5 +458,22 @@ public class VipSpawnManager : MonoBehaviour
 
         GameManager.Instance.VipsChanged += HandleVipsChanged;
         subscribedToGameManager = true;
+    }
+
+    private int CalculateStationDistance(Station from, Station to)
+    {
+        // Simple distance calculation based on station order
+        // For now, using a rough estimate. Could be improved with actual route graph.
+        string[] stationOrder = { "groningen", "amsterdam", "brussels", "hamburg", "paris", "hannover", "berlin" };
+        
+        int fromIndex = System.Array.IndexOf(stationOrder, from.StationId.ToLower());
+        int toIndex = System.Array.IndexOf(stationOrder, to.StationId.ToLower());
+        
+        if (fromIndex == -1 || toIndex == -1)
+        {
+            return 1; // Default distance if station not found
+        }
+        
+        return Mathf.Abs(toIndex - fromIndex);
     }
 }

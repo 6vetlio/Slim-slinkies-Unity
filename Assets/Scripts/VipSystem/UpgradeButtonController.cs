@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,6 +47,7 @@ public class UpgradeButtonController : MonoBehaviour
     private void Update()
     {
         TrySubscribeToGameManager();
+        Refresh(); // Check train movement status every frame
     }
 
     private void HandleUpgradePressed()
@@ -71,7 +73,22 @@ public class UpgradeButtonController : MonoBehaviour
             return;
         }
 
-        upgradeButton.SetActive(GameManager.Instance != null && GameManager.Instance.CanBuyUpgrade);
+        // Find TrainMover to check movement status
+        var trainMover = FindFirstObjectByType<TrainMover>();
+        bool trainTraveling = trainMover != null && trainMover.MovementStatus == TrainMovementStatus.Travelling;
+        
+        // Only show button if can afford AND train is not traveling
+        bool canShow = GameManager.Instance != null 
+                       && GameManager.Instance.CanBuyUpgrade 
+                       && !trainTraveling;
+
+        TMP_Text label = upgradeButton.GetComponentInChildren<TMP_Text>(true);
+        if (label != null && GameManager.Instance != null)
+        {
+            label.text = "Upgrade\nEUR " + GameManager.Instance.UpgradeCost.ToString("F0");
+        }
+        
+        upgradeButton.SetActive(canShow);
     }
 
     private void TrySubscribeToGameManager()

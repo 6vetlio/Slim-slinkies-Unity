@@ -4,5 +4,6 @@ using UnityEngine;
 public class VipProfile : ScriptableObject
 {
     public string passengerName = "VIP Passenger";
+    public bool isMale = true;
     public Sprite portrait;
 }
