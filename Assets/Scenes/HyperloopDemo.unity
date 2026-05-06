@@ -7807,6 +7807,7 @@ GameObject:
   m_Component:
   - component: {fileID: 315962344}
   - component: {fileID: 315962345}
+  - component: {fileID: 315962346}
   m_Layer: 0
   m_Name: MiddleHills
   m_TagString: Untagged
@@ -7853,6 +7854,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 12160
+--- !u!114 &315962346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315962343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0.7
+  MainCamera: {fileID: 254164148}
 --- !u!1 &317831367
 GameObject:
   m_ObjectHideFlags: 0
@@ -11552,6 +11567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 497809118}
   - component: {fileID: 497809119}
+  - component: {fileID: 497809120}
   m_Layer: 0
   m_Name: GrassBack_2
   m_TagString: Untagged
@@ -11598,6 +11614,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 13635
+--- !u!114 &497809120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497809117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0.5
+  MainCamera: {fileID: 254164148}
 --- !u!1 &499321899
 GameObject:
   m_ObjectHideFlags: 0
@@ -19856,6 +19886,7 @@ GameObject:
   m_Component:
   - component: {fileID: 837995237}
   - component: {fileID: 837995238}
+  - component: {fileID: 837995239}
   m_Layer: 0
   m_Name: Grass
   m_TagString: Untagged
@@ -19900,6 +19931,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 13635
+--- !u!114 &837995239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837995236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0
+  MainCamera: {fileID: 254164148}
 --- !u!1 &841173163
 GameObject:
   m_ObjectHideFlags: 0
@@ -20097,6 +20142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 851213764}
   - component: {fileID: 851213765}
+  - component: {fileID: 851213766}
   m_Layer: 0
   m_Name: GrassBack_1
   m_TagString: Untagged
@@ -20143,6 +20189,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 13635
+--- !u!114 &851213766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851213763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0.3
+  MainCamera: {fileID: 254164148}
 --- !u!1 &856668677
 GameObject:
   m_ObjectHideFlags: 0
@@ -22906,6 +22966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 985475793}
   - component: {fileID: 985475794}
+  - component: {fileID: 985475795}
   m_Layer: 0
   m_Name: FrontHills
   m_TagString: Untagged
@@ -22952,6 +23013,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 12160
+--- !u!114 &985475795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985475792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0.6
+  MainCamera: {fileID: 254164148}
 --- !u!1 &991130626
 GameObject:
   m_ObjectHideFlags: 0
@@ -32252,6 +32327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1420678067}
   - component: {fileID: 1420678068}
+  - component: {fileID: 1420678069}
   m_Layer: 0
   m_Name: Sky
   m_TagString: Untagged
@@ -32301,6 +32377,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 4000
+--- !u!114 &1420678069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420678066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 1
+  MainCamera: {fileID: 254164148}
 --- !u!1 &1423663795
 GameObject:
   m_ObjectHideFlags: 0
@@ -43495,6 +43585,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1905388043}
   - component: {fileID: 1905388044}
+  - component: {fileID: 1905388045}
   m_Layer: 0
   m_Name: Rails
   m_TagString: Untagged
@@ -43544,6 +43635,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 9090
+--- !u!114 &1905388045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1905388042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0.2
+  MainCamera: {fileID: 254164148}
 --- !u!1 &1906431634
 GameObject:
   m_ObjectHideFlags: 0
@@ -45529,6 +45634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1974715713}
   - component: {fileID: 1974715714}
+  - component: {fileID: 1974715715}
   m_Layer: 0
   m_Name: BackHills
   m_TagString: Untagged
@@ -45575,6 +45681,20 @@ MonoBehaviour:
   scrollMultiplier: 4
   wrapHorizontally: 1
   tileWidth: 11680
+--- !u!114 &1974715715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974715712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1329e2a90983d3f44af1f1f23f02d616, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AmountOfParallax: 0.8
+  MainCamera: {fileID: 254164148}
 --- !u!1 &1980191459
 GameObject:
   m_ObjectHideFlags: 0
