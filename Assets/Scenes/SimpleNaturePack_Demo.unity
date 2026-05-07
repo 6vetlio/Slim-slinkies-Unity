@@ -232,18 +232,12 @@ MonoBehaviour:
   normalTrainDuration: 25
   hyperloopDuration: 5
   minimumTravelDistance: 1400
-  moveCameraForParallax: 1
+  moveCameraForParallax: 0
   cameraTravelDistance: 2400
   cameraZPosition: -10
-<<<<<<< HEAD:Assets/Scenes/SimpleNaturePack_Demo.unity
   debugMovementLogs: 0
   visualTravelScreenDistance: 0
   visualTravelVerticalBob: 0
-=======
-  debugMovementLogs: 1
-  visualTravelScreenDistance: 28
-  visualTravelVerticalBob: 3
->>>>>>> wout2:Assets/SimpleNaturePack/Scenes/SimpleNaturePack_Demo.unity
   lockZPosition: 1
   zPosition: 0
   movementStatus: 0
@@ -645,11 +639,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -1989,56 +1986,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-<<<<<<< HEAD:Assets/Scenes/SimpleNaturePack_Demo.unity
-=======
---- !u!114 &281548939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281548934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be095042a8a6040dc802644348671616, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointA: {fileID: 961768569}
-  pointB: {fileID: 1601503649}
-  pointC: {fileID: 0}
-  pointD: {fileID: 0}
-  speed: 250
-  acceleration: 100
-  stopAtPointB: 1
-  travelDuration: 30
-  minimumTravelDistance: 1400
-  moveCameraForParallax: 1
-  cameraTravelDistance: 500
-  cameraZPosition: -10
-  debugMovementLogs: 1
-  visualTravelScreenDistance: 28
-  visualTravelVerticalBob: 3
-  lockZPosition: 1
-  zPosition: 0
-  movementStatus: 0
---- !u!114 &281548940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281548934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4171bfa9c80484ca6c34f9143b1bda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trainTransform: {fileID: 0}
-  travelSpeed: 8
-  startingStation: {fileID: 2107047262}
-  moveTrainTransform: 0
-  debugVipLogs: 1
->>>>>>> wout2:Assets/SimpleNaturePack/Scenes/SimpleNaturePack_Demo.unity
 --- !u!1 &288629174
 GameObject:
   m_ObjectHideFlags: 0
@@ -4097,11 +4044,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -4722,11 +4672,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -5058,11 +5011,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -7767,11 +7723,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -8377,11 +8336,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 120
   tileSpacing: 0
@@ -8883,10 +8845,8 @@ MonoBehaviour:
   displayName: Paris
   markerAnchor: {fileID: 0}
   trainHandlerToNotify: {fileID: 0}
-<<<<<<< HEAD:Assets/Scenes/SimpleNaturePack_Demo.unity
   isUnlocked: 0
   unlockCost: 3500
-=======
 --- !u!1 &1050530147
 GameObject:
   m_ObjectHideFlags: 0
@@ -8964,7 +8924,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050530147}
   m_CullTransparentMesh: 1
->>>>>>> wout2:Assets/SimpleNaturePack/Scenes/SimpleNaturePack_Demo.unity
 --- !u!1 &1052705279
 GameObject:
   m_ObjectHideFlags: 0
@@ -9643,11 +9602,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -9709,11 +9671,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 303
   tileSpacing: 0
@@ -10057,11 +10022,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -11293,10 +11261,8 @@ MonoBehaviour:
   displayName: Point B
   markerAnchor: {fileID: 0}
   trainHandlerToNotify: {fileID: 0}
-<<<<<<< HEAD:Assets/Scenes/SimpleNaturePack_Demo.unity
   isUnlocked: 1
   unlockCost: 0
-=======
 --- !u!1 &1604651228
 GameObject:
   m_ObjectHideFlags: 0
@@ -11430,7 +11396,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1604651228}
   m_CullTransparentMesh: 1
->>>>>>> wout2:Assets/SimpleNaturePack/Scenes/SimpleNaturePack_Demo.unity
 --- !u!21 &1607734114
 Material:
   serializedVersion: 8
@@ -12197,18 +12162,12 @@ MonoBehaviour:
   normalTrainDuration: 25
   hyperloopDuration: 5
   minimumTravelDistance: 1400
-  moveCameraForParallax: 1
+  moveCameraForParallax: 0
   cameraTravelDistance: 2400
   cameraZPosition: -10
-<<<<<<< HEAD:Assets/Scenes/SimpleNaturePack_Demo.unity
   debugMovementLogs: 0
   visualTravelScreenDistance: 0
   visualTravelVerticalBob: 0
-=======
-  debugMovementLogs: 1
-  visualTravelScreenDistance: 28
-  visualTravelVerticalBob: 3
->>>>>>> wout2:Assets/SimpleNaturePack/Scenes/SimpleNaturePack_Demo.unity
   lockZPosition: 1
   zPosition: 0
   movementStatus: 0
@@ -13275,11 +13234,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -14867,11 +14829,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9586891b5dae44fbac6cfdaca62f52c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trainMover: {fileID: 1717746829}
   cameraToFollow: {fileID: 0}
   parallaxStrengthX: 0.107
   parallaxStrengthY: 0
   parallaxStrengthZ: 0
-  scrollMultiplier: 100
+
+  moveOnlyWhileTravelling: 1
+  idleSpeed: 0
   wrapHorizontally: 1
   tileWidth: 909
   tileSpacing: 0
@@ -14888,3 +14853,5 @@ SceneRoots:
   - {fileID: 652513943}
   - {fileID: 674413598}
   - {fileID: 217797457}
+
+

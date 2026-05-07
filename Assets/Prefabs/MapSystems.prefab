@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3761150798593159049}
   - component: {fileID: 1416176497168474532}
   - component: {fileID: 8807368514912885225}
+  - component: {fileID: 7111111111111111111}
   m_Layer: 0
   m_Name: MapSystems
   m_TagString: Untagged
@@ -142,3 +143,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainMover: {fileID: 0}
   targetCanvas: {fileID: 0}
+--- !u!114 &7111111111111111111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001622470580252433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcf93620f72734b49828075a6d563e0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stationsContainer: {fileID: 0}
+  trainMover: {fileID: 0}
+  trainVipHandler: {fileID: 0}
+  vipSpawnManager: {fileID: 3761150798593159049}
+  trainDotObject: {fileID: 0}
+  routeLineObjects: []
+  colorUnlocked: {r: 0.1, g: 0.45, b: 0.6, a: 1}
+  colorLocked: {r: 0.2, g: 0.2, b: 0.22, a: 1}
+  colorCurrent: {r: 0.15, g: 0.7, b: 0.3, a: 1}
+  colorPassed: {r: 0.16, g: 0.22, b: 0.26, a: 1}

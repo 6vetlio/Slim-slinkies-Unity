@@ -19,6 +19,7 @@ public class MapVisualizer : MonoBehaviour
     [SerializeField] private Color colorUnlocked = new Color(0.10f, 0.45f, 0.60f, 1f);
     [SerializeField] private Color colorLocked   = new Color(0.20f, 0.20f, 0.22f, 1f);
     [SerializeField] private Color colorCurrent  = new Color(0.15f, 0.70f, 0.30f, 1f);
+    [SerializeField] private Color colorPassed   = new Color(0.16f, 0.22f, 0.26f, 1f);
 
     private readonly Dictionary<string, Station>       stationById   = new Dictionary<string, Station>();
     private readonly Dictionary<string, RectTransform> stationRects  = new Dictionary<string, RectTransform>();
@@ -29,9 +30,6 @@ public class MapVisualizer : MonoBehaviour
 
     private void Start()
     {
-        if (stationsContainer == null)
-            stationsContainer = transform.Find("Stations")?.gameObject;
-
         if (trainMover == null)
             trainMover = FindFirstObjectByType<TrainMover>();
 
@@ -46,6 +44,8 @@ public class MapVisualizer : MonoBehaviour
             GameManager.Instance.StationUnlocked += OnStationUnlocked;
             GameManager.Instance.VipsChanged += OnCurrentStationChanged;
         }
+
+        ResolveSceneReferences();
 
         // Position route lines immediately so they don't sit stacked at origin
         if (stationsContainer != null)
@@ -69,6 +69,7 @@ public class MapVisualizer : MonoBehaviour
 
     public void ShowMapElements()
     {
+        ResolveSceneReferences();
         BuildNetwork();
         if (trainDotObject != null)
         {
@@ -89,6 +90,7 @@ public class MapVisualizer : MonoBehaviour
 
     private void BuildNetwork()
     {
+        ResolveSceneReferences();
         if (stationsContainer == null) return;
 
         stationById.Clear();
@@ -119,8 +121,42 @@ public class MapVisualizer : MonoBehaviour
 
     public void SyncRoutesNow()
     {
+        ResolveSceneReferences();
         if (stationsContainer != null)
             BuildNetwork();
+    }
+
+    private void ResolveSceneReferences()
+    {
+        if (stationsContainer == null)
+        {
+            stationsContainer = transform.Find("Stations")?.gameObject;
+        }
+
+        if (stationsContainer == null)
+        {
+            var mapStop = GetComponent<MapStopController>();
+            GameObject root = mapStop != null ? mapStop.MapRoot : null;
+            if (root != null)
+            {
+                Transform stations = root.transform.Find("Stations");
+                stationsContainer = stations != null ? stations.gameObject : root;
+            }
+        }
+
+        if ((routeLineObjects == null || routeLineObjects.Length == 0) && stationsContainer != null)
+        {
+            routeLineObjects = stationsContainer.GetComponentsInChildren<RouteLineUI>(true);
+        }
+
+        if (trainDotObject == null && stationsContainer != null)
+        {
+            Transform trainDot = stationsContainer.transform.Find("TrainDot");
+            if (trainDot != null)
+            {
+                trainDotObject = trainDot.gameObject;
+            }
+        }
     }
 
     private void UpdateRouteLinePositions()
@@ -231,7 +267,14 @@ public class MapVisualizer : MonoBehaviour
         bool    isCurrent = trainVipHandler?.CurrentStation?.StationId == id;
 
         if (stationImages.TryGetValue(id, out var img) && img != null)
-            img.color = isCurrent ? colorCurrent : (station.IsUnlocked ? colorUnlocked : colorLocked);
+        {
+            if (isCurrent)
+                img.color = colorCurrent;
+            else if (!station.IsUnlocked)
+                img.color = colorLocked;
+            else
+                img.color = colorUnlocked;
+        }
 
         if (costLabels.TryGetValue(id, out var label) && label != null)
         {
@@ -272,27 +315,12 @@ public class MapVisualizer : MonoBehaviour
             }
         }
 
-        if (existing == null)
-        {
-            var go = new GameObject("CostLabel");
-            go.transform.SetParent(parentRT, false);
-
-            var rt = go.AddComponent<RectTransform>();
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.one;
-            rt.offsetMin = new Vector2(0f, -22f);
-            rt.offsetMax = new Vector2(0f,  0f);
-
-            go.AddComponent<CanvasRenderer>();
-            existing = go.AddComponent<TextMeshProUGUI>();
-            existing.fontSize  = 11f;
-            existing.alignment = TextAlignmentOptions.Center;
-            existing.color     = new Color(1f, 0.85f, 0.2f);
-        }
-
         costLabels[id] = existing;
-        existing.gameObject.SetActive(!station.IsUnlocked);
-        if (!station.IsUnlocked)
-            existing.text = "EUR " + station.UnlockCost;
+        if (existing != null)
+        {
+            existing.gameObject.SetActive(!station.IsUnlocked);
+            if (!station.IsUnlocked)
+                existing.text = "EUR " + station.UnlockCost;
+        }
     }
 }

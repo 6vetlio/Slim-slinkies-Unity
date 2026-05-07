@@ -30,6 +30,8 @@ public class MapStopController : MonoBehaviour
     private bool subscribedToStationClicks;
     private CanvasGroup mapCanvasContentGroup;
 
+    public GameObject MapRoot => mapRoot;
+
     public void Configure(
         TrainMover newTrainMover,
         TrainVipHandler newTrainVipHandler,
@@ -83,6 +85,11 @@ public class MapStopController : MonoBehaviour
 
     private void Awake()
     {
+        if (mapVisualizer == null)
+        {
+            mapVisualizer = GetComponent<MapVisualizer>();
+        }
+
         EnsureMapCanvasGroup();
         ApplyMapPanelVisibility(false);
 
@@ -94,6 +101,11 @@ public class MapStopController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (mapVisualizer == null)
+        {
+            mapVisualizer = GetComponent<MapVisualizer>();
+        }
+
         SubscribeToTrainMover();
         SubscribeToStationClicks();
         ConfigureMapButton();
@@ -268,13 +280,9 @@ public class MapStopController : MonoBehaviour
             Debug.Log("MapStopController: station clicked | station=" + station.DisplayName + " | currentStation=" + (trainVipHandler != null && trainVipHandler.CurrentStation != null ? trainVipHandler.CurrentStation.DisplayName : "none") + " | moverStatus=" + trainMover.MovementStatus + " | isStopped=" + trainMover.IsStoppedAtStation);
         }
 
-        if (!station.IsUnlocked)
+        if (!station.IsUnlocked && GameManager.Instance != null)
         {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.TryUnlockStation(station);
-            }
-            return;
+            GameManager.Instance.TryUnlockStation(station);
         }
 
         if (IsCurrentStation(station))

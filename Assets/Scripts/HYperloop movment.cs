@@ -23,7 +23,7 @@ public class TrainMover : MonoBehaviour
     public float minTravelDurationFactor = 0.45f;
     public float maxTravelDurationFactor = 3.25f;
     public float minimumTravelDistance = 1400f;
-    public bool moveCameraForParallax = true;
+    public bool moveCameraForParallax = false;
     public float cameraTravelDistance = 500f;
     public float cameraZPosition = -10f;
     public bool debugMovementLogs = true;
@@ -86,16 +86,11 @@ public class TrainMover : MonoBehaviour
         CacheActiveTransportVisual();
         ApplyTransportVisualOffset(progress);
 
-        if (!moveCameraForParallax)
+        if (lockZPosition)
         {
-            transform.position = movingObject.position;
-
-            if (lockZPosition)
-            {
-                Vector3 position = transform.position;
-                position.z = zPosition;
-                transform.position = position;
-            }
+            Vector3 position = transform.position;
+            position.z = zPosition;
+            transform.position = position;
         }
 
         if (progress >= 1f)
@@ -135,13 +130,8 @@ public class TrainMover : MonoBehaviour
             return;
         }
 
-        movingObject = moveCameraForParallax && Camera.main != null ? Camera.main.transform : transform;
-        if (moveCameraForParallax && Camera.main != null)
-        {
-            Vector3 cameraPosition = movingObject.position;
-            cameraPosition.z = cameraZPosition;
-            movingObject.position = cameraPosition;
-        }
+        moveCameraForParallax = false;
+        movingObject = transform;
         
         target = null;
         movementStatus = TrainMovementStatus.Stationary;
@@ -194,43 +184,27 @@ public class TrainMover : MonoBehaviour
             return;
         }
 
-        movingObject = moveCameraForParallax && Camera.main != null ? Camera.main.transform : transform;
-        if (moveCameraForParallax && Camera.main != null)
-        {
-            Vector3 cameraPosition = movingObject.position;
-            cameraPosition.z = cameraZPosition;
-            movingObject.position = cameraPosition;
-        }
+        moveCameraForParallax = false;
+        movingObject = transform;
 
         CacheActiveTransportVisual();
         ResetTransportVisualOffset();
 
-        float distance = Vector3.Distance(transform.position, destination.position);
-        Vector3 destinationPosition = destination.position;
-
-        if (distance < minimumTravelDistance)
-        {
-            float direction = destinationPosition.x >= transform.position.x ? 1f : -1f;
-            destinationPosition = transform.position + Vector3.right * direction * minimumTravelDistance;
-            destinationPosition.y = destination.position.y;
-            destinationPosition.z = destination.position.z;
-            distance = minimumTravelDistance;
-        }
+        float distance = Mathf.Max(Vector3.Distance(transform.position, destination.position), minimumTravelDistance);
+        Vector3 destinationPosition = transform.position + Vector3.right * distance;
+        destinationPosition.y = destination.position.y;
+        destinationPosition.z = destination.position.z;
 
         movementStatus = TrainMovementStatus.Travelling;
         target = destination;
         targetPosition = destinationPosition;
         travelStartPosition = transform.position;
-        activeTravelDirection = Mathf.Sign(destinationPosition.x - travelStartPosition.x);
-        if (Mathf.Approximately(activeTravelDirection, 0f))
-        {
-            activeTravelDirection = 1f;
-        }
+        activeTravelDirection = 1f;
         movingObjectStartPosition = movingObject.position;
-        float movementDistance = moveCameraForParallax ? cameraTravelDistance : distance;
-        movingObjectTargetPosition = movingObjectStartPosition + Vector3.right * Mathf.Sign(destinationPosition.x - transform.position.x) * movementDistance;
+        float movementDistance = distance;
+        movingObjectTargetPosition = movingObjectStartPosition + Vector3.right * movementDistance;
         movingObjectTargetPosition.y = movingObjectStartPosition.y;
-        movingObjectTargetPosition.z = moveCameraForParallax ? cameraZPosition : movingObjectStartPosition.z;
+        movingObjectTargetPosition.z = movingObjectStartPosition.z;
         travelElapsed = 0f;
         bool isHyperloop = transportSwitcher != null && transportSwitcher.IsHyperloopActive();
         float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : normalTrainDuration);
@@ -244,7 +218,7 @@ public class TrainMover : MonoBehaviour
 
         if (debugMovementLogs)
         {
-            Debug.Log("TrainMover: travel started | destination=" + destination.name + " | status=" + movementStatus + " | worldDistance=" + distance + " | cameraDistance=" + movementDistance + " | duration=" + activeTravelDuration + " | from=" + movingObjectStartPosition + " | to=" + movingObjectTargetPosition);
+            Debug.Log("TrainMover: travel started | destination=" + destination.name + " | status=" + movementStatus + " | worldDistance=" + distance + " | movementDistance=" + movementDistance + " | duration=" + activeTravelDuration + " | from=" + movingObjectStartPosition + " | to=" + movingObjectTargetPosition);
         }
     }
 
@@ -359,12 +333,9 @@ public class TrainMover : MonoBehaviour
 
         movingObject.position = movingObjectTargetPosition;
 
-        if (!moveCameraForParallax)
-        {
-            transform.position = targetPosition;
-        }
+        transform.position = targetPosition;
 
-        if (!moveCameraForParallax && lockZPosition)
+        if (lockZPosition)
         {
             Vector3 position = transform.position;
             position.z = zPosition;

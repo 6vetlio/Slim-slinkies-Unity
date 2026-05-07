@@ -5,39 +5,69 @@ namespace _Scripts
 {
     public class NoahsParallax : MonoBehaviour
     {
-        private float _startingPos,
-            _lengthOfSprite;
-        public float AmountOfParallax;
-        public Camera MainCamera;
+        [SerializeField] private float AmountOfParallax = 1f;
+        [SerializeField] private TrainMover trainMover;
+        [SerializeField] private bool moveOnlyWhileTravelling = true;
+        [SerializeField] private float idleSpeedMultiplier = 0f;
+        [SerializeField] private float travelSpeedMultiplier = 60f;
 
-
+        private float _startingPos;
+        private float _lengthOfSprite;
 
         private void Start()
         {
             _startingPos = transform.position.x;
-            _lengthOfSprite = GetComponent<SpriteRenderer>().bounds.size.x;
+
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                _lengthOfSprite = spriteRenderer.bounds.size.x;
+            }
+
+            if (trainMover == null)
+            {
+                trainMover = FindFirstObjectByType<TrainMover>();
+            }
         }
-
-
 
         private void Update()
         {
-            Vector3 Position = MainCamera.transform.position;
-            float Temp = Position.x * (1 - AmountOfParallax);
-            float Distance = Position.x * AmountOfParallax;
-
-            Vector3 NewPosition = new Vector3(_startingPos + Distance, transform.position.y, transform.position.z);
-
-            transform.position = NewPosition;
-
-            if (Temp > _startingPos + (_lengthOfSprite / 2))
+            float speed = GetScrollSpeed();
+            if (Mathf.Approximately(speed, 0f))
             {
-                _startingPos += _lengthOfSprite;
+                return;
             }
-            else if (Temp < _startingPos - (_lengthOfSprite / 2))
+
+            _startingPos -= speed * Time.deltaTime;
+
+            Vector3 newPosition = transform.position;
+            newPosition.x = _startingPos;
+            transform.position = newPosition;
+
+            if (_lengthOfSprite <= 0f)
             {
-                _startingPos -= _lengthOfSprite;
+                return;
             }
+
+            float wrapLimit = -_lengthOfSprite;
+            if (transform.position.x <= wrapLimit)
+            {
+                _startingPos += _lengthOfSprite * 2f;
+                newPosition.x = _startingPos;
+                transform.position = newPosition;
+            }
+        }
+
+        private float GetScrollSpeed()
+        {
+            bool isTravelling = trainMover != null && trainMover.MovementStatus == TrainMovementStatus.Travelling;
+            if (!isTravelling && moveOnlyWhileTravelling)
+            {
+                return 0f;
+            }
+
+            float stateMultiplier = isTravelling ? travelSpeedMultiplier : idleSpeedMultiplier;
+            return Mathf.Max(0f, AmountOfParallax) * stateMultiplier;
         }
     }
 }
