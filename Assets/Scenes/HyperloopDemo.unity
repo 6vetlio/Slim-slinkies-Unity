@@ -3052,7 +3052,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!212 &141867122
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6450,7 +6449,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &259371240
 GameObject:
   m_ObjectHideFlags: 0
@@ -8182,7 +8180,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &317831367
 GameObject:
   m_ObjectHideFlags: 0
@@ -12117,7 +12114,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &499321899
 GameObject:
   m_ObjectHideFlags: 0
@@ -14751,7 +14747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70.79999, y: 50.299988}
+  m_AnchoredPosition: {x: 289, y: -25.73999}
   m_SizeDelta: {x: 310, y: 170}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &599915156
@@ -20673,7 +20669,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &841173163
 GameObject:
   m_ObjectHideFlags: 0
@@ -20994,7 +20989,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &856668677
 GameObject:
   m_ObjectHideFlags: 0
@@ -22758,8 +22752,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 26.999992, y: -124}
-  m_SizeDelta: {x: -20, y: 30}
+  m_AnchoredPosition: {x: 20, y: -119}
+  m_SizeDelta: {x: -20, y: 132.3335}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &944246504
 MonoBehaviour:
@@ -23937,7 +23931,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &991130626
 GameObject:
   m_ObjectHideFlags: 0
@@ -25980,7 +25973,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &1099997184
 GameObject:
   m_ObjectHideFlags: 0
@@ -33809,7 +33801,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &1423663795
 GameObject:
   m_ObjectHideFlags: 0
@@ -38199,7 +38190,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!212 &1616324861
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -42599,7 +42589,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &1781155160
 GameObject:
   m_ObjectHideFlags: 0
@@ -44550,7 +44539,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 10, y: -10}
-  m_SizeDelta: {x: 328.6016, y: 185.7398}
+  m_SizeDelta: {x: 328.6016, y: 277.1879}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1870561244
 MonoBehaviour:
@@ -44845,7 +44834,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!212 &1881334291
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -45740,10 +45728,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e945e6b96fd37b4ea84669545c7205e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 254164150}
-  parallaxEffectMultiplier: 1
-  lastCameraPosition: {x: 0, y: 0, z: 0}
-  textureUnitSizeX: 0
 --- !u!114 &1905388048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45761,7 +45745,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &1906431634
 GameObject:
   m_ObjectHideFlags: 0
@@ -47289,7 +47272,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &1957444656
 GameObject:
   m_ObjectHideFlags: 0
@@ -47948,7 +47930,6 @@ MonoBehaviour:
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
-  MainCamera: {fileID: 254164148}
 --- !u!1 &1980191459
 GameObject:
   m_ObjectHideFlags: 0
@@ -51643,4 +51624,3 @@ SceneRoots:
   - {fileID: 214099761}
   - {fileID: 2056145241}
   - {fileID: 1434170771}
-
