@@ -77,6 +77,7 @@
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\Scripts\UIParallax.cs" />
     <Compile Include="Assets\Scripts\VipSystem\VipMarkerUI.cs" />
+    <Compile Include="Assets\Scripts\BackgroundSwitcher.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\UISpriteAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
