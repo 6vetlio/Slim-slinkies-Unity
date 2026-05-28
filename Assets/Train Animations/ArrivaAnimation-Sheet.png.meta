@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: 22c9f796ce96ad44183b6a93d26ba006
+guid: d0cc4dd2a72e88644ae7f2e78fbfbf03
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 2305195105071971633
-    second: BulletTrainAnimation-Sheet_11
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,10 +69,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -109,282 +106,269 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_0
+      name: ArrivaAnimation-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7c56951fcf53c7370800000000000000
-      internalID: 8321585571971032519
+      spriteID: 0cd52feae876fb24a83814070d92e735
+      internalID: 874781596
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_1
+      name: ArrivaAnimation-Sheet_1
       rect:
         serializedVersion: 2
-        x: 363
+        x: 272
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 40a753268b0185de0800000000000000
-      internalID: -1344306104662394364
+      spriteID: 259fbab045344dd4db8178ed1a35639d
+      internalID: 181424702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_2
+      name: ArrivaAnimation-Sheet_2
       rect:
         serializedVersion: 2
-        x: 726
+        x: 544
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f89cab14a0262c3f0800000000000000
-      internalID: -882034780819240561
+      spriteID: 75aa63e5f69f2ad45b5ecf72b7c47e4a
+      internalID: -1165897226
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_3
+      name: ArrivaAnimation-Sheet_3
       rect:
         serializedVersion: 2
-        x: 1089
+        x: 816
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f6e4a62e911ec8bc0800000000000000
-      internalID: -3779398485981639057
+      spriteID: daeb6f4ab88ea2e4da75a018ef66bdd1
+      internalID: -1498387595
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_4
+      name: ArrivaAnimation-Sheet_4
       rect:
         serializedVersion: 2
-        x: 1452
+        x: 1088
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 41aba3cddbe3a28b0800000000000000
-      internalID: -5176255836544386540
+      spriteID: f2f0e56f18c01a849971ac6a347a85f1
+      internalID: -1617551932
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_5
+      name: ArrivaAnimation-Sheet_5
       rect:
         serializedVersion: 2
-        x: 1815
+        x: 1360
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6a1d09ae328a80ec0800000000000000
-      internalID: -3600443029870030426
+      spriteID: 66092302c70273d4ca48be7f740ad343
+      internalID: -1896108919
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_6
+      name: ArrivaAnimation-Sheet_6
       rect:
         serializedVersion: 2
-        x: 2178
+        x: 1632
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7dde404115e12fa30800000000000000
-      internalID: 4247490732140850647
+      spriteID: 2a46ba1b5951a0c4d80efafd982f78c1
+      internalID: 1204391071
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_7
+      name: ArrivaAnimation-Sheet_7
       rect:
         serializedVersion: 2
-        x: 2541
+        x: 1904
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bfdcbed6e0da3c990800000000000000
-      internalID: -7366854287962681861
+      spriteID: 5dd97a2207cc5ad44b37395e8800a9c5
+      internalID: -783241523
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_8
+      name: ArrivaAnimation-Sheet_8
       rect:
         serializedVersion: 2
-        x: 2904
+        x: 2176
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 56482ba6239ff02b0800000000000000
-      internalID: -5615996215373953947
+      spriteID: 47333c80db9134945adffac562a701c2
+      internalID: -1432781306
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_9
+      name: ArrivaAnimation-Sheet_9
       rect:
         serializedVersion: 2
-        x: 3267
+        x: 2448
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0d6eaaaf25ce8f2c0800000000000000
-      internalID: -4397505194990311728
+      spriteID: 976b38ae78735244ea0eb78f7605a6d9
+      internalID: -1861176989
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_10
+      name: ArrivaAnimation-Sheet_10
       rect:
         serializedVersion: 2
-        x: 3630
+        x: 2720
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c4dc7062751e53e80800000000000000
-      internalID: -8199399782141670068
+      spriteID: cd7c495e05dda224c9ee549360b20095
+      internalID: -1078405482
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BulletTrainAnimation-Sheet_11
+      name: ArrivaAnimation-Sheet_11
       rect:
         serializedVersion: 2
-        x: 3993
+        x: 2992
         y: 0
-        width: 363
+        width: 272
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 13db8cf0cb2bdff10800000000000000
-      internalID: 2305195105071971633
+      spriteID: 1e0712316d8081347b95277b41ec6ea2
+      internalID: -1043080644
       vertices: []
       indices: 
       edges: []
@@ -393,7 +377,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f212c32d686eed54caea36632f9d6394
     internalID: 0
     vertices: []
     indices: 
@@ -403,18 +387,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BulletTrainAnimation-Sheet_0: 8321585571971032519
-      BulletTrainAnimation-Sheet_1: -1344306104662394364
-      BulletTrainAnimation-Sheet_10: -8199399782141670068
-      BulletTrainAnimation-Sheet_11: 2305195105071971633
-      BulletTrainAnimation-Sheet_2: -882034780819240561
-      BulletTrainAnimation-Sheet_3: -3779398485981639057
-      BulletTrainAnimation-Sheet_4: -5176255836544386540
-      BulletTrainAnimation-Sheet_5: -3600443029870030426
-      BulletTrainAnimation-Sheet_6: 4247490732140850647
-      BulletTrainAnimation-Sheet_7: -7366854287962681861
-      BulletTrainAnimation-Sheet_8: -5615996215373953947
-      BulletTrainAnimation-Sheet_9: -4397505194990311728
+      ArrivaAnimation-Sheet_0: 874781596
+      ArrivaAnimation-Sheet_1: 181424702
+      ArrivaAnimation-Sheet_10: -1078405482
+      ArrivaAnimation-Sheet_11: -1043080644
+      ArrivaAnimation-Sheet_2: -1165897226
+      ArrivaAnimation-Sheet_3: -1498387595
+      ArrivaAnimation-Sheet_4: -1617551932
+      ArrivaAnimation-Sheet_5: -1896108919
+      ArrivaAnimation-Sheet_6: 1204391071
+      ArrivaAnimation-Sheet_7: -783241523
+      ArrivaAnimation-Sheet_8: -1432781306
+      ArrivaAnimation-Sheet_9: -1861176989
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
