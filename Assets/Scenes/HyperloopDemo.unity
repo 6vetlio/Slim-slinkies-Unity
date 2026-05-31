@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeaeaa00d8764734d90225d6518db826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainSpeed: 10
+  trainSpeed: 100
   worldContainer: {fileID: 1498416663}
 --- !u!212 &307396800
 SpriteRenderer:
@@ -663,6 +663,59 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1419770990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1419770992}
+  - component: {fileID: 1419770991}
+  m_Layer: 0
+  m_Name: ChunkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1419770991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419770990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eb7f5a823107e343bb7ec8eddb139fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainTransform: {fileID: 307396796}
+  landscapeChunkPrefabs:
+  - {fileID: 1270700607684206230}
+  - {fileID: 5815364346822787112}
+  stationChunkPrefab: {fileID: 0}
+  worldContainer: {fileID: 1498416663}
+  spawnDistance: 1000
+  despawnDistance: 200
+  stationInterval: 5
+--- !u!4 &1419770992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419770990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498416662
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,7 +725,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1498416663}
-  - component: {fileID: 1498416664}
   m_Layer: 0
   m_Name: worldcontainer
   m_TagString: Untagged
@@ -697,26 +749,6 @@ Transform:
   - {fileID: 5541535153243430721}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1498416664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1498416662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2eb7f5a823107e343bb7ec8eddb139fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trainTransform: {fileID: 307396796}
-  landscapeChunkPrefabs:
-  - {fileID: 1270700607684206230}
-  - {fileID: 5815364346822787112}
-  stationChunkPrefab: {fileID: 0}
-  spawnDistance: 1000
-  despawnDistance: 200
-  stationInterval: 5
 --- !u!1 &2056145240
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,7 +992,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2895010999328774371, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1002,3 +1034,4 @@ SceneRoots:
   - {fileID: 214099761}
   - {fileID: 2056145241}
   - {fileID: 1498416663}
+  - {fileID: 1419770992}
