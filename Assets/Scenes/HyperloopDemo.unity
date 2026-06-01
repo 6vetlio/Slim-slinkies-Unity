@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeaeaa00d8764734d90225d6518db826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainSpeed: 100
+  trainSpeed: 200
   worldContainer: {fileID: 1498416663}
 --- !u!212 &307396800
 SpriteRenderer:
@@ -699,7 +699,7 @@ MonoBehaviour:
   stationChunkPrefab: {fileID: 0}
   worldContainer: {fileID: 1498416663}
   spawnDistance: 1000
-  despawnDistance: 200
+  despawnDistance: 1000
   stationInterval: 5
 --- !u!4 &1419770992
 Transform:
