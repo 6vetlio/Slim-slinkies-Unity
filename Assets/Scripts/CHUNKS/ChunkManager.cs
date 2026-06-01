@@ -49,27 +49,31 @@ public class ChunkManager : MonoBehaviour
         }
     }
     
-    private void SpawnNextChunk()
+  private void SpawnNextChunk()
+{
+    BackgroundChunk chunkToSpawn;
+    
+    if (stationChunkPrefab != null && chunkCount > 0 && chunkCount % stationInterval == 0)
     {
-        BackgroundChunk chunkToSpawn;
-        
-        if (stationChunkPrefab != null && chunkCount > 0 && chunkCount % stationInterval == 0)
-        {
-            chunkToSpawn = Instantiate(stationChunkPrefab);
-            chunkToSpawn.chunkType = BackgroundChunk.ChunkType.Station;
-        }
-        else
-        {
-            BackgroundChunk prefab = landscapeChunkPrefabs[Random.Range(0, landscapeChunkPrefabs.Length)];
-            chunkToSpawn = Instantiate(prefab);
-            chunkToSpawn.chunkType = BackgroundChunk.ChunkType.Landscape;
-        }
-        
-        chunkToSpawn.transform.SetParent(worldContainer);
-        chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 0f, 0f);
-        
-        activeChunks.Add(chunkToSpawn);
-        nextChunkLocalX += chunkToSpawn.ChunkWidth;
-        chunkCount++;
+        chunkToSpawn = Instantiate(stationChunkPrefab);
+        chunkToSpawn.chunkType = BackgroundChunk.ChunkType.Station;
     }
+    else
+    {
+        BackgroundChunk prefab = landscapeChunkPrefabs[Random.Range(0, landscapeChunkPrefabs.Length)];
+        chunkToSpawn = Instantiate(prefab);
+        chunkToSpawn.chunkType = BackgroundChunk.ChunkType.Landscape;
+    }
+    
+    chunkToSpawn.transform.SetParent(worldContainer);
+    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 0f, 0f);
+    
+    // Debug line - shows world position and local position
+    float chunkWorldX = nextChunkLocalX + worldContainer.position.x;
+    Debug.Log($"Spawned chunk {chunkCount}: Local X = {nextChunkLocalX}, World X = {chunkWorldX}");
+    
+    activeChunks.Add(chunkToSpawn);
+    nextChunkLocalX += chunkToSpawn.ChunkWidth;
+    chunkCount++;
+}
 }
