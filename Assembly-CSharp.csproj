@@ -89,6 +89,7 @@
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\Wout Folder\ShopItem.cs" />
     <Compile Include="Assets\Scripts\UIParallax.cs" />
+    <Compile Include="Assets\Wout Folder\ShopList.cs" />
     <Compile Include="Assets\Scripts\VipSystem\VipMarkerUI.cs" />
     <Compile Include="Assets\Scripts\BackgroundSwitcher.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Assets\Scripts\VipSystem\HyperloopDemoBootstrap.cs" />
     <Compile Include="Assets\Scripts\VipSystem\GameManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
+    <Compile Include="Assets\Wout Folder\NewBuyButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Scripts\VipSystem\Station.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
