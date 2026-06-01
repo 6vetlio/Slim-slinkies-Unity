@@ -12,7 +12,7 @@ public class ChunkManager : MonoBehaviour
     [SerializeField] private int stationInterval = 5;
     
     private List<BackgroundChunk> activeChunks = new List<BackgroundChunk>();
-    private float nextChunkLocalX = 0f; // Local position relative to worldContainer
+    private float nextChunkLocalX = 0f;
     private int chunkCount = 0;
     
     private void Start()
@@ -25,17 +25,17 @@ public class ChunkManager : MonoBehaviour
     
     private void Update()
     {
-        // Distance between next spawn point and train (both in world space)
+       
         float nextChunkWorldX = nextChunkLocalX + worldContainer.position.x;
         float distanceToNextChunk = nextChunkWorldX - trainTransform.position.x;
         
-        // Spawn if next chunk is close enough
+       
         if (distanceToNextChunk < spawnDistance)
         {
             SpawnNextChunk();
         }
         
-        // Despawn chunks far behind
+        
         for (int i = activeChunks.Count - 1; i >= 0; i--)
         {
             float chunkWorldX = activeChunks[i].transform.localPosition.x + worldContainer.position.x;
@@ -68,7 +68,6 @@ public class ChunkManager : MonoBehaviour
     chunkToSpawn.transform.SetParent(worldContainer);
     chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 0f, 0f);
     
-    // Debug line - shows world position and local position
     float chunkWorldX = nextChunkLocalX + worldContainer.position.x;
     Debug.Log($"Spawned chunk {chunkCount}: Local X = {nextChunkLocalX}, World X = {chunkWorldX}");
     

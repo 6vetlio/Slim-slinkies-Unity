@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeaeaa00d8764734d90225d6518db826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainSpeed: 200
+  trainSpeed: 350
   worldContainer: {fileID: 1498416663}
 --- !u!212 &307396800
 SpriteRenderer:
@@ -698,8 +698,8 @@ MonoBehaviour:
   - {fileID: 5815364346822787112}
   stationChunkPrefab: {fileID: 0}
   worldContainer: {fileID: 1498416663}
-  spawnDistance: 1000
-  despawnDistance: 1000
+  spawnDistance: 2700
+  despawnDistance: 2000
   stationInterval: 5
 --- !u!4 &1419770992
 Transform:
@@ -936,7 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkWidth: 900
+  chunkWidth: 2700
   chunkType: 0
 --- !u!1001 &4255072570032617124
 PrefabInstance:
@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkWidth: 900
+  chunkWidth: 2700
   chunkType: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
