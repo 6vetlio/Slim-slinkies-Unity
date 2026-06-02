@@ -6,7 +6,7 @@ public class Economy : MonoBehaviour
     public int passengers = 50;
     public float revenuePerPassenger = 1f;
 
-    float totalMoney = 0f;
+   public float totalMoney = 0f;
     bool upgraded = false;
 
     public TMP_Text passengersText;
