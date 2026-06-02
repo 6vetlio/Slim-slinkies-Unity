@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public event Action<VipPassenger, int> VipPenalized;
     public event Action<Station> StationUnlocked;
     public event Action<string> NotEnoughMoney;
+    public event Action<int> MinorUpgradePurchased;
+    public event Action<int> TrainTierChanged;
 
     [Header("Economy")]
     [SerializeField] private float startingMoney = 100f;
@@ -24,6 +26,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int upgradedPassengerCount = 80;
     [SerializeField] private float upgradedRevenueMultiplier = 2.5f;
 
+    [Header("Train Tiers")]
+    [Tooltip("Ordered list of train tiers. Index 0 = base train, must be cost=0. Each subsequent tier costs money to unlock.")]
+    [SerializeField] private List<TrainTierDefinition> trainTiers = new List<TrainTierDefinition>();
+    [SerializeField] private int currentTrainTier = 0;
+    [Tooltip("Fallback travel duration if no train tiers are configured.")]
+    [SerializeField] private float defaultTravelDuration = 25f;
+
+    [Header("Minor Upgrades")]
+    [Tooltip("List of minor upgrades that the player must purchase to unlock the major upgrade (hyperloop). Configure in Inspector.")]
+    [SerializeField] private List<MinorUpgradeDefinition> minorUpgrades = new List<MinorUpgradeDefinition>();
+    [Tooltip("If true, the major (hyperloop) upgrade is locked until all minor upgrades are purchased.")]
+    [SerializeField] private bool gateMajorUpgradeBehindMinorUpgrades = true;
+    private List<bool> minorUpgradesPurchased = new List<bool>();
+
     [Header("Train State")]
     [SerializeField] private string currentStationId = "";
 
@@ -35,7 +51,7 @@ public class GameManager : MonoBehaviour
     public float Money { get; private set; }
     public int RegularPassengers => regularPassengers;
     public int EffectivePassengers => regularPassengers + trainTierPassengerBonus;
-    public float PassiveIncomePerSecond 
+    public float PassiveIncomePerSecond
     {
         get
         {
@@ -44,12 +60,137 @@ public class GameManager : MonoBehaviour
             {
                 baseIncome *= upgradedRevenueMultiplier;
             }
+            baseIncome *= CurrentTrainTierIncomeMultiplier;
+            baseIncome += MinorUpgradeIncomeBonus;
             return baseIncome;
         }
     }
+
+    public int CurrentTrainTier => currentTrainTier;
+    public int TrainTierCount => trainTiers != null ? trainTiers.Count : 0;
+
+    public TrainTierDefinition GetTrainTier(int index)
+    {
+        if (trainTiers == null || index < 0 || index >= trainTiers.Count)
+        {
+            return null;
+        }
+        return trainTiers[index];
+    }
+
+    public TrainTierDefinition CurrentTrainTierDef => GetTrainTier(currentTrainTier);
+
+    public float CurrentTrainTravelDuration
+    {
+        get
+        {
+            TrainTierDefinition def = CurrentTrainTierDef;
+            return def != null ? Mathf.Max(0.85f, def.travelDuration) : Mathf.Max(0.85f, defaultTravelDuration);
+        }
+    }
+
+    public float CurrentTrainTierIncomeMultiplier
+    {
+        get
+        {
+            TrainTierDefinition def = CurrentTrainTierDef;
+            return def != null ? Mathf.Max(0f, def.incomeMultiplier) : 1f;
+        }
+    }
+
+    public bool IsTrainTierOwned(int index) => index <= currentTrainTier;
+    public bool IsNextTrainTier(int index) => index == currentTrainTier + 1;
+
+    public bool CanBuyTrainTier(int index)
+    {
+        TrainTierDefinition def = GetTrainTier(index);
+        if (def == null) return false;
+        if (IsTrainTierOwned(index)) return false;
+        if (!IsNextTrainTier(index)) return false; // Must be purchased in order
+        return Money >= def.cost;
+    }
+
+    public bool TryBuyTrainTier(int index)
+    {
+        TrainTierDefinition def = GetTrainTier(index);
+        if (def == null)
+        {
+            return false;
+        }
+
+        if (IsTrainTierOwned(index))
+        {
+            return false;
+        }
+
+        if (!IsNextTrainTier(index))
+        {
+            NotEnoughMoney?.Invoke("Buy the previous train tier first");
+            return false;
+        }
+
+        if (Money < def.cost)
+        {
+            NotEnoughMoney?.Invoke("Need EUR " + def.cost + " for " + def.displayName);
+            return false;
+        }
+
+        Money -= def.cost;
+        currentTrainTier = index;
+        SetTrainTierEconomy(def.passengerBonus);
+        Debug.Log("[GameManager] Train tier purchased: " + def.displayName + " | tier=" + index + " | duration=" + def.travelDuration + "s | +" + def.passengerBonus + " passengers | x" + def.incomeMultiplier + " income");
+        TrainTierChanged?.Invoke(currentTrainTier);
+        MoneyChanged?.Invoke();
+        return true;
+    }
     public float UpgradeCost => upgradeCost;
     public bool HasUpgraded { get; private set; }
-    public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost;
+    public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost && (!gateMajorUpgradeBehindMinorUpgrades || AllMinorUpgradesPurchased);
+
+    public int MinorUpgradeCount => minorUpgrades != null ? minorUpgrades.Count : 0;
+
+    public bool AllMinorUpgradesPurchased
+    {
+        get
+        {
+            if (minorUpgrades == null || minorUpgrades.Count == 0)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < minorUpgradesPurchased.Count; i++)
+            {
+                if (!minorUpgradesPurchased[i])
+                {
+                    return false;
+                }
+            }
+
+            return minorUpgradesPurchased.Count == minorUpgrades.Count;
+        }
+    }
+
+    public float MinorUpgradeIncomeBonus
+    {
+        get
+        {
+            if (minorUpgrades == null || minorUpgradesPurchased == null)
+            {
+                return 0f;
+            }
+
+            float total = 0f;
+            int count = Mathf.Min(minorUpgrades.Count, minorUpgradesPurchased.Count);
+            for (int i = 0; i < count; i++)
+            {
+                if (minorUpgradesPurchased[i] && minorUpgrades[i] != null)
+                {
+                    total += minorUpgrades[i].passiveIncomeBonusPerSecond;
+                }
+            }
+            return total;
+        }
+    }
     public string CurrentStationId => currentStationId;
     public int MaxOnboardVips => maxOnboardVips;
 
@@ -73,6 +214,34 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         Money = startingMoney;
+
+        InitializeMinorUpgradesState();
+        InitializeTrainTierState();
+    }
+
+    private void InitializeTrainTierState()
+    {
+        if (trainTiers == null || trainTiers.Count == 0)
+        {
+            return;
+        }
+
+        currentTrainTier = Mathf.Clamp(currentTrainTier, 0, trainTiers.Count - 1);
+        TrainTierDefinition def = CurrentTrainTierDef;
+        if (def != null)
+        {
+            SetTrainTierEconomy(def.passengerBonus);
+        }
+    }
+
+    private void InitializeMinorUpgradesState()
+    {
+        int count = minorUpgrades != null ? minorUpgrades.Count : 0;
+        minorUpgradesPurchased = new List<bool>(count);
+        for (int i = 0; i < count; i++)
+        {
+            minorUpgradesPurchased.Add(false);
+        }
     }
 
     private void Update()
@@ -226,6 +395,12 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
+        if (gateMajorUpgradeBehindMinorUpgrades && !AllMinorUpgradesPurchased)
+        {
+            NotEnoughMoney?.Invoke("Complete all minor upgrades before the hyperloop upgrade");
+            return false;
+        }
+
         if (Money < upgradeCost)
         {
             NotEnoughMoney?.Invoke("Need EUR " + upgradeCost + " for hyperloop upgrade");
@@ -236,6 +411,67 @@ public class GameManager : MonoBehaviour
         regularPassengers = Mathf.Max(0, upgradedPassengerCount);
         HasUpgraded = true;
         SetVipTimersPaused(false);
+        MoneyChanged?.Invoke();
+        return true;
+    }
+
+    public MinorUpgradeDefinition GetMinorUpgrade(int index)
+    {
+        if (minorUpgrades == null || index < 0 || index >= minorUpgrades.Count)
+        {
+            return null;
+        }
+        return minorUpgrades[index];
+    }
+
+    public bool IsMinorUpgradePurchased(int index)
+    {
+        if (minorUpgradesPurchased == null || index < 0 || index >= minorUpgradesPurchased.Count)
+        {
+            return false;
+        }
+        return minorUpgradesPurchased[index];
+    }
+
+    public bool CanBuyMinorUpgrade(int index)
+    {
+        MinorUpgradeDefinition def = GetMinorUpgrade(index);
+        if (def == null)
+        {
+            return false;
+        }
+
+        if (IsMinorUpgradePurchased(index))
+        {
+            return false;
+        }
+
+        return Money >= def.cost;
+    }
+
+    public bool TryBuyMinorUpgrade(int index)
+    {
+        MinorUpgradeDefinition def = GetMinorUpgrade(index);
+        if (def == null)
+        {
+            return false;
+        }
+
+        if (IsMinorUpgradePurchased(index))
+        {
+            return false;
+        }
+
+        if (Money < def.cost)
+        {
+            NotEnoughMoney?.Invoke("Need EUR " + def.cost + " for " + def.displayName);
+            return false;
+        }
+
+        Money -= def.cost;
+        minorUpgradesPurchased[index] = true;
+        Debug.Log("[GameManager] Minor upgrade purchased: " + def.displayName + " | +" + def.passiveIncomeBonusPerSecond + " EUR/s");
+        MinorUpgradePurchased?.Invoke(index);
         MoneyChanged?.Invoke();
         return true;
     }
