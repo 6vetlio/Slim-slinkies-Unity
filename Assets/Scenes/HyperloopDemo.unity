@@ -3049,9 +3049,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!212 &141867122
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6446,9 +6448,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &259371240
 GameObject:
   m_ObjectHideFlags: 0
@@ -8177,9 +8181,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &317831367
 GameObject:
   m_ObjectHideFlags: 0
@@ -12111,9 +12117,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &499321899
 GameObject:
   m_ObjectHideFlags: 0
@@ -20666,9 +20674,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &841173163
 GameObject:
   m_ObjectHideFlags: 0
@@ -20986,9 +20996,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &856668677
 GameObject:
   m_ObjectHideFlags: 0
@@ -23928,9 +23940,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &991130626
 GameObject:
   m_ObjectHideFlags: 0
@@ -25970,9 +25984,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &1099997184
 GameObject:
   m_ObjectHideFlags: 0
@@ -33798,9 +33814,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &1423663795
 GameObject:
   m_ObjectHideFlags: 0
@@ -34125,6 +34143,9 @@ MonoBehaviour:
   visualTravelVerticalBob: 3
   lockZPosition: 1
   zPosition: 0
+  trainAnimator: {fileID: 0}
+  hyperloopAnimator: {fileID: 0}
+  isMovingAnimatorParam: IsMoving
   movementStatus: 0
 --- !u!114 &1434170769
 MonoBehaviour:
@@ -34145,6 +34166,32 @@ MonoBehaviour:
   upgradeCost: 8000
   upgradedPassengerCount: 80
   upgradedRevenueMultiplier: 2.5
+  trainTiers:
+  - displayName: Arriva
+    icon: {fileID: 0}
+    cost: 0
+    travelDuration: 25
+    passengerBonus: 0
+    incomeMultiplier: 1
+    visualPrefab: {fileID: 0}
+  - displayName: Bullet Train
+    icon: {fileID: 0}
+    cost: 2000
+    travelDuration: 12
+    passengerBonus: 40
+    incomeMultiplier: 1.5
+    visualPrefab: {fileID: 0}
+  - displayName: Hyperloop
+    icon: {fileID: 0}
+    cost: 8000
+    travelDuration: 5
+    passengerBonus: 80
+    incomeMultiplier: 2.5
+    visualPrefab: {fileID: 0}
+  currentTrainTier: 0
+  defaultTravelDuration: 25
+  minorUpgrades: []
+  gateMajorUpgradeBehindMinorUpgrades: 1
   currentStationId: 
   maxOnboardVips: 3
 --- !u!114 &1434170770
@@ -34162,6 +34209,7 @@ MonoBehaviour:
   trainImage: {fileID: 307396795}
   hyperloopImage: {fileID: 453095707}
   tubeLayer: {fileID: 0}
+  trainTierVisuals: []
 --- !u!4 &1434170771
 Transform:
   m_ObjectHideFlags: 0
@@ -37136,6 +37184,125 @@ RectTransform:
   m_AnchoredPosition: {x: -2720, y: 3.5}
   m_SizeDelta: {x: 160, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1571608376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1571608377}
+  - component: {fileID: 1571608381}
+  - component: {fileID: 1571608380}
+  - component: {fileID: 1571608379}
+  - component: {fileID: 1571608378}
+  m_Layer: 0
+  m_Name: TrainUpgradesPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1571608377
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571608376}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2056145241}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -230, y: 0}
+  m_SizeDelta: {x: 440, y: -200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1571608378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571608376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fc54a3f59ab49d0a035eb6fdcaf7a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonContainer: {fileID: 1571608377}
+  buttonPrefab: {fileID: 166468912729494885, guid: 6fe4c193dbce84889878adff7a8db440, type: 3}
+  trainMover: {fileID: 0}
+  skipBaseTier: 1
+--- !u!114 &1571608379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571608376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &1571608380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571608376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1571608381
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571608376}
+  m_CullTransparentMesh: 1
 --- !u!1 &1573648091
 GameObject:
   m_ObjectHideFlags: 0
@@ -37768,6 +37935,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1434170766}
     - target: {fileID: 1416176497168474532, guid: 507d4770599a64c42b8b3626dfb47e99, type: 3}
+      propertyPath: trainUpgradesPanel
+      value: 
+      objectReference: {fileID: 1571608376}
+    - target: {fileID: 1416176497168474532, guid: 507d4770599a64c42b8b3626dfb47e99, type: 3}
       propertyPath: gameplayElementsToHide.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -38187,9 +38358,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!212 &1616324861
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -42586,9 +42759,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &1781155160
 GameObject:
   m_ObjectHideFlags: 0
@@ -44831,9 +45006,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!212 &1881334291
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -45742,9 +45919,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &1906431634
 GameObject:
   m_ObjectHideFlags: 0
@@ -47269,9 +47448,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &1957444656
 GameObject:
   m_ObjectHideFlags: 0
@@ -47927,9 +48108,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
+  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
   travelSpeedMultiplier: 60
+  hyperloopSpeedMultiplier: 300
 --- !u!1 &1980191459
 GameObject:
   m_ObjectHideFlags: 0
@@ -49919,6 +50102,7 @@ RectTransform:
   - {fileID: 1211071810}
   - {fileID: 1603108992}
   - {fileID: 129054399}
+  - {fileID: 1571608377}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

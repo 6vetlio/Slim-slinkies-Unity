@@ -200,16 +200,20 @@ public class TrainUpgradeButton : MonoBehaviour
         bool owned = GameManager.Instance.IsTrainTierOwned(tierIndex);
         bool canBuy = GameManager.Instance.CanBuyTrainTier(tierIndex) && !trainMoving;
 
+        string priceText = owned ? "Owned" : "Buy — EUR " + def.cost.ToString("F0");
+
         if (nameLabel != null)
         {
-            nameLabel.text = def.displayName + (owned ? " (Owned)" : "");
+            // When there's a separate price label, the name label only shows the name.
+            // When there's only one label, combine name + price onto two lines.
+            nameLabel.text = priceLabel != null
+                ? def.displayName + (owned ? " (Owned)" : "")
+                : def.displayName + "\n" + priceText;
         }
 
         if (priceLabel != null)
         {
-            priceLabel.text = owned
-                ? "Owned"
-                : "Buy — EUR " + def.cost.ToString("F0");
+            priceLabel.text = priceText;
         }
 
         if (iconImage != null && def.icon != null)
