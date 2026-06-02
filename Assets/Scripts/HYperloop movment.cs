@@ -28,11 +28,19 @@ public class TrainMover : MonoBehaviour
     public float cameraZPosition = -10f;
     public bool debugMovementLogs = true;
     public float visualTravelScreenDistance = 0f;
+    [Tooltip("Vertical bob amount during travel. Keep at 0 to prevent the train from floating off the track.")]
     public float visualTravelVerticalBob = 0f;
 
     [Header("2D Lock")]
     public bool lockZPosition = true;
     public float zPosition = 0f;
+
+    [Header("Animation")]
+    [Tooltip("Animator on the train visual. Must have a bool parameter named 'IsMoving'.")]
+    [SerializeField] private Animator trainAnimator;
+    [Tooltip("Animator on the hyperloop visual. Must have a bool parameter named 'IsMoving'.")]
+    [SerializeField] private Animator hyperloopAnimator;
+    [SerializeField] private string isMovingAnimatorParam = "IsMoving";
 
     [SerializeField] private TrainMovementStatus movementStatus = TrainMovementStatus.Stationary;
 
@@ -196,6 +204,7 @@ public class TrainMover : MonoBehaviour
         destinationPosition.z = destination.position.z;
 
         movementStatus = TrainMovementStatus.Travelling;
+        SetMovingAnimation(true);
         target = destination;
         targetPosition = destinationPosition;
         travelStartPosition = transform.position;
@@ -203,11 +212,15 @@ public class TrainMover : MonoBehaviour
         movingObjectStartPosition = movingObject.position;
         float movementDistance = distance;
         movingObjectTargetPosition = movingObjectStartPosition + Vector3.right * movementDistance;
+        // Lock Y to the start position so the train cannot float off the track during Lerp.
         movingObjectTargetPosition.y = movingObjectStartPosition.y;
         movingObjectTargetPosition.z = movingObjectStartPosition.z;
         travelElapsed = 0f;
         bool isHyperloop = transportSwitcher != null && transportSwitcher.IsHyperloopActive();
-        float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : normalTrainDuration);
+        float trainDurationFromTier = GameManager.Instance != null
+            ? GameManager.Instance.CurrentTrainTravelDuration
+            : normalTrainDuration;
+        float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : trainDurationFromTier);
         float legWorldDistance = Vector3.Distance(travelStartPosition, destinationPosition);
         float refDist = Mathf.Max(1f, referenceWorldDistance);
         float distanceFactor = Mathf.Clamp(legWorldDistance / refDist, minTravelDurationFactor, maxTravelDurationFactor);
@@ -235,6 +248,7 @@ public class TrainMover : MonoBehaviour
     public void ForceStationary()
     {
         movementStatus = TrainMovementStatus.Stationary;
+        SetMovingAnimation(false);
         target = null;
         travelElapsed = 0f;
         ResetTransportVisualOffset();
@@ -343,6 +357,7 @@ public class TrainMover : MonoBehaviour
         }
 
         movementStatus = TrainMovementStatus.Arrived;
+        SetMovingAnimation(false);
         target = null;
         travelElapsed = 0f;
         ResetTransportVisualOffset();
@@ -352,5 +367,23 @@ public class TrainMover : MonoBehaviour
             Debug.Log("TrainMover: travel complete | status=" + movementStatus + " | movingObjectPosition=" + movingObject.position);
         }
         ReachedStationStop?.Invoke();
+    }
+
+    private void SetMovingAnimation(bool isMoving)
+    {
+        if (string.IsNullOrEmpty(isMovingAnimatorParam))
+        {
+            return;
+        }
+
+        if (trainAnimator != null)
+        {
+            trainAnimator.SetBool(isMovingAnimatorParam, isMoving);
+        }
+
+        if (hyperloopAnimator != null)
+        {
+            hyperloopAnimator.SetBool(isMovingAnimatorParam, isMoving);
+        }
     }
 }

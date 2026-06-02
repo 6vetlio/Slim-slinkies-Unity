@@ -24,6 +24,10 @@ public class MapStopController : MonoBehaviour
     [Header("Hide When Map Open")]
     [SerializeField] private CanvasGroup[] gameplayElementsToHide;
 
+    [Header("Train Upgrades Panel")]
+    [Tooltip("Optional. If set, this panel is shown when the map opens and hidden when it closes.")]
+    [SerializeField] private GameObject trainUpgradesPanel;
+
     private Station pendingArrivalStation;
     private bool mapOpen;
     private TrainMover subscribedTrainMover;
@@ -180,6 +184,11 @@ public class MapStopController : MonoBehaviour
                 cg.blocksRaycasts = visible;
             }
         }
+
+        if (trainUpgradesPanel != null)
+        {
+            trainUpgradesPanel.SetActive(visible);
+        }
     }
 
     private void SubscribeToTrainMover()
@@ -282,7 +291,14 @@ public class MapStopController : MonoBehaviour
 
         if (!station.IsUnlocked && GameManager.Instance != null)
         {
-            GameManager.Instance.TryUnlockStation(station);
+            if (!GameManager.Instance.TryUnlockStation(station))
+            {
+                if (debugMapLogs)
+                {
+                    Debug.Log("MapStopController: travel blocked because station unlock failed (likely not enough money) | station=" + station.DisplayName);
+                }
+                return;
+            }
         }
 
         if (IsCurrentStation(station))
