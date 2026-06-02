@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Slim-slinkies-Unity.slnx"
+    "dotnet.defaultSolution": "Slim slinkies Unity.slnx"
 }
