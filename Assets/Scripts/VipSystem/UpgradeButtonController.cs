@@ -76,18 +76,25 @@ public class UpgradeButtonController : MonoBehaviour
         // Find TrainMover to check movement status
         var trainMover = FindFirstObjectByType<TrainMover>();
         bool trainTraveling = trainMover != null && trainMover.MovementStatus == TrainMovementStatus.Travelling;
-        
+
         // Only show button if can afford AND train is not traveling
-        bool canShow = GameManager.Instance != null 
-                       && GameManager.Instance.CanBuyUpgrade 
+        bool canShow = GameManager.Instance != null
+                       && GameManager.Instance.CanBuyUpgrade
                        && !trainTraveling;
 
         TMP_Text label = upgradeButton.GetComponentInChildren<TMP_Text>(true);
         if (label != null && GameManager.Instance != null)
         {
-            label.text = "Upgrade\nEUR " + GameManager.Instance.UpgradeCost.ToString("F0");
+            if (!GameManager.Instance.AllMinorUpgradesPurchased)
+            {
+                label.text = "Upgrade Locked\nComplete minor upgrades";
+            }
+            else
+            {
+                label.text = "Upgrade\nEUR " + GameManager.Instance.UpgradeCost.ToString("F0");
+            }
         }
-        
+
         upgradeButton.SetActive(canShow);
     }
 

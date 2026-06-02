@@ -7,9 +7,11 @@ namespace _Scripts
     {
         [SerializeField] private float AmountOfParallax = 1f;
         [SerializeField] private TrainMover trainMover;
+        [SerializeField] private TransportSwitcher transportSwitcher;
         [SerializeField] private bool moveOnlyWhileTravelling = true;
         [SerializeField] private float idleSpeedMultiplier = 0f;
         [SerializeField] private float travelSpeedMultiplier = 60f;
+        [SerializeField] private float hyperloopSpeedMultiplier = 300f;
 
         private float _startingPos;
         private float _lengthOfSprite;
@@ -27,6 +29,11 @@ namespace _Scripts
             if (trainMover == null)
             {
                 trainMover = FindFirstObjectByType<TrainMover>();
+            }
+
+            if (transportSwitcher == null)
+            {
+                transportSwitcher = FindFirstObjectByType<TransportSwitcher>();
             }
         }
 
@@ -66,7 +73,13 @@ namespace _Scripts
                 return 0f;
             }
 
-            float stateMultiplier = isTravelling ? travelSpeedMultiplier : idleSpeedMultiplier;
+            float travelMultiplier = travelSpeedMultiplier;
+            if (isTravelling && transportSwitcher != null && transportSwitcher.IsHyperloopActive())
+            {
+                travelMultiplier = hyperloopSpeedMultiplier;
+            }
+
+            float stateMultiplier = isTravelling ? travelMultiplier : idleSpeedMultiplier;
             return Mathf.Max(0f, AmountOfParallax) * stateMultiplier;
         }
     }
