@@ -233,6 +233,11 @@ public class TrainMover : MonoBehaviour
         {
             Debug.Log("TrainMover: travel started | destination=" + destination.name + " | status=" + movementStatus + " | worldDistance=" + distance + " | movementDistance=" + movementDistance + " | duration=" + activeTravelDuration + " | from=" + movingObjectStartPosition + " | to=" + movingObjectTargetPosition);
         }
+    TrainMovement chunkMovementSystem = FindObjectOfType<TrainMovement>();
+        if (chunkMovementSystem != null)
+        {
+            chunkMovementSystem.InitializeChunkTravel(distance);
+        }
     }
 
     public void SkipToDestination()
