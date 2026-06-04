@@ -73,7 +73,7 @@ private void SpawnNextChunk()
     // Convert world Z to local Z relative to worldContainer
     float nextChunkLocalZ = nextChunkWorldZ - worldContainer.position.z;
     
-    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 0f, nextChunkLocalZ);
+    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 43.63748f, nextChunkLocalZ);
     
     if (chunkCount == 0 && chunkToSpawn.name.Contains("HillsChunk2"))
     {
