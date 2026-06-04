@@ -14,9 +14,14 @@ public class DevMenu : MonoBehaviour
     private const KeyCode ToggleKey = KeyCode.F1;
 
     private bool open = true;
-    private Rect window = new Rect(20, 20, 280, 380);
+    private Rect window = new Rect(20, 20, 560, 760);
     private string moneyInput = "1000";
     private string vipInput = "1";
+    private const float UiScale = 2.5f;
+    private static GUIStyle bigLabel;
+    private static GUIStyle bigButton;
+    private static GUIStyle bigField;
+    private static GUIStyle bigWindow;
 
     private static MethodInfo addMoneyMethod;
 
@@ -37,7 +42,18 @@ public class DevMenu : MonoBehaviour
     private void OnGUI()
     {
         if (!open) return;
-        window = GUILayout.Window(0xDEAFBABE.GetHashCode(), window, DrawWindow, "Dev Menu  (F1 to hide)");
+        EnsureStyles();
+        window = GUILayout.Window(0xDEAFBABE.GetHashCode(), window, DrawWindow, "Dev Menu  (F1 to hide)", bigWindow);
+    }
+
+    private static void EnsureStyles()
+    {
+        if (bigLabel != null) return;
+        int fs = Mathf.RoundToInt(14 * UiScale);
+        bigLabel = new GUIStyle(GUI.skin.label) { fontSize = fs };
+        bigButton = new GUIStyle(GUI.skin.button) { fontSize = fs, fixedHeight = fs * 2f, padding = new RectOffset(12, 12, 6, 6) };
+        bigField = new GUIStyle(GUI.skin.textField) { fontSize = fs, fixedHeight = fs * 2f };
+        bigWindow = new GUIStyle(GUI.skin.window) { fontSize = fs };
     }
 
     private void DrawWindow(int id)
@@ -45,48 +61,48 @@ public class DevMenu : MonoBehaviour
         var gm = GameManager.Instance;
         if (gm == null)
         {
-            GUILayout.Label("GameManager not ready.");
+            GUILayout.Label("GameManager not ready.", bigLabel);
             GUI.DragWindow();
             return;
         }
 
-        GUILayout.Label($"Money: EUR {gm.Money:0}");
-        GUILayout.Label($"Income/s: EUR {gm.PassiveIncomePerSecond:0.0}");
-        GUILayout.Label($"Tier: {gm.CurrentTrainTier} / {gm.TrainTierCount - 1}  |  {gm.CurrentTrainTopSpeedKmh:0} km/h");
-        GUILayout.Label($"Onboard: {gm.OnboardVips.Count}/{gm.MaxOnboardVips}");
-        GUILayout.Label($"Minor upgrades: {CountOwnedMinor(gm)} / {gm.MinorUpgradeCount}");
+        GUILayout.Label($"Money: EUR {gm.Money:0}", bigLabel);
+        GUILayout.Label($"Income/s: EUR {gm.PassiveIncomePerSecond:0.0}", bigLabel);
+        GUILayout.Label($"Tier: {gm.CurrentTrainTier} / {gm.TrainTierCount - 1}  |  {gm.CurrentTrainTopSpeedKmh:0} km/h", bigLabel);
+        GUILayout.Label($"Onboard: {gm.OnboardVips.Count}/{gm.MaxOnboardVips}", bigLabel);
+        GUILayout.Label($"Minor upgrades: {CountOwnedMinor(gm)} / {gm.MinorUpgradeCount}", bigLabel);
 
-        GUILayout.Space(6);
-        GUILayout.Label("Money");
+        GUILayout.Space(10);
+        GUILayout.Label("Money", bigLabel);
         GUILayout.BeginHorizontal();
-        moneyInput = GUILayout.TextField(moneyInput, GUILayout.Width(80));
-        if (GUILayout.Button("Add") && int.TryParse(moneyInput, out var v)) AddMoney(gm, v);
-        if (GUILayout.Button("+10k")) AddMoney(gm, 10000);
-        if (GUILayout.Button("+100k")) AddMoney(gm, 100000);
+        moneyInput = GUILayout.TextField(moneyInput, bigField, GUILayout.Width(160));
+        if (GUILayout.Button("Add", bigButton) && int.TryParse(moneyInput, out var v)) AddMoney(gm, v);
+        if (GUILayout.Button("+10k", bigButton)) AddMoney(gm, 10000);
+        if (GUILayout.Button("+100k", bigButton)) AddMoney(gm, 100000);
         GUILayout.EndHorizontal();
 
-        GUILayout.Space(6);
-        GUILayout.Label("Tier");
-        if (GUILayout.Button("Force +1 Tier (auto-pay)")) ForceTierUp(gm);
-        if (GUILayout.Button("Reload scene (reset)")) ReloadScene();
+        GUILayout.Space(10);
+        GUILayout.Label("Tier", bigLabel);
+        if (GUILayout.Button("Force +1 Tier (auto-pay)", bigButton)) ForceTierUp(gm);
+        if (GUILayout.Button("Reload scene (reset)", bigButton)) ReloadScene();
 
-        GUILayout.Space(6);
-        GUILayout.Label("VIPs");
+        GUILayout.Space(10);
+        GUILayout.Label("VIPs", bigLabel);
         GUILayout.BeginHorizontal();
-        vipInput = GUILayout.TextField(vipInput, GUILayout.Width(50));
-        if (GUILayout.Button("Spawn") && int.TryParse(vipInput, out var n)) SpawnVips(n);
+        vipInput = GUILayout.TextField(vipInput, bigField, GUILayout.Width(120));
+        if (GUILayout.Button("Spawn", bigButton) && int.TryParse(vipInput, out var n)) SpawnVips(n);
         GUILayout.EndHorizontal();
 
-        GUILayout.Space(6);
-        if (GUILayout.Button("Buy ALL minor upgrades")) BuyAllMinor(gm);
-        if (GUILayout.Button("Time skip +60s income"))
+        GUILayout.Space(10);
+        if (GUILayout.Button("Buy ALL minor upgrades", bigButton)) BuyAllMinor(gm);
+        if (GUILayout.Button("Time skip +60s income", bigButton))
         {
             AddMoney(gm, Mathf.RoundToInt(gm.PassiveIncomePerSecond * 60f));
         }
 
-        GUILayout.Space(6);
-        GUILayout.Label("F1 = hide. Drag title to move.");
-        GUI.DragWindow(new Rect(0, 0, 10000, 22));
+        GUILayout.Space(10);
+        GUILayout.Label("F1 = hide. Drag title to move.", bigLabel);
+        GUI.DragWindow(new Rect(0, 0, 10000, 44));
     }
 
     private static void AddMoney(GameManager gm, int amount)
