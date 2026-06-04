@@ -216,11 +216,13 @@ public class TrainMover : MonoBehaviour
         movingObjectTargetPosition.y = movingObjectStartPosition.y;
         movingObjectTargetPosition.z = movingObjectStartPosition.z;
         travelElapsed = 0f;
-        bool isHyperloop = transportSwitcher != null && transportSwitcher.IsHyperloopActive();
+        // Every tier honors its own travelDuration (configured on TrainTierDefinition).
+        // The legacy hyperloopDuration override would have made Hyperloop tier feel the
+        // same as Bullet regardless of the per-tier setting — dropped on purpose.
         float trainDurationFromTier = GameManager.Instance != null
             ? GameManager.Instance.CurrentTrainTravelDuration
             : normalTrainDuration;
-        float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : trainDurationFromTier);
+        float baseLegDuration = Mathf.Max(0.85f, trainDurationFromTier);
         float legWorldDistance = Vector3.Distance(travelStartPosition, destinationPosition);
         float refDist = Mathf.Max(1f, referenceWorldDistance);
         float distanceFactor = Mathf.Clamp(legWorldDistance / refDist, minTravelDurationFactor, maxTravelDurationFactor);

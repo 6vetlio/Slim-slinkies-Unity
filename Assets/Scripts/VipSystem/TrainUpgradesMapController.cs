@@ -27,6 +27,8 @@ public class TrainUpgradesMapController : MonoBehaviour
     [SerializeField] private TrainMover trainMover;
     [Tooltip("If true, skips tier 0 (the base train) — it's already owned at start.")]
     [SerializeField] private bool skipBaseTier = true;
+    [Tooltip("If true, only spawns the next-purchasable tier (single CTA). Owned tiers and far-future tiers stay hidden.")]
+    [SerializeField] private bool onlyShowNextTier = false;
 
     private readonly List<TrainUpgradeButton> spawnedButtons = new List<TrainUpgradeButton>();
     private bool subscribed;
@@ -88,7 +90,16 @@ public class TrainUpgradesMapController : MonoBehaviour
     }
 
     private void HandleStateChanged() => RefreshAll();
-    private void HandleTierChanged(int newTier) => RefreshAll();
+    private void HandleTierChanged(int newTier)
+    {
+        // In single-CTA mode the spawned button set changes when the tier changes
+        // (the next tier shifts up by one). Rebuild rather than refresh-in-place.
+        if (onlyShowNextTier)
+        {
+            RebuildButtons();
+        }
+        RefreshAll();
+    }
 
     private void RebuildButtons()
     {
@@ -108,6 +119,18 @@ public class TrainUpgradesMapController : MonoBehaviour
 
         int count = GameManager.Instance.TrainTierCount;
         int startIndex = skipBaseTier ? 1 : 0;
+
+        if (onlyShowNextTier)
+        {
+            int next = GameManager.Instance.CurrentTrainTier + 1;
+            if (next < startIndex || next >= count)
+            {
+                return; // No purchasable next tier — show nothing.
+            }
+            startIndex = next;
+            count = next + 1;
+        }
+
         for (int i = startIndex; i < count; i++)
         {
             GameObject go = Instantiate(buttonPrefab, buttonContainer);

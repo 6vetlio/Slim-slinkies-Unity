@@ -24,4 +24,10 @@ public class TrainTierDefinition
 
     [Tooltip("Optional GameObject visual to enable when this tier is active. Leave empty to keep current placeholder visuals.")]
     public GameObject visualPrefab;
+
+    [Tooltip("Top speed in km/h shown on the speedometer when this tier is active.")]
+    public float topSpeedKmh = 80f;
+
+    [Tooltip("Short subtitle shown under the tier name on the upgrade panel header (e.g. \"National Net\", \"High Speed\").")]
+    public string subtitle = "";
 }

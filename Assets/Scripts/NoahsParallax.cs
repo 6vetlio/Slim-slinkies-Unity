@@ -80,7 +80,16 @@ namespace _Scripts
             }
 
             float stateMultiplier = isTravelling ? travelMultiplier : idleSpeedMultiplier;
-            return Mathf.Max(0f, AmountOfParallax) * stateMultiplier;
+
+            // Scale by the current tier so background visibly speeds up when the
+            // player upgrades trains — not only at the Hyperloop branch above.
+            float tierMultiplier = 1f;
+            if (GameManager.Instance != null)
+            {
+                tierMultiplier = Mathf.Max(0.1f, GameManager.Instance.CurrentTierScrollMultiplier);
+            }
+
+            return Mathf.Max(0f, AmountOfParallax) * stateMultiplier * tierMultiplier;
         }
     }
 }

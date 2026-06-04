@@ -20972,6 +20972,142 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 810674151}
   m_CullTransparentMesh: 1
+--- !u!1 &816228510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 816228511}
+  - component: {fileID: 816228513}
+  - component: {fileID: 816228512}
+  m_Layer: 0
+  m_Name: TierHeader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &816228511
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816228510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571608377}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &816228512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816228510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "ARRIVA \u2014 80 km/h\n"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &816228513
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816228510}
+  m_CullTransparentMesh: 1
 --- !u!1 &818747822
 GameObject:
   m_ObjectHideFlags: 0
@@ -35409,6 +35545,8 @@ MonoBehaviour:
     passengerBonus: 0
     incomeMultiplier: 1
     visualPrefab: {fileID: 0}
+    topSpeedKmh: 80
+    subtitle: National Net
   - displayName: Bullet Train
     icon: {fileID: 0}
     cost: 2000
@@ -35416,6 +35554,8 @@ MonoBehaviour:
     passengerBonus: 40
     incomeMultiplier: 1.5
     visualPrefab: {fileID: 0}
+    topSpeedKmh: 220
+    subtitle: High Speed
   - displayName: Hyperloop
     icon: {fileID: 0}
     cost: 8000
@@ -35423,9 +35563,41 @@ MonoBehaviour:
     passengerBonus: 80
     incomeMultiplier: 2.5
     visualPrefab: {fileID: 0}
+    topSpeedKmh: 700
+    subtitle: Vacuum Tube
   currentTrainTier: 0
   defaultTravelDuration: 25
-  minorUpgrades: []
+  minorUpgrades:
+  - displayName: Coffee Cart
+    description: Brewed espresso for happy commuters
+    cost: 250
+    passiveIncomeBonusPerSecond: 0.5
+    icon: {fileID: 0}
+  - displayName: Cushy Seats
+    description: Plush leather across every car
+    cost: 400
+    passiveIncomeBonusPerSecond: 0.5
+    icon: {fileID: 0}
+  - displayName: Reinforced Wheels
+    description: Smoother ride, fewer delays
+    cost: 600
+    passiveIncomeBonusPerSecond: 0.5
+    icon: {fileID: 0}
+  - displayName: Aerodynamic Fairing
+    description: Slice through the wind
+    cost: 900
+    passiveIncomeBonusPerSecond: 0.5
+    icon: {fileID: 0}
+  - displayName: Onboard WiFi
+    description: Faster internet, happier passengers
+    cost: 1300
+    passiveIncomeBonusPerSecond: 1
+    icon: {fileID: 0}
+  - displayName: Conductor Tip Jar
+    description: Generous travelers leave more
+    cost: 1800
+    passiveIncomeBonusPerSecond: 1
+    icon: {fileID: 0}
   gateMajorUpgradeBehindMinorUpgrades: 1
   currentStationId: 
   maxOnboardVips: 3
@@ -38432,13 +38604,14 @@ GameObject:
   - component: {fileID: 1571608380}
   - component: {fileID: 1571608379}
   - component: {fileID: 1571608378}
+  - component: {fileID: 1571608382}
   m_Layer: 0
   m_Name: TrainUpgradesPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1571608377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38452,6 +38625,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1641652589}
+  - {fileID: 816228511}
+  - {fileID: 1599659637}
   m_Father: {fileID: 2056145241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -38475,6 +38650,7 @@ MonoBehaviour:
   buttonPrefab: {fileID: 166468912729494885, guid: 6fe4c193dbce84889878adff7a8db440, type: 3}
   trainMover: {fileID: 0}
   skipBaseTier: 1
+  onlyShowNextTier: 1
 --- !u!114 &1571608379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38539,6 +38715,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571608376}
   m_CullTransparentMesh: 1
+--- !u!114 &1571608382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571608376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f40361d2be0044fcbce55614fd8da73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  needle: {fileID: 0}
+  arcFill: {fileID: 0}
+  speedLabel: {fileID: 816228512}
+  captionLabel: {fileID: 0}
+  maxNeedleSpeedKmh: 800
+  needleZeroAngle: 90
+  needleMaxAngle: -90
+  speedFormat: '{0:0} km/h'
 --- !u!1 &1573648091
 GameObject:
   m_ObjectHideFlags: 0
@@ -39138,6 +39334,82 @@ RectTransform:
   m_AnchoredPosition: {x: 3040, y: 3.5}
   m_SizeDelta: {x: 160, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1599659636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1599659637}
+  - component: {fileID: 1599659639}
+  - component: {fileID: 1599659638}
+  m_Layer: 0
+  m_Name: MinorUpgradesGrid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1599659637
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599659636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1571608377}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1599659638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599659636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08576bf55e61d4ad792048325e3f4881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonContainer: {fileID: 1599659637}
+  buttonPrefab: {fileID: 166468912729494885, guid: 6fe4c193dbce84889878adff7a8db440, type: 3}
+  hideWhenAllPurchased: 0
+--- !u!114 &1599659639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599659636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 200, y: 60}
+  m_Spacing: {x: 6, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1001 &1603108991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40615,9 +40887,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1571608377}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100.754326, y: -70.44438}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 102.9297, y: 88.6075}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1641652590

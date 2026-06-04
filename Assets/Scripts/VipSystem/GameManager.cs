@@ -98,6 +98,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // How much faster the world should scroll relative to the base tier.
+    // Arriva (25s travel) → 1.0, Bullet (12s) → ~2.08, Hyperloop (5s) → 5.0.
+    public float CurrentTierScrollMultiplier
+    {
+        get
+        {
+            float current = CurrentTrainTravelDuration;
+            return Mathf.Max(0.1f, defaultTravelDuration / Mathf.Max(0.85f, current));
+        }
+    }
+
+    public float CurrentTrainTopSpeedKmh
+    {
+        get
+        {
+            TrainTierDefinition def = CurrentTrainTierDef;
+            return def != null ? Mathf.Max(1f, def.topSpeedKmh) : 80f;
+        }
+    }
+
     public bool IsTrainTierOwned(int index) => index <= currentTrainTier;
     public bool IsNextTrainTier(int index) => index == currentTrainTier + 1;
 
