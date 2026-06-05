@@ -6,9 +6,10 @@ public class NewBuyButton : MonoBehaviour
     public GameObject ItemPrefab ;
     public Transform Interior ;
 
+    public float price = 500f;
     public void BoughtArt()
     {
-        if (GameManager.BuyArt())
+        if (GameManager.BuyArt(price))
         {
             Instantiate(ItemPrefab, Interior);
         }

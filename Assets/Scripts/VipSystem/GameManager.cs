@@ -560,11 +560,11 @@ public class GameManager : MonoBehaviour
         Money = Mathf.Max(0f, Money - penalty);
         MoneyChanged?.Invoke();
     }
-    public bool BuyArt()
+    public bool BuyArt(float cost)
     {
-        if (Money >= 500f)
+        if (Money >= cost)
         {
-            Money -= 500f;
+            Money -= cost;
             return true;
         }
         return false;
