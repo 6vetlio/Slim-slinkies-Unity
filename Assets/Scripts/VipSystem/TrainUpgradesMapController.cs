@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+// NOTE: scene still serialises `skipBaseTier` and `onlyShowNextTier` against
+// this controller. Unity discards those fields silently — keep them deleted.
 
 /// <summary>
 /// Spawns one buy-button per train tier defined on GameManager. Lives inside
@@ -25,13 +27,44 @@ public class TrainUpgradesMapController : MonoBehaviour
     [Header("Gating")]
     [Tooltip("Optional. If assigned, upgrade buttons are disabled while the train is moving.")]
     [SerializeField] private TrainMover trainMover;
-    [Tooltip("If true, skips tier 0 (the base train) — it's already owned at start.")]
-    [SerializeField] private bool skipBaseTier = true;
-    [Tooltip("If true, only spawns the next-purchasable tier (single CTA). Owned tiers and far-future tiers stay hidden.")]
-    [SerializeField] private bool onlyShowNextTier = false;
+
+    [Header("Layout")]
+    [Tooltip("If true, the panel reanchors itself when it opens. Saves brutus a scene anchor pass.")]
+    [SerializeField] private bool forceLayoutOnEnable = true;
+    [Tooltip("Where the panel sits on the screen. Default (0.55, 0)-(1, 1) puts it on the right side, leaving the map peek on the left.")]
+    [SerializeField] private Vector2 panelAnchorMin = new Vector2(0.55f, 0f);
+    [SerializeField] private Vector2 panelAnchorMax = new Vector2(1f, 1f);
+    [Tooltip("Split inside the panel: train upgrades on the left column, minor upgrades on the right column. 0.55 leaves a bit more room for the minor list since it has more entries.")]
+    [Range(0.1f, 0.9f)]
+    [SerializeField] private float trainColumnRightEdge = 0.5f;
+    [Tooltip("Optional. If assigned, alpha is bumped to backgroundAlpha so the map underneath is hidden.")]
+    [SerializeField] private Image panelBackground;
+    [Range(0f, 1f)]
+    [SerializeField] private float backgroundAlpha = 0.92f;
+    [Tooltip("If true, this panel hides itself on Awake so the upgrades page isn't visible on game start.")]
+    [SerializeField] private bool startClosed = true;
+
+    [Header("Minor Upgrades Reparent")]
+    [Tooltip("If true, on enable the controller finds a MinorUpgradesPanelController in the scene and reparents it under this panel so train tiers + minor upgrades share one page.")]
+    [SerializeField] private bool autoMergeMinorUpgrades = true;
+    [Tooltip("Optional explicit reference. Leave null to FindFirstObjectByType at runtime.")]
+    [SerializeField] private MinorUpgradesPanelController minorUpgradesPanel;
 
     private readonly List<TrainUpgradeButton> spawnedButtons = new List<TrainUpgradeButton>();
     private bool subscribed;
+
+    private bool startClosedApplied;
+
+    private void Awake()
+    {
+        if (startClosed && !startClosedApplied)
+        {
+            startClosedApplied = true;
+            // Defer until end-of-frame so MapStopController's wiring (which also
+            // toggles this panel) doesn't race us on Awake order.
+            gameObject.SetActive(false);
+        }
+    }
 
     private void Start()
     {
@@ -40,8 +73,110 @@ public class TrainUpgradesMapController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (forceLayoutOnEnable)
+        {
+            ApplyPanelLayout();
+        }
+        BringSelfToTop();
+        TryMergeMinorUpgradesPanel();
+        if (forceLayoutOnEnable)
+        {
+            ApplyColumnSplit();
+        }
         TrySubscribeAndBuild();
         RefreshAll();
+    }
+
+    private void BringSelfToTop()
+    {
+        // The most recently opened UI panel should render on top of the rest.
+        transform.SetAsLastSibling();
+        Canvas parentCanvas = GetComponentInParent<Canvas>();
+        if (parentCanvas != null && parentCanvas.transform != transform)
+        {
+            // Bubble the bring-to-top up to the canvas root in case our parent
+            // panel is also stacked with siblings (e.g. map root and HUD).
+            Transform t = transform;
+            while (t.parent != null && t.parent != parentCanvas.transform)
+            {
+                t.parent.SetAsLastSibling();
+                t = t.parent;
+            }
+        }
+    }
+
+    private void TryMergeMinorUpgradesPanel()
+    {
+        if (!autoMergeMinorUpgrades) return;
+
+        if (minorUpgradesPanel == null)
+        {
+            minorUpgradesPanel = FindFirstObjectByType<MinorUpgradesPanelController>(FindObjectsInactive.Include);
+        }
+        if (minorUpgradesPanel == null) return;
+
+        // Reparent under this panel so train tiers and minor upgrades render on
+        // the same page. Keep the minor-upgrades panel's own layout intact.
+        if (minorUpgradesPanel.transform.parent != transform)
+        {
+            minorUpgradesPanel.transform.SetParent(transform, false);
+            minorUpgradesPanel.transform.SetAsLastSibling();
+        }
+        minorUpgradesPanel.gameObject.SetActive(true);
+    }
+
+    private void ApplyPanelLayout()
+    {
+        // Anchor the whole upgrades panel to the configured screen region (default:
+        // right half) so it doesn't drown the rest of the HUD.
+        RectTransform panelRect = transform as RectTransform;
+        if (panelRect != null)
+        {
+            panelRect.anchorMin = panelAnchorMin;
+            panelRect.anchorMax = panelAnchorMax;
+            panelRect.offsetMin = Vector2.zero;
+            panelRect.offsetMax = Vector2.zero;
+            panelRect.pivot = new Vector2(0.5f, 0.5f);
+        }
+
+        if (panelBackground == null)
+        {
+            panelBackground = GetComponent<Image>();
+        }
+        if (panelBackground != null)
+        {
+            Color c = panelBackground.color;
+            c.a = Mathf.Max(c.a, backgroundAlpha);
+            panelBackground.color = c;
+        }
+    }
+
+    private void ApplyColumnSplit()
+    {
+        // Train upgrades occupy the left column of the panel, minor upgrades the
+        // right column. Without this, both controllers stretch full-panel and
+        // their children stack on top of each other.
+        if (buttonContainer != null)
+        {
+            buttonContainer.anchorMin = new Vector2(0f, 0f);
+            buttonContainer.anchorMax = new Vector2(trainColumnRightEdge, 1f);
+            buttonContainer.offsetMin = new Vector2(8f, 8f);
+            buttonContainer.offsetMax = new Vector2(-4f, -8f);
+            buttonContainer.pivot = new Vector2(0.5f, 0.5f);
+        }
+
+        if (minorUpgradesPanel != null)
+        {
+            RectTransform minorRect = minorUpgradesPanel.transform as RectTransform;
+            if (minorRect != null)
+            {
+                minorRect.anchorMin = new Vector2(trainColumnRightEdge, 0f);
+                minorRect.anchorMax = new Vector2(1f, 1f);
+                minorRect.offsetMin = new Vector2(4f, 8f);
+                minorRect.offsetMax = new Vector2(-8f, -8f);
+                minorRect.pivot = new Vector2(0.5f, 0.5f);
+            }
+        }
     }
 
     private void OnDisable()
@@ -90,16 +225,7 @@ public class TrainUpgradesMapController : MonoBehaviour
     }
 
     private void HandleStateChanged() => RefreshAll();
-    private void HandleTierChanged(int newTier)
-    {
-        // In single-CTA mode the spawned button set changes when the tier changes
-        // (the next tier shifts up by one). Rebuild rather than refresh-in-place.
-        if (onlyShowNextTier)
-        {
-            RebuildButtons();
-        }
-        RefreshAll();
-    }
+    private void HandleTierChanged(int newTier) => RefreshAll();
 
     private void RebuildButtons()
     {
@@ -117,21 +243,10 @@ public class TrainUpgradesMapController : MonoBehaviour
         }
         spawnedButtons.Clear();
 
+        // Always show every tier. Owned ones (including tier 0 at start) render as
+        // "Owned"; the next one is the buy CTA; further ones are 🔒 Locked.
         int count = GameManager.Instance.TrainTierCount;
-        int startIndex = skipBaseTier ? 1 : 0;
-
-        if (onlyShowNextTier)
-        {
-            int next = GameManager.Instance.CurrentTrainTier + 1;
-            if (next < startIndex || next >= count)
-            {
-                return; // No purchasable next tier — show nothing.
-            }
-            startIndex = next;
-            count = next + 1;
-        }
-
-        for (int i = startIndex; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             GameObject go = Instantiate(buttonPrefab, buttonContainer);
             TrainUpgradeButton wrapper = go.GetComponent<TrainUpgradeButton>();
@@ -221,17 +336,38 @@ public class TrainUpgradeButton : MonoBehaviour
         }
 
         bool owned = GameManager.Instance.IsTrainTierOwned(tierIndex);
+        bool isNext = GameManager.Instance.IsNextTrainTier(tierIndex);
+        bool minorUpgradesDone = GameManager.Instance.AllMinorUpgradesPurchasedForCurrentTier;
         bool canBuy = GameManager.Instance.CanBuyTrainTier(tierIndex) && !trainMoving;
 
-        string priceText = owned ? "Owned" : "Buy — EUR " + def.cost.ToString("F0");
+        string priceText;
+        string namePrefix = "";
+        if (owned)
+        {
+            priceText = "Owned";
+        }
+        else if (!isNext)
+        {
+            priceText = "🔒 Locked";
+            namePrefix = "🔒 ";
+        }
+        else if (!minorUpgradesDone)
+        {
+            priceText = "Finish current train's upgrades";
+            namePrefix = "🔒 ";
+        }
+        else
+        {
+            priceText = "Buy — EUR " + def.cost.ToString("F0");
+        }
 
         if (nameLabel != null)
         {
             // When there's a separate price label, the name label only shows the name.
             // When there's only one label, combine name + price onto two lines.
             nameLabel.text = priceLabel != null
-                ? def.displayName + (owned ? " (Owned)" : "")
-                : def.displayName + "\n" + priceText;
+                ? namePrefix + def.displayName + (owned ? " (Owned)" : "")
+                : namePrefix + def.displayName + "\n" + priceText;
         }
 
         if (priceLabel != null)

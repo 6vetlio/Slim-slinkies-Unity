@@ -34,16 +34,32 @@ public class DevMenu : MonoBehaviour
         go.AddComponent<DevMenu>();
     }
 
+    // Window-level guard so a sustained 3-finger touch doesn't toggle every frame.
+    private bool threeFingerLatch;
+
     private void Update()
     {
         if (Input.GetKeyDown(ToggleKey)) open = !open;
+
+        // Android-friendly toggle: a fresh 3-touch press flips the panel open/closed.
+        // Latch on first frame the gesture is held; unlatch when the finger count drops.
+        bool threeFingers = Input.touchCount >= 3;
+        if (threeFingers && !threeFingerLatch)
+        {
+            open = !open;
+            threeFingerLatch = true;
+        }
+        else if (!threeFingers)
+        {
+            threeFingerLatch = false;
+        }
     }
 
     private void OnGUI()
     {
         if (!open) return;
         EnsureStyles();
-        window = GUILayout.Window(0xDEAFBABE.GetHashCode(), window, DrawWindow, "Dev Menu  (F1 to hide)", bigWindow);
+        window = GUILayout.Window(0xDEAFBABE.GetHashCode(), window, DrawWindow, "Dev Menu  (F1 or 3-finger tap)", bigWindow);
     }
 
     private static void EnsureStyles()
@@ -101,7 +117,7 @@ public class DevMenu : MonoBehaviour
         }
 
         GUILayout.Space(10);
-        GUILayout.Label("F1 = hide. Drag title to move.", bigLabel);
+        GUILayout.Label("F1 or 3-finger tap = hide. Drag title to move.", bigLabel);
         GUI.DragWindow(new Rect(0, 0, 10000, 44));
     }
 
@@ -126,7 +142,9 @@ public class DevMenu : MonoBehaviour
         int next = gm.CurrentTrainTier + 1;
         var def = gm.GetTrainTier(next);
         if (def == null) { Debug.Log("[DevMenu] Already at max tier."); return; }
-        // Throw plenty of money at it so cost is never the blocker.
+        // Tier purchase now requires the current tier's minor upgrades to be done first.
+        // Cheat past that gate so dev testing isn't blocked.
+        BuyAllMinor(gm);
         AddMoney(gm, Mathf.Max(1, Mathf.CeilToInt(def.cost)) + 10);
         gm.TryBuyTrainTier(next);
     }

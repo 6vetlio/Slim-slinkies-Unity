@@ -76,23 +76,20 @@ public class TrainMover : MonoBehaviour
 
     void Update()
     {
-        
         if (target == null) return;
 
+        // Train stays put in world space — only the parallax layers convey motion.
+        // Per-tier animations on the train sprite handle the "alive" look. We just
+        // tick the timer and fire the arrival event when it elapses.
         travelElapsed += Time.deltaTime;
         float duration = Mathf.Max(0.01f, activeTravelDuration);
         float progress = Mathf.Clamp01(travelElapsed / duration);
-        float easedProgress = Mathf.SmoothStep(0f, 1f, progress);
-        movingObject.position = Vector3.Lerp(movingObjectStartPosition, movingObjectTargetPosition, easedProgress);
 
         if (debugMovementLogs && progress - lastProgressLog >= 0.25f)
         {
             lastProgressLog = progress;
-            Debug.Log("TrainMover: travelling progress " + Mathf.RoundToInt(progress * 100f) + "% | movingObject=" + movingObject.name + " | position=" + movingObject.position);
+            Debug.Log("TrainMover: travelling progress " + Mathf.RoundToInt(progress * 100f) + "% | duration=" + duration);
         }
-
-        CacheActiveTransportVisual();
-        ApplyTransportVisualOffset(progress);
 
         if (lockZPosition)
         {
@@ -198,45 +195,68 @@ public class TrainMover : MonoBehaviour
         CacheActiveTransportVisual();
         ResetTransportVisualOffset();
 
-        float distance = Mathf.Max(Vector3.Distance(transform.position, destination.position), minimumTravelDistance);
-        Vector3 destinationPosition = transform.position + Vector3.right * distance;
-        destinationPosition.y = destination.position.y;
-        destinationPosition.z = destination.position.z;
+        // Chunk-based travel. Duration = segment.chunkCount * tier.secondsPerChunk.
+        // World distance the train slides = segment.chunkCount * segment.worldUnitsPerChunk.
+        // No more drifting "always +1400 rightward" — same leg, same time, every time.
+        string fromId = GameManager.Instance != null ? GameManager.Instance.CurrentStationId : null;
+        Station destStation = destination.GetComponent<Station>();
+        if (destStation == null)
+        {
+            destStation = destination.GetComponentInParent<Station>();
+        }
+        string toId = destStation != null ? destStation.StationId : null;
+
+        RouteSegment segment = GameManager.Instance != null ? GameManager.Instance.GetSegment(fromId, toId) : null;
+        int chunkCount;
+        float worldUnitsPerChunk;
+        if (segment != null)
+        {
+            chunkCount = Mathf.Max(1, segment.chunkCount);
+            worldUnitsPerChunk = Mathf.Max(1f, segment.worldUnitsPerChunk);
+        }
+        else
+        {
+            // Fallback: use the hardcoded station-order to estimate distance, so
+            // groningen→berlin takes 6× as long as groningen→amsterdam without
+            // brutus wiring up RouteSegments. The numbers self-correct once he
+            // populates the Inspector list.
+            chunkCount = GameManager.Instance != null
+                ? GameManager.Instance.GetFallbackChunkCount(fromId, toId)
+                : 1;
+            worldUnitsPerChunk = Mathf.Max(1f, minimumTravelDistance);
+            if (debugMovementLogs)
+            {
+                Debug.Log("TrainMover: no RouteSegment for " + fromId + " → " + toId + ", using station-order fallback chunks=" + chunkCount);
+            }
+        }
+
+        float secondsPerChunk = GameManager.Instance != null
+            ? GameManager.Instance.CurrentTrainSecondsPerChunk
+            : Mathf.Max(0.05f, normalTrainDuration / Mathf.Max(1, chunkCount));
 
         movementStatus = TrainMovementStatus.Travelling;
         SetMovingAnimation(true);
         target = destination;
-        targetPosition = destinationPosition;
-        travelStartPosition = transform.position;
         activeTravelDirection = 1f;
-        movingObjectStartPosition = movingObject.position;
-        float movementDistance = distance;
-        movingObjectTargetPosition = movingObjectStartPosition + Vector3.right * movementDistance;
-        // Lock Y to the start position so the train cannot float off the track during Lerp.
-        movingObjectTargetPosition.y = movingObjectStartPosition.y;
-        movingObjectTargetPosition.z = movingObjectStartPosition.z;
+        travelStartPosition = transform.position;
+        targetPosition = transform.position; // train stays put; field kept for legacy callers
         travelElapsed = 0f;
-        bool isHyperloop = transportSwitcher != null && transportSwitcher.IsHyperloopActive();
-        float trainDurationFromTier = GameManager.Instance != null
-            ? GameManager.Instance.CurrentTrainTravelDuration
-            : normalTrainDuration;
-        float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : trainDurationFromTier);
-        float legWorldDistance = Vector3.Distance(travelStartPosition, destinationPosition);
-        float refDist = Mathf.Max(1f, referenceWorldDistance);
-        float distanceFactor = Mathf.Clamp(legWorldDistance / refDist, minTravelDurationFactor, maxTravelDurationFactor);
-        activeTravelDuration = Mathf.Max(0.85f, baseLegDuration * distanceFactor);
-        speed = Mathf.Max(speed, 300f, movementDistance / activeTravelDuration * 1.2f);
-        acceleration = Mathf.Max(acceleration, 500f);
+        activeTravelDuration = Mathf.Max(0.85f, chunkCount * secondsPerChunk);
         lastProgressLog = 0f;
+
+        // Hand off to Noah's chunk world-scroller: it lerps worldContainer left
+        // by `movementDistance` over activeTravelDuration. Train stays put; the
+        // chunks slide past it.
+        float movementDistance = chunkCount * worldUnitsPerChunk;
+        TrainMovement chunkMovementSystem = FindFirstObjectByType<TrainMovement>();
+        if (chunkMovementSystem != null)
+        {
+            chunkMovementSystem.InitializeChunkTravel(movementDistance);
+        }
 
         if (debugMovementLogs)
         {
-            Debug.Log("TrainMover: travel started | destination=" + destination.name + " | status=" + movementStatus + " | worldDistance=" + distance + " | movementDistance=" + movementDistance + " | duration=" + activeTravelDuration + " | from=" + movingObjectStartPosition + " | to=" + movingObjectTargetPosition);
-        }
-    TrainMovement chunkMovementSystem = FindObjectOfType<TrainMovement>();
-        if (chunkMovementSystem != null)
-        {
-            chunkMovementSystem.InitializeChunkTravel(distance);
+            Debug.Log("TrainMover: travel started | from=" + fromId + " | to=" + toId + " | chunks=" + chunkCount + " | secondsPerChunk=" + secondsPerChunk + " | duration=" + activeTravelDuration + " | worldScroll=" + movementDistance);
         }
     }
 
@@ -350,10 +370,7 @@ public class TrainMover : MonoBehaviour
             return;
         }
 
-        movingObject.position = movingObjectTargetPosition;
-
-        transform.position = targetPosition;
-
+        // Train stays put — no position snap. Just transition status and fire arrival.
         if (lockZPosition)
         {
             Vector3 position = transform.position;

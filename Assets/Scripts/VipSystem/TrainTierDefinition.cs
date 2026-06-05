@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -13,7 +14,10 @@ public class TrainTierDefinition
     [Tooltip("Cost in EUR to purchase this tier. Tier 0 (the base train) should be 0.")]
     public float cost = 0f;
 
-    [Tooltip("Travel duration in seconds for this tier. Lower = faster.")]
+    [Tooltip("Seconds the train takes to traverse a single chunk. Travel duration = chunkCount * secondsPerChunk.")]
+    public float secondsPerChunk = 2.5f;
+
+    [Tooltip("Fallback travel duration in seconds for legs with no RouteSegment configured. Lower = faster.")]
     public float travelDuration = 25f;
 
     [Tooltip("Passenger bonus added to base passenger count when this tier is active.")]
@@ -30,4 +34,7 @@ public class TrainTierDefinition
 
     [Tooltip("Short subtitle shown under the tier name on the upgrade panel header (e.g. \"National Net\", \"High Speed\").")]
     public string subtitle = "";
+
+    [Tooltip("Ordered list of minor upgrades the player must purchase one-by-one before this tier's next-tier CTA unlocks.")]
+    public List<MinorUpgradeDefinition> minorUpgrades = new List<MinorUpgradeDefinition>();
 }

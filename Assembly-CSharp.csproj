@@ -54,6 +54,8 @@
     <Compile Include="Assets/Scripts/AutoScrollCamera.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/EnvMapAnimator.cs" />
     <Compile Include="Assets/Scripts/RouteLineUI.cs" />
+    <Compile Include="Assets/Scripts/UI/SpeedometerWidget.cs" />
+    <Compile Include="Assets/Scripts/CHUNKS/ChunkManager.cs" />
     <Compile Include="Assets/Scripts/RailLine2D.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextSelector_A.cs" />
     <Compile Include="Assets/Scripts/ParallaxCameraScroll.cs" />
@@ -61,7 +63,10 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/SimpleScript.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark04.cs" />
     <Compile Include="Assets/StarterAssets/Mobile/Scripts/VirtualInputs/UIVirtualTouchZone.cs" />
+    <Compile Include="Assets/Scripts/UI/MenuAutoClose.cs" />
+    <Compile Include="Assets/Scripts/VipSystem/WorldStationVisualSpawner.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/ChatController.cs" />
+    <Compile Include="Assets/Scripts/VipSystem/RouteSegment.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_DigitValidator.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_FrameRateCounter.cs" />
     <Compile Include="Assets/Scripts/RuntimeFileLogger.cs" />
@@ -74,6 +79,7 @@
     <Compile Include="Assets/Scripts/VipSystem/VipPassenger.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark02.cs" />
     <Compile Include="Assets/StarterAssets/Mobile/Scripts/VirtualInputs/UIVirtualJoystick.cs" />
+    <Compile Include="Assets/Scripts/Dev/DevMenu.cs" />
     <Compile Include="Assets/Scripts/VipSystem/MinorUpgradeDefinition.cs" />
     <Compile Include="Assets/Scripts/VipSystem/MinorUpgradesPanelController.cs" />
     <Compile Include="Assets/Wout Folder/ShopItem.cs" />
@@ -84,11 +90,14 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/CameraController.cs" />
     <Compile Include="Assets/Scripts/UISpriteAnimator.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
+    <Compile Include="Assets/Scripts/CHUNKS/TrainMovement.cs" />
     <Compile Include="Assets/Scripts/TransportSwitcher.cs" />
     <Compile Include="Assets/Scripts/VipSystem/UpgradeButtonController.cs" />
     <Compile Include="Assets/Scripts/VipSystem/VipSpawnManager.cs" />
     <Compile Include="Assets/Wout Folder/DraggableItem.cs" />
     <Compile Include="Assets/Scripts/VipSystem/TrainTierDefinition.cs" />
+    <Compile Include="Assets/Scripts/CHUNKS/BackgroundChunk.cs" />
+    <Compile Include="Assets/Scripts/UI/CapacityBar.cs" />
     <Compile Include="Assets/Scripts/WorldScroller.cs" />
     <Compile Include="Assets/Scripts/VipSystem/MapVisualizer.cs" />
     <Compile Include="Assets/Scripts/NoahsParallax.cs" />
@@ -101,8 +110,8 @@
     <Compile Include="Assets/Scripts/VipSystem/TrainUpgradesMapController.cs" />
     <Compile Include="Assets/Scripts/VipSystem/HyperloopDemoBootstrap.cs" />
     <Compile Include="Assets/Scripts/VipSystem/GameManager.cs" />
-    <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/ObjectSpin.cs" />
     <Compile Include="Assets/Wout Folder/NewBuyButton.cs" />
+    <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/ObjectSpin.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets/Scripts/VipSystem/Station.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexJitter.cs" />

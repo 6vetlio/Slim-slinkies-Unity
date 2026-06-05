@@ -42,6 +42,7 @@ public class MinorUpgradesPanelController : MonoBehaviour
         {
             GameManager.Instance.MoneyChanged -= HandleStateChanged;
             GameManager.Instance.MinorUpgradePurchased -= HandleUpgradePurchased;
+            GameManager.Instance.TrainTierChanged -= HandleTierChanged;
         }
         subscribed = false;
     }
@@ -57,6 +58,7 @@ public class MinorUpgradesPanelController : MonoBehaviour
         {
             GameManager.Instance.MoneyChanged += HandleStateChanged;
             GameManager.Instance.MinorUpgradePurchased += HandleUpgradePurchased;
+            GameManager.Instance.TrainTierChanged += HandleTierChanged;
             subscribed = true;
         }
 
@@ -71,6 +73,15 @@ public class MinorUpgradesPanelController : MonoBehaviour
 
     private void HandleUpgradePurchased(int index)
     {
+        RefreshAll();
+    }
+
+    // The current tier's minor-upgrade list is the source of truth — when the
+    // tier changes (player bought the next train), the spawned button set must
+    // change to reflect the new tier's upgrades.
+    private void HandleTierChanged(int newTier)
+    {
+        RebuildButtons();
         RefreshAll();
     }
 
@@ -178,18 +189,30 @@ public class MinorUpgradeButton : MonoBehaviour
         }
 
         bool purchased = GameManager.Instance.IsMinorUpgradePurchased(upgradeIndex);
+        bool unlocked = GameManager.Instance.IsMinorUpgradeUnlocked(upgradeIndex);
         bool canBuy = GameManager.Instance.CanBuyMinorUpgrade(upgradeIndex);
 
         if (nameLabel != null)
         {
-            nameLabel.text = def.displayName + (purchased ? " (Owned)" : "");
+            string prefix = purchased ? "" : (unlocked ? "" : "🔒 ");
+            string suffix = purchased ? " (Owned)" : "";
+            nameLabel.text = prefix + def.displayName + suffix;
         }
 
         if (costLabel != null)
         {
-            costLabel.text = purchased
-                ? "+EUR " + def.passiveIncomeBonusPerSecond + "/s"
-                : "EUR " + def.cost + "  (+" + def.passiveIncomeBonusPerSecond + "/s)";
+            if (purchased)
+            {
+                costLabel.text = "+EUR " + def.passiveIncomeBonusPerSecond + "/s";
+            }
+            else if (!unlocked)
+            {
+                costLabel.text = "Locked";
+            }
+            else
+            {
+                costLabel.text = "EUR " + def.cost + "  (+" + def.passiveIncomeBonusPerSecond + "/s)";
+            }
         }
 
         if (iconImage != null && def.icon != null)

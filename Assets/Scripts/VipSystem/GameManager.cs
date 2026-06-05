@@ -33,12 +33,20 @@ public class GameManager : MonoBehaviour
     [Tooltip("Fallback travel duration if no train tiers are configured.")]
     [SerializeField] private float defaultTravelDuration = 25f;
 
-    [Header("Minor Upgrades")]
-    [Tooltip("List of minor upgrades that the player must purchase to unlock the major upgrade (hyperloop). Configure in Inspector.")]
+    [Header("Routes")]
+    [Tooltip("Adjacent-station route segments. Travel time = chunkCount * currentTier.secondsPerChunk. Symmetric — define each pair once.")]
+    [SerializeField] private List<RouteSegment> routeSegments = new List<RouteSegment>();
+
+    [Header("Minor Upgrades (legacy fallback)")]
+    [Tooltip("Legacy global upgrade list. Used when the current train tier has no minorUpgrades configured. Migrate entries onto each TrainTierDefinition.minorUpgrades to unlock per-tier sequential lock.")]
     [SerializeField] private List<MinorUpgradeDefinition> minorUpgrades = new List<MinorUpgradeDefinition>();
-    [Tooltip("If true, the major (hyperloop) upgrade is locked until all minor upgrades are purchased.")]
-    [SerializeField] private bool gateMajorUpgradeBehindMinorUpgrades = true;
-    private List<bool> minorUpgradesPurchased = new List<bool>();
+
+    // Per-tier purchased flags. Keyed by tier index; each entry is a bool[] aligned to that tier's minorUpgrades list.
+    private readonly Dictionary<int, bool[]> minorUpgradesPurchasedByTier = new Dictionary<int, bool[]>();
+    // Purchased flags for the legacy global list. Separate from per-tier state so
+    // progress doesn't reset when the player switches tiers while still on the
+    // legacy list.
+    private bool[] minorUpgradesPurchasedLegacy = new bool[0];
 
     [Header("Train State")]
     [SerializeField] private string currentStationId = "";
@@ -89,6 +97,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Header("Travel Timing")]
+    [Tooltip("How many real seconds a 100 km/h train takes to cross one chunk. Per-tier travel time scales inversely with topSpeedKmh, so 700 km/h finishes 7× faster than 100 km/h on the same route.")]
+    [SerializeField] private float referenceSecondsPerChunkAt100Kmh = 8f;
+
+    // Time per chunk for the current tier is derived from its topSpeedKmh, so
+    // brutus doesn't have to keep two numbers in sync per tier. Arriva (80 km/h)
+    // ≈ 10s/chunk; Bullet (220) ≈ 3.6s; Hyperloop (700) ≈ 1.1s.
+    public float CurrentTrainSecondsPerChunk
+    {
+        get
+        {
+            TrainTierDefinition def = CurrentTrainTierDef;
+            float topSpeedKmh = def != null ? Mathf.Max(1f, def.topSpeedKmh) : 80f;
+            return Mathf.Max(0.05f, referenceSecondsPerChunkAt100Kmh * 100f / topSpeedKmh);
+        }
+    }
+
     public float CurrentTrainTierIncomeMultiplier
     {
         get
@@ -98,15 +123,53 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // How much faster the world should scroll relative to the base tier.
-    // Arriva (25s travel) → 1.0, Bullet (12s) → ~2.08, Hyperloop (5s) → 5.0.
+    // How much faster the world should scroll relative to the base tier, derived from
+    // secondsPerChunk so it tracks the chunk-based travel system instead of the legacy
+    // per-leg travelDuration. Base tier returns 1.0.
     public float CurrentTierScrollMultiplier
     {
         get
         {
-            float current = CurrentTrainTravelDuration;
-            return Mathf.Max(0.1f, defaultTravelDuration / Mathf.Max(0.85f, current));
+            float baseSeconds = (trainTiers != null && trainTiers.Count > 0 && trainTiers[0] != null)
+                ? Mathf.Max(0.05f, trainTiers[0].secondsPerChunk)
+                : 2.5f;
+            return Mathf.Max(0.1f, baseSeconds / CurrentTrainSecondsPerChunk);
         }
+    }
+
+    public RouteSegment GetSegment(string fromId, string toId)
+    {
+        if (routeSegments == null) return null;
+        for (int i = 0; i < routeSegments.Count; i++)
+        {
+            if (routeSegments[i] != null && routeSegments[i].Matches(fromId, toId))
+            {
+                return routeSegments[i];
+            }
+        }
+        return null;
+    }
+
+    public bool HasRouteBetween(string fromId, string toId) => GetSegment(fromId, toId) != null;
+
+    // True only once brutus configures the routeSegments list in the Inspector.
+    // The adjacent-only travel gate keys off this — if no routes exist yet, the
+    // gate is inert and every station tap is allowed (legacy behaviour).
+    public bool HasAnyRoutes => routeSegments != null && routeSegments.Count > 0;
+
+    // Hardcoded fallback chain mirroring VipSpawnManager.stationOrder. Used to
+    // estimate "how many chunks apart" two stations are when no RouteSegment is
+    // configured. groningen→amsterdam = 1, groningen→berlin = 6.
+    private static readonly string[] defaultStationOrder = {
+        "groningen", "amsterdam", "brussels", "hamburg", "paris", "hannover", "berlin"
+    };
+
+    public int GetFallbackChunkCount(string fromId, string toId)
+    {
+        int a = System.Array.IndexOf(defaultStationOrder, fromId);
+        int b = System.Array.IndexOf(defaultStationOrder, toId);
+        if (a < 0 || b < 0) return 1;
+        return Mathf.Max(1, Mathf.Abs(a - b));
     }
 
     public float CurrentTrainTopSpeedKmh
@@ -127,6 +190,7 @@ public class GameManager : MonoBehaviour
         if (def == null) return false;
         if (IsTrainTierOwned(index)) return false;
         if (!IsNextTrainTier(index)) return false; // Must be purchased in order
+        if (!AllMinorUpgradesPurchasedForCurrentTier) return false;
         return Money >= def.cost;
     }
 
@@ -149,6 +213,12 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
+        if (!AllMinorUpgradesPurchasedForCurrentTier)
+        {
+            NotEnoughMoney?.Invoke("Finish all minor upgrades for " + (CurrentTrainTierDef != null ? CurrentTrainTierDef.displayName : "this train") + " first");
+            return false;
+        }
+
         if (Money < def.cost)
         {
             NotEnoughMoney?.Invoke("Need EUR " + def.cost + " for " + def.displayName);
@@ -157,59 +227,112 @@ public class GameManager : MonoBehaviour
 
         Money -= def.cost;
         currentTrainTier = index;
+        EnsureTierPurchasedArray(currentTrainTier);
         SetTrainTierEconomy(def.passengerBonus);
-        Debug.Log("[GameManager] Train tier purchased: " + def.displayName + " | tier=" + index + " | duration=" + def.travelDuration + "s | +" + def.passengerBonus + " passengers | x" + def.incomeMultiplier + " income");
+        Debug.Log("[GameManager] Train tier purchased: " + def.displayName + " | tier=" + index + " | secondsPerChunk=" + def.secondsPerChunk + " | +" + def.passengerBonus + " passengers | x" + def.incomeMultiplier + " income");
         TrainTierChanged?.Invoke(currentTrainTier);
         MoneyChanged?.Invoke();
         return true;
     }
     public float UpgradeCost => upgradeCost;
     public bool HasUpgraded { get; private set; }
-    public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost && (!gateMajorUpgradeBehindMinorUpgrades || AllMinorUpgradesPurchased);
+    public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost && AllMinorUpgradesPurchasedForCurrentTier;
 
-    public int MinorUpgradeCount => minorUpgrades != null ? minorUpgrades.Count : 0;
+    // ---------- Minor upgrades (per-tier with legacy fallback) ----------
 
-    public bool AllMinorUpgradesPurchased
+    // The current tier's own minor-upgrade list takes priority. If empty (e.g. the
+    // scene hasn't been migrated yet), fall back to the legacy global list — so
+    // the existing scene with 6 root entries keeps working unchanged.
+    private List<MinorUpgradeDefinition> CurrentTierMinorUpgrades
     {
         get
         {
-            if (minorUpgrades == null || minorUpgrades.Count == 0)
-            {
-                return true;
-            }
-
-            for (int i = 0; i < minorUpgradesPurchased.Count; i++)
-            {
-                if (!minorUpgradesPurchased[i])
-                {
-                    return false;
-                }
-            }
-
-            return minorUpgradesPurchased.Count == minorUpgrades.Count;
+            var tierList = CurrentTrainTierDef != null ? CurrentTrainTierDef.minorUpgrades : null;
+            if (tierList != null && tierList.Count > 0) return tierList;
+            return minorUpgrades;
         }
     }
+
+    // True when the active source is the legacy global list (vs. the per-tier list).
+    private bool UsingLegacyMinorUpgrades
+    {
+        get
+        {
+            var tierList = CurrentTrainTierDef != null ? CurrentTrainTierDef.minorUpgrades : null;
+            return tierList == null || tierList.Count == 0;
+        }
+    }
+
+    public int MinorUpgradeCount =>
+        CurrentTierMinorUpgrades != null ? CurrentTierMinorUpgrades.Count : 0;
+
+    public bool AllMinorUpgradesPurchasedForCurrentTier
+    {
+        get
+        {
+            var list = CurrentTierMinorUpgrades;
+            if (list == null || list.Count == 0) return true;
+            bool[] purchased = GetPurchasedArrayForCurrentSource(list.Count);
+            for (int i = 0; i < purchased.Length; i++)
+            {
+                if (!purchased[i]) return false;
+            }
+            return true;
+        }
+    }
+
+    // Legacy alias — older callers and the major-upgrade gate referenced this name.
+    public bool AllMinorUpgradesPurchased => AllMinorUpgradesPurchasedForCurrentTier;
 
     public float MinorUpgradeIncomeBonus
     {
         get
         {
-            if (minorUpgrades == null || minorUpgradesPurchased == null)
-            {
-                return 0f;
-            }
-
+            var list = CurrentTierMinorUpgrades;
+            if (list == null || list.Count == 0) return 0f;
+            bool[] purchased = GetPurchasedArrayForCurrentSource(list.Count);
             float total = 0f;
-            int count = Mathf.Min(minorUpgrades.Count, minorUpgradesPurchased.Count);
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                if (minorUpgradesPurchased[i] && minorUpgrades[i] != null)
+                if (purchased[i] && list[i] != null)
                 {
-                    total += minorUpgrades[i].passiveIncomeBonusPerSecond;
+                    total += list[i].passiveIncomeBonusPerSecond;
                 }
             }
             return total;
         }
+    }
+
+    // Returns the purchased-flags array matching whichever upgrade list is active.
+    // Legacy global list uses minorUpgradesPurchasedLegacy; per-tier lists use the dict.
+    private bool[] GetPurchasedArrayForCurrentSource(int requiredLength)
+    {
+        if (UsingLegacyMinorUpgrades)
+        {
+            if (minorUpgradesPurchasedLegacy == null || minorUpgradesPurchasedLegacy.Length != requiredLength)
+            {
+                minorUpgradesPurchasedLegacy = new bool[requiredLength];
+            }
+            return minorUpgradesPurchasedLegacy;
+        }
+        return GetTierPurchasedArray(currentTrainTier, requiredLength);
+    }
+
+    private bool[] GetTierPurchasedArray(int tierIndex, int requiredLength)
+    {
+        if (!minorUpgradesPurchasedByTier.TryGetValue(tierIndex, out bool[] arr) || arr.Length != requiredLength)
+        {
+            arr = new bool[requiredLength];
+            minorUpgradesPurchasedByTier[tierIndex] = arr;
+        }
+        return arr;
+    }
+
+    private void EnsureTierPurchasedArray(int tierIndex)
+    {
+        TrainTierDefinition def = GetTrainTier(tierIndex);
+        int len = def != null && def.minorUpgrades != null ? def.minorUpgrades.Count : 0;
+        GetTierPurchasedArray(tierIndex, len);
     }
     public string CurrentStationId => currentStationId;
     public int MaxOnboardVips => maxOnboardVips;
@@ -235,7 +358,6 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Money = startingMoney;
 
-        InitializeMinorUpgradesState();
         InitializeTrainTierState();
     }
 
@@ -247,20 +369,14 @@ public class GameManager : MonoBehaviour
         }
 
         currentTrainTier = Mathf.Clamp(currentTrainTier, 0, trainTiers.Count - 1);
+        for (int i = 0; i < trainTiers.Count; i++)
+        {
+            EnsureTierPurchasedArray(i);
+        }
         TrainTierDefinition def = CurrentTrainTierDef;
         if (def != null)
         {
             SetTrainTierEconomy(def.passengerBonus);
-        }
-    }
-
-    private void InitializeMinorUpgradesState()
-    {
-        int count = minorUpgrades != null ? minorUpgrades.Count : 0;
-        minorUpgradesPurchased = new List<bool>(count);
-        for (int i = 0; i < count; i++)
-        {
-            minorUpgradesPurchased.Add(false);
         }
     }
 
@@ -415,7 +531,7 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-        if (gateMajorUpgradeBehindMinorUpgrades && !AllMinorUpgradesPurchased)
+        if (!AllMinorUpgradesPurchasedForCurrentTier)
         {
             NotEnoughMoney?.Invoke("Complete all minor upgrades before the hyperloop upgrade");
             return false;
@@ -437,48 +553,60 @@ public class GameManager : MonoBehaviour
 
     public MinorUpgradeDefinition GetMinorUpgrade(int index)
     {
-        if (minorUpgrades == null || index < 0 || index >= minorUpgrades.Count)
-        {
-            return null;
-        }
-        return minorUpgrades[index];
+        var list = CurrentTierMinorUpgrades;
+        if (list == null || index < 0 || index >= list.Count) return null;
+        return list[index];
     }
 
     public bool IsMinorUpgradePurchased(int index)
     {
-        if (minorUpgradesPurchased == null || index < 0 || index >= minorUpgradesPurchased.Count)
+        var list = CurrentTierMinorUpgrades;
+        if (list == null || index < 0 || index >= list.Count) return false;
+        bool[] purchased = GetPurchasedArrayForCurrentSource(list.Count);
+        return purchased[index];
+    }
+
+    // Sequential unlock: an upgrade is unlocked only after every lower-index upgrade
+    // on the current source list has been purchased. Index 0 starts unlocked.
+    // While the legacy global list is in use this still applies — but the rule
+    // can be made "buy in any order" by giving each tier its own list (no shared
+    // ordering across tiers).
+    public bool IsMinorUpgradeUnlocked(int index)
+    {
+        var list = CurrentTierMinorUpgrades;
+        if (list == null || index < 0 || index >= list.Count) return false;
+
+        // Legacy global list keeps the "any order" behaviour the original scene
+        // shipped with, so flipping to per-tier mode is the only way the
+        // sequential lock turns on.
+        if (UsingLegacyMinorUpgrades) return true;
+
+        bool[] purchased = GetPurchasedArrayForCurrentSource(list.Count);
+        for (int i = 0; i < index; i++)
         {
-            return false;
+            if (!purchased[i]) return false;
         }
-        return minorUpgradesPurchased[index];
+        return true;
     }
 
     public bool CanBuyMinorUpgrade(int index)
     {
         MinorUpgradeDefinition def = GetMinorUpgrade(index);
-        if (def == null)
-        {
-            return false;
-        }
-
-        if (IsMinorUpgradePurchased(index))
-        {
-            return false;
-        }
-
+        if (def == null) return false;
+        if (IsMinorUpgradePurchased(index)) return false;
+        if (!IsMinorUpgradeUnlocked(index)) return false;
         return Money >= def.cost;
     }
 
     public bool TryBuyMinorUpgrade(int index)
     {
         MinorUpgradeDefinition def = GetMinorUpgrade(index);
-        if (def == null)
-        {
-            return false;
-        }
+        if (def == null) return false;
+        if (IsMinorUpgradePurchased(index)) return false;
 
-        if (IsMinorUpgradePurchased(index))
+        if (!IsMinorUpgradeUnlocked(index))
         {
+            NotEnoughMoney?.Invoke("Buy the previous upgrade first");
             return false;
         }
 
@@ -489,8 +617,10 @@ public class GameManager : MonoBehaviour
         }
 
         Money -= def.cost;
-        minorUpgradesPurchased[index] = true;
-        Debug.Log("[GameManager] Minor upgrade purchased: " + def.displayName + " | +" + def.passiveIncomeBonusPerSecond + " EUR/s");
+        var list = CurrentTierMinorUpgrades;
+        bool[] purchased = GetPurchasedArrayForCurrentSource(list.Count);
+        purchased[index] = true;
+        Debug.Log("[GameManager] Minor upgrade purchased: " + def.displayName + " | source=" + (UsingLegacyMinorUpgrades ? "legacy" : ("tier " + currentTrainTier)) + " | +" + def.passiveIncomeBonusPerSecond + " EUR/s");
         MinorUpgradePurchased?.Invoke(index);
         MoneyChanged?.Invoke();
         return true;

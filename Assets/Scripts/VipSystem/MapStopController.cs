@@ -322,6 +322,24 @@ public class MapStopController : MonoBehaviour
             return;
         }
 
+        // Adjacent-only: refuse the trip if no RouteSegment connects the current
+        // station to the clicked one. Only enforced once brutus has populated
+        // routeSegments — otherwise every tap would be rejected and the train
+        // would never move.
+        if (GameManager.Instance != null && GameManager.Instance.HasAnyRoutes)
+        {
+            string fromId = GameManager.Instance.CurrentStationId;
+            if (!string.IsNullOrEmpty(fromId) && !GameManager.Instance.HasRouteBetween(fromId, station.StationId))
+            {
+                ShowPopup("No route from " + fromId + " to " + station.StationId);
+                if (debugMapLogs)
+                {
+                    Debug.LogWarning("MapStopController: travel blocked — no RouteSegment between " + fromId + " and " + station.StationId);
+                }
+                return;
+            }
+        }
+
         pendingArrivalStation = station;
         trainMover.TravelTo(station.transform);
 
@@ -423,6 +441,14 @@ public class MapStopController : MonoBehaviour
         }
 
         ApplyMapPanelVisibility(open);
+
+        // Bring the most recently opened UI to the front so HUD elements don't
+        // overlap it. Sibling order in the canvas is the render order.
+        if (open)
+        {
+            if (mapRoot != null) mapRoot.transform.SetAsLastSibling();
+            if (trainUpgradesPanel != null) trainUpgradesPanel.transform.SetAsLastSibling();
+        }
 
         if (mapVisualizer != null)
         {
