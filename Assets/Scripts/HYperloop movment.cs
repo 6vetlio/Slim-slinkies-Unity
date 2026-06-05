@@ -216,13 +216,11 @@ public class TrainMover : MonoBehaviour
         movingObjectTargetPosition.y = movingObjectStartPosition.y;
         movingObjectTargetPosition.z = movingObjectStartPosition.z;
         travelElapsed = 0f;
-        // Every tier honors its own travelDuration (configured on TrainTierDefinition).
-        // The legacy hyperloopDuration override would have made Hyperloop tier feel the
-        // same as Bullet regardless of the per-tier setting — dropped on purpose.
+        bool isHyperloop = transportSwitcher != null && transportSwitcher.IsHyperloopActive();
         float trainDurationFromTier = GameManager.Instance != null
             ? GameManager.Instance.CurrentTrainTravelDuration
             : normalTrainDuration;
-        float baseLegDuration = Mathf.Max(0.85f, trainDurationFromTier);
+        float baseLegDuration = Mathf.Max(0.85f, isHyperloop ? hyperloopDuration : trainDurationFromTier);
         float legWorldDistance = Vector3.Distance(travelStartPosition, destinationPosition);
         float refDist = Mathf.Max(1f, referenceWorldDistance);
         float distanceFactor = Mathf.Clamp(legWorldDistance / refDist, minTravelDurationFactor, maxTravelDurationFactor);
@@ -234,6 +232,11 @@ public class TrainMover : MonoBehaviour
         if (debugMovementLogs)
         {
             Debug.Log("TrainMover: travel started | destination=" + destination.name + " | status=" + movementStatus + " | worldDistance=" + distance + " | movementDistance=" + movementDistance + " | duration=" + activeTravelDuration + " | from=" + movingObjectStartPosition + " | to=" + movingObjectTargetPosition);
+        }
+    TrainMovement chunkMovementSystem = FindObjectOfType<TrainMovement>();
+        if (chunkMovementSystem != null)
+        {
+            chunkMovementSystem.InitializeChunkTravel(distance);
         }
     }
 

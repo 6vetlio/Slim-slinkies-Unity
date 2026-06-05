@@ -49,7 +49,7 @@ public class ChunkManager : MonoBehaviour
         }
     }
     
-  private void SpawnNextChunk()
+ private void SpawnNextChunk()
 {
     BackgroundChunk chunkToSpawn;
     
@@ -66,9 +66,16 @@ public class ChunkManager : MonoBehaviour
     }
     
     chunkToSpawn.transform.SetParent(worldContainer);
-    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 0f, 0f);
     
-    // Debug line - shows world position and local position
+    float nextChunkLocalZ = (activeChunks.Count > 0) ? activeChunks[0].transform.localPosition.z : 230.875f;
+    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 45.63698f, nextChunkLocalZ);
+    
+    // Hide only the FIRST chunk if it's HillsChunk2
+    if (chunkCount == 0 && chunkToSpawn.name.Contains("HillsChunk2"))
+    {
+        chunkToSpawn.gameObject.SetActive(false);
+    }
+    
     float chunkWorldX = nextChunkLocalX + worldContainer.position.x;
     Debug.Log($"Spawned chunk {chunkCount}: Local X = {nextChunkLocalX}, World X = {chunkWorldX}");
     
