@@ -194,90 +194,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1502246}
   m_CullTransparentMesh: 1
---- !u!1001 &2908819
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 363792210}
-    m_Modifications:
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -42.0773
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 45.636982
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 122.90998
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2895010999328774371, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      propertyPath: m_Name
-      value: hillschunk2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2895010999328774371, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2908822}
-  m_SourcePrefab: {fileID: 100100000, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
---- !u!4 &2908820 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 641433957324520231, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-  m_PrefabInstance: {fileID: 2908819}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2908821 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2895010999328774371, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
-  m_PrefabInstance: {fileID: 2908819}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2908822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2908821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chunkWidth: 2500
-  chunkType: 0
 --- !u!1 &4784332
 GameObject:
   m_ObjectHideFlags: 0
@@ -2342,14 +2258,14 @@ RectTransform:
   m_GameObject: {fileID: 119381262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.5, y: 5.5, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5.55, y: 5.55, z: 1.0090909}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1284892873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -326, y: -155.8}
+  m_AnchoredPosition: {x: -549.1, y: -137.4}
   m_SizeDelta: {x: 240, y: 46.5415}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &119381264
@@ -3265,11 +3181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!212 &141867122
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6796,11 +6710,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &259371240
 GameObject:
   m_ObjectHideFlags: 0
@@ -8483,14 +8395,14 @@ RectTransform:
   m_GameObject: {fileID: 307396795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.35, y: 2.35, z: 0.78333324}
+  m_LocalScale: {x: 1.9, y: 1.9, z: 0.63333327}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1284892873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -407, y: -47.8}
+  m_AnchoredPosition: {x: -399.99, y: -48.04}
   m_SizeDelta: {x: 220, y: 80}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &307396798
@@ -8686,11 +8598,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &317831367
 GameObject:
   m_ObjectHideFlags: 0
@@ -9801,7 +9711,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1383905132}
-  - {fileID: 2908820}
+  - {fileID: 1243684288730726514}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &366774190
@@ -11801,7 +11711,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 453095707}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 121.3}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11809,7 +11719,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -157, y: -163}
+  m_AnchoredPosition: {x: -157, y: 10.8}
   m_SizeDelta: {x: 280, y: 56}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &453095709
@@ -12655,11 +12565,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &499321899
 GameObject:
   m_ObjectHideFlags: 0
@@ -15955,7 +15863,7 @@ MonoBehaviour:
   trainTransform: {fileID: 1284892873}
   landscapeChunkPrefabs:
   - {fileID: 1383905134}
-  - {fileID: 2908822}
+  - {fileID: 0}
   stationChunkPrefab: {fileID: 0}
   worldContainer: {fileID: 363792210}
   spawnDistance: 2500
@@ -15970,7 +15878,7 @@ Transform:
   m_GameObject: {fileID: 613690287}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.450407, y: 17.957203, z: 9.079275}
+  m_LocalPosition: {x: -1133.242, y: 17.957203, z: 9.079275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17105,7 +17013,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -7.4000244, y: 11.699951}
+  m_AnchoredPosition: {x: -7.3999023, y: 11.699951}
   m_SizeDelta: {x: 406.7086, y: 289.8551}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &665788800
@@ -21882,11 +21790,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &841173163
 GameObject:
   m_ObjectHideFlags: 0
@@ -22204,11 +22110,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &856668677
 GameObject:
   m_ObjectHideFlags: 0
@@ -25494,11 +25398,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &991130626
 GameObject:
   m_ObjectHideFlags: 0
@@ -27538,11 +27440,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &1099997184
 GameObject:
   m_ObjectHideFlags: 0
@@ -29554,15 +29454,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191387978}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 121.3}
   m_LocalScale: {x: 4, y: 4, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1284892873}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -157, y: -162.8}
+  m_AnchoredPosition: {x: -157, y: 14.5}
   m_SizeDelta: {x: 280, y: 56}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1191387980
@@ -32328,8 +32228,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 307396796}
   - {fileID: 119381263}
+  - {fileID: 307396796}
   - {fileID: 453095708}
   - {fileID: 1191387979}
   m_Father: {fileID: 2056145241}
@@ -34328,9 +34228,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 363792210}
     m_Modifications:
+    - target: {fileID: 1338887384372658721, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338887384372658721, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338887384372658721, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8333333
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338887384372658721, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3176751451571374538, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_Name
       value: hillschunk1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3176751451571374538, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3478249295695337132, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34342,7 +34262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3478249295695337132, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 122.90998
+      value: 161
       objectReference: {fileID: 0}
     - target: {fileID: 3478249295695337132, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_LocalRotation.w
@@ -34402,7 +34322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkWidth: 2500
+  chunkWidth: 2266.48
   chunkType: 0
 --- !u!1 &1385273034
 GameObject:
@@ -35510,11 +35430,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &1423663795
 GameObject:
   m_ObjectHideFlags: 0
@@ -35866,32 +35784,39 @@ MonoBehaviour:
   - displayName: Arriva
     icon: {fileID: 0}
     cost: 0
+    secondsPerChunk: 2.5
     travelDuration: 25
     passengerBonus: 0
     incomeMultiplier: 1
     visualPrefab: {fileID: 0}
     topSpeedKmh: 80
     subtitle: National Net
+    minorUpgrades: []
   - displayName: Bullet Train
     icon: {fileID: 0}
     cost: 2000
+    secondsPerChunk: 2.5
     travelDuration: 12
     passengerBonus: 40
     incomeMultiplier: 1.5
     visualPrefab: {fileID: 0}
     topSpeedKmh: 220
     subtitle: High Speed
+    minorUpgrades: []
   - displayName: Hyperloop
     icon: {fileID: 0}
     cost: 8000
+    secondsPerChunk: 2.5
     travelDuration: 5
     passengerBonus: 80
     incomeMultiplier: 2.5
     visualPrefab: {fileID: 0}
     topSpeedKmh: 700
     subtitle: Vacuum Tube
+    minorUpgrades: []
   currentTrainTier: 0
   defaultTravelDuration: 25
+  routeSegments: []
   minorUpgrades:
   - displayName: Coffee Cart
     description: Brewed espresso for happy commuters
@@ -35923,9 +35848,9 @@ MonoBehaviour:
     cost: 1800
     passiveIncomeBonusPerSecond: 1
     icon: {fileID: 0}
-  gateMajorUpgradeBehindMinorUpgrades: 1
   currentStationId: 
   maxOnboardVips: 3
+  referenceSecondsPerChunkAt100Kmh: 8
 --- !u!114 &1434170770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38974,8 +38899,15 @@ MonoBehaviour:
   buttonContainer: {fileID: 1571608377}
   buttonPrefab: {fileID: 166468912729494885, guid: 6fe4c193dbce84889878adff7a8db440, type: 3}
   trainMover: {fileID: 0}
-  skipBaseTier: 1
-  onlyShowNextTier: 1
+  forceLayoutOnEnable: 1
+  panelAnchorMin: {x: 0.55, y: 0}
+  panelAnchorMax: {x: 1, y: 1}
+  trainColumnRightEdge: 0.5
+  panelBackground: {fileID: 0}
+  backgroundAlpha: 0.92
+  startClosed: 1
+  autoMergeMinorUpgrades: 1
+  minorUpgradesPanel: {fileID: 0}
 --- !u!114 &1571608379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40191,11 +40123,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!212 &1616324861
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -44771,11 +44701,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &1781155160
 GameObject:
   m_ObjectHideFlags: 0
@@ -47018,11 +46946,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!212 &1881334291
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -47931,11 +47857,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &1906431634
 GameObject:
   m_ObjectHideFlags: 0
@@ -49460,11 +49384,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &1957444656
 GameObject:
   m_ObjectHideFlags: 0
@@ -50120,11 +50042,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmountOfParallax: 0.5
   trainMover: {fileID: 1434170768}
-  transportSwitcher: {fileID: 0}
   moveOnlyWhileTravelling: 1
   idleSpeedMultiplier: 0
-  travelSpeedMultiplier: 60
-  hyperloopSpeedMultiplier: 300
+  speedKmhToWorldUnitsPerSecond: 3
 --- !u!1 &1980191459
 GameObject:
   m_ObjectHideFlags: 0
@@ -54085,6 +54005,76 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143518948}
   m_CullTransparentMesh: 1
+--- !u!4 &1243684288730726514 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+  m_PrefabInstance: {fileID: 5367674951727380314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5367674951727380314
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 363792210}
+    m_Modifications:
+    - target: {fileID: 731310839645096550, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: chunkWidth
+      value: 2266.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -42.07729
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 45.636982
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 161
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8398246469638006210, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_Name
+      value: hillschunk2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8398246469638006210, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
