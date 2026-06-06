@@ -71,7 +71,7 @@ public class ChunkManager : MonoBehaviour
     chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 45.63698f, nextChunkLocalZ);
     
     // Hide only the FIRST chunk if it's HillsChunk2
-    if (chunkCount == 0 && chunkToSpawn.name.Contains("HillsChunk2"))
+    if (chunkCount == 0 && chunkToSpawn.name.Contains("hillschunk2"))
     {
         chunkToSpawn.gameObject.SetActive(false);
     }

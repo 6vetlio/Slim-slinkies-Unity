@@ -975,6 +975,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3478249295695337132}
+  - component: {fileID: 233062208838668467}
   m_Layer: 0
   m_Name: hillschunk1
   m_TagString: Untagged
@@ -1008,6 +1009,20 @@ Transform:
   - {fileID: 5810434225849862781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &233062208838668467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3176751451571374538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkWidth: 2400.06
+  chunkType: 0
 --- !u!1 &4209681513311753353
 GameObject:
   m_ObjectHideFlags: 0

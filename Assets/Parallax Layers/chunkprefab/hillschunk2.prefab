@@ -2628,5 +2628,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkWidth: 2500
+  chunkWidth: 2400.06
   chunkType: 0

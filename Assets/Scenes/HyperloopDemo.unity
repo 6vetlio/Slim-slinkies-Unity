@@ -15863,11 +15863,11 @@ MonoBehaviour:
   trainTransform: {fileID: 1284892873}
   landscapeChunkPrefabs:
   - {fileID: 1383905134}
-  - {fileID: 0}
+  - {fileID: 1243684288730726515}
   stationChunkPrefab: {fileID: 0}
   worldContainer: {fileID: 363792210}
-  spawnDistance: 2500
-  despawnDistance: 2500
+  spawnDistance: 2399
+  despawnDistance: 2399
   stationInterval: 5
 --- !u!4 &613690289
 Transform:
@@ -15878,7 +15878,7 @@ Transform:
   m_GameObject: {fileID: 613690287}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1133.242, y: 17.957203, z: 9.079275}
+  m_LocalPosition: {x: 0, y: 17.957203, z: 9.079275}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34228,6 +34228,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 363792210}
     m_Modifications:
+    - target: {fileID: 233062208838668467, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+      propertyPath: chunkWidth
+      value: 2399
+      objectReference: {fileID: 0}
     - target: {fileID: 1338887384372658721, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.5
@@ -34254,7 +34258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3478249295695337132, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -42.077293
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3478249295695337132, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
       propertyPath: m_LocalPosition.y
@@ -34295,35 +34299,24 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3176751451571374538, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383905134}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
 --- !u!4 &1383905132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3478249295695337132, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
   m_PrefabInstance: {fileID: 1383905131}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1383905133 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3176751451571374538, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
+--- !u!114 &1383905134 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 233062208838668467, guid: 0731e665330d7bd49bfc0952fc9d42fe, type: 3}
   m_PrefabInstance: {fileID: 1383905131}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1383905134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383905133}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chunkWidth: 2266.48
-  chunkType: 0
 --- !u!1 &1385273034
 GameObject:
   m_ObjectHideFlags: 0
@@ -54010,6 +54003,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
   m_PrefabInstance: {fileID: 5367674951727380314}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1243684288730726515 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 731310839645096550, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
+  m_PrefabInstance: {fileID: 5367674951727380314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ba58a27861bb424b824d6480edbf41d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5367674951727380314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54020,11 +54024,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 731310839645096550, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
       propertyPath: chunkWidth
-      value: 2266.48
+      value: 2399
       objectReference: {fileID: 0}
     - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -42.07729
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3662836440766603633, guid: acd21af83b109354fbb2edde4ef120ac, type: 3}
       propertyPath: m_LocalPosition.y
