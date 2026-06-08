@@ -6,7 +6,6 @@ public class QuickToggle : MonoBehaviour
 
 public void TogglePanel()
 {
-    Debug.Log("Button clicked!");
 
     if (targetPanel == null) return;
 
