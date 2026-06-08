@@ -50,10 +50,23 @@ public class TrainUpgradesMapController : MonoBehaviour
     [Tooltip("Optional explicit reference. Leave null to FindFirstObjectByType at runtime.")]
     [SerializeField] private MinorUpgradesPanelController minorUpgradesPanel;
 
+    [Header("Header")]
+    [Tooltip("Optional. The 'TRAIN STAGE X/5' label. Auto-found by the child named 'TierHeader' if left null.")]
+    [SerializeField] private TMP_Text tierHeaderLabel;
+
     private readonly List<TrainUpgradeButton> spawnedButtons = new List<TrainUpgradeButton>();
     private bool subscribed;
 
     private bool startClosedApplied;
+
+    private void ResolveHeader()
+    {
+        if (tierHeaderLabel == null)
+        {
+            Transform h = transform.Find("TierHeader");
+            if (h != null) tierHeaderLabel = h.GetComponent<TMP_Text>();
+        }
+    }
 
     private void Awake()
     {
@@ -79,6 +92,7 @@ public class TrainUpgradesMapController : MonoBehaviour
         }
         BringSelfToTop();
         TryMergeMinorUpgradesPanel();
+        ResolveHeader();
         if (forceLayoutOnEnable)
         {
             ApplyColumnSplit();
@@ -132,8 +146,11 @@ public class TrainUpgradesMapController : MonoBehaviour
         RectTransform panelRect = transform as RectTransform;
         if (panelRect != null)
         {
-            panelRect.anchorMin = panelAnchorMin;
-            panelRect.anchorMax = panelAnchorMax;
+            // Big, near-fullscreen and centred — this is its OWN page (not docked beside
+            // the map) and must be comfortable to tap on a phone. (The old right-half
+            // anchors are ignored on purpose.)
+            panelRect.anchorMin = new Vector2(0.04f, 0.05f);
+            panelRect.anchorMax = new Vector2(0.96f, 0.95f);
             panelRect.offsetMin = Vector2.zero;
             panelRect.offsetMax = Vector2.zero;
             panelRect.pivot = new Vector2(0.5f, 0.5f);
@@ -153,15 +170,45 @@ public class TrainUpgradesMapController : MonoBehaviour
 
     private void ApplyColumnSplit()
     {
-        // Train upgrades occupy the left column of the panel, minor upgrades the
-        // right column. Without this, both controllers stretch full-panel and
-        // their children stack on top of each other.
+        // A LayoutGroup on the panel ROOT force-positions its children every frame,
+        // which OVERRIDES the column anchors set below — the train-tier column and the
+        // minor-upgrade column then collapse on top of each other (the overlapping
+        // "REI / NEO / ARRIVA / OWNED" garble). The two-column split is done by explicit
+        // anchors, so the root must NOT also run an auto-layout. Disable it if present.
+        var rootLayout = GetComponent<UnityEngine.UI.LayoutGroup>();
+        if (rootLayout != null)
+        {
+            rootLayout.enabled = false;
+        }
+
+        // Reserve the top strip of the panel for the header (TRAIN STAGE X/5).
+        const float headerHeight = 64f;
+
+        // Header: full-width strip pinned to the top of the panel.
+        if (tierHeaderLabel != null)
+        {
+            RectTransform hr = tierHeaderLabel.rectTransform;
+            hr.anchorMin = new Vector2(0f, 1f);
+            hr.anchorMax = new Vector2(1f, 1f);
+            hr.pivot = new Vector2(0.5f, 1f);
+            hr.offsetMin = new Vector2(16f, -headerHeight);
+            hr.offsetMax = new Vector2(-16f, -8f);
+            tierHeaderLabel.alignment = TextAlignmentOptions.Center;
+            tierHeaderLabel.textWrappingMode = TextWrappingModes.NoWrap;
+            tierHeaderLabel.enableAutoSizing = true;
+            tierHeaderLabel.fontSizeMin = 16f;
+            tierHeaderLabel.fontSizeMax = 40f;
+        }
+
+        // Train upgrades occupy the left column (below the header), minor upgrades the
+        // right column. Without this, both controllers stretch full-panel and their
+        // children stack on top of each other.
         if (buttonContainer != null)
         {
             buttonContainer.anchorMin = new Vector2(0f, 0f);
             buttonContainer.anchorMax = new Vector2(trainColumnRightEdge, 1f);
-            buttonContainer.offsetMin = new Vector2(8f, 8f);
-            buttonContainer.offsetMax = new Vector2(-4f, -8f);
+            buttonContainer.offsetMin = new Vector2(12f, 12f);
+            buttonContainer.offsetMax = new Vector2(-6f, -(headerHeight + 6f));
             buttonContainer.pivot = new Vector2(0.5f, 0.5f);
         }
 
@@ -172,8 +219,8 @@ public class TrainUpgradesMapController : MonoBehaviour
             {
                 minorRect.anchorMin = new Vector2(trainColumnRightEdge, 0f);
                 minorRect.anchorMax = new Vector2(1f, 1f);
-                minorRect.offsetMin = new Vector2(4f, 8f);
-                minorRect.offsetMax = new Vector2(-8f, -8f);
+                minorRect.offsetMin = new Vector2(6f, 12f);
+                minorRect.offsetMax = new Vector2(-12f, -(headerHeight + 6f));
                 minorRect.pivot = new Vector2(0.5f, 0.5f);
             }
         }
@@ -243,12 +290,16 @@ public class TrainUpgradesMapController : MonoBehaviour
         }
         spawnedButtons.Clear();
 
+        // Make the container stack buttons cleanly at full column width.
+        UpgradeUiStyle.ConfigureColumn(buttonContainer);
+
         // Always show every tier. Owned ones (including tier 0 at start) render as
         // "Owned"; the next one is the buy CTA; further ones are 🔒 Locked.
         int count = GameManager.Instance.TrainTierCount;
         for (int i = 0; i < count; i++)
         {
             GameObject go = Instantiate(buttonPrefab, buttonContainer);
+            UpgradeUiStyle.StyleButton(go); // big touch height + no-wrap label
             TrainUpgradeButton wrapper = go.GetComponent<TrainUpgradeButton>();
             if (wrapper == null)
             {
@@ -261,12 +312,25 @@ public class TrainUpgradesMapController : MonoBehaviour
 
     private void RefreshAll()
     {
+        // Keep the column layout in sync (grid cell width tracks real container width).
+        UpgradeUiStyle.ConfigureColumn(buttonContainer);
+
         for (int i = 0; i < spawnedButtons.Count; i++)
         {
             if (spawnedButtons[i] != null)
             {
                 spawnedButtons[i].Refresh();
             }
+        }
+
+        if (tierHeaderLabel != null && GameManager.Instance != null)
+        {
+            int tier = GameManager.Instance.CurrentTrainTier;
+            int total = GameManager.Instance.TrainTierCount;
+            TrainTierDefinition cur = GameManager.Instance.CurrentTrainTierDef;
+            string name = cur != null ? cur.displayName : "";
+            tierHeaderLabel.text = $"TRAIN STAGE {tier + 1}/{total}"
+                                   + (string.IsNullOrEmpty(name) ? "" : " — " + name);
         }
     }
 }
@@ -375,10 +439,11 @@ public class TrainUpgradeButton : MonoBehaviour
             priceLabel.text = priceText;
         }
 
-        if (iconImage != null && def.icon != null)
+        // Hide the icon slot when there's no sprite, so it isn't a white box over the label.
+        if (iconImage != null)
         {
-            iconImage.sprite = def.icon;
-            iconImage.enabled = true;
+            iconImage.enabled = def.icon != null;
+            if (def.icon != null) iconImage.sprite = def.icon;
         }
 
         if (button != null)

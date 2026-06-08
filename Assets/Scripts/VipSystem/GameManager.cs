@@ -234,6 +234,24 @@ public class GameManager : MonoBehaviour
         MoneyChanged?.Invoke();
         return true;
     }
+
+    // Dev shortcut: jump to any tier with no cost / order checks, but fire the same events
+    // as a real purchase so visuals, speedometer, scroll-multiplier, and the upgrade panel
+    // all update consistently. Wired to DevTrainSwitcher (number keys 1..N).
+    public void DevSetTrainTier(int index)
+    {
+        if (trainTiers == null || trainTiers.Count == 0) return;
+        index = Mathf.Clamp(index, 0, trainTiers.Count - 1);
+        TrainTierDefinition def = trainTiers[index];
+        if (def == null) return;
+        currentTrainTier = index;
+        EnsureTierPurchasedArray(currentTrainTier);
+        SetTrainTierEconomy(def.passengerBonus);
+        Debug.Log("[DEV] Train tier set: " + def.displayName + " | tier=" + index + " | secondsPerChunk=" + def.secondsPerChunk);
+        TrainTierChanged?.Invoke(currentTrainTier);
+        MoneyChanged?.Invoke();
+    }
+
     public float UpgradeCost => upgradeCost;
     public bool HasUpgraded { get; private set; }
     public bool CanBuyUpgrade => !HasUpgraded && Money >= upgradeCost && AllMinorUpgradesPurchasedForCurrentTier;

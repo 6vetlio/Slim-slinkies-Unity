@@ -1752,7 +1752,13 @@ MonoBehaviour:
   worldContainer: {fileID: 1061336291}
   spawnDistance: 300
   despawnDistance: 300
-  stationInterval: 5
+  chunksPerLeg: 3
+  referenceChunkWidth: 640
+  autoAlignStationToTrain: 1
+  stationAlignNudge: 360
+  startPhaseX: 0
+  spawnLocalY: 0
+  spawnLocalZ: 0
 --- !u!1 &389643493
 GameObject:
   m_ObjectHideFlags: 0
@@ -2091,6 +2097,7 @@ MonoBehaviour:
   worldContainer: {fileID: 1061336291}
   trainMover: {fileID: 1434170768}
   routeStrip: {fileID: 0}
+  chunkManager: {fileID: 0}
 --- !u!1001 &548342122
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2768,6 +2775,7 @@ MonoBehaviour:
   panelToClose: {fileID: 665788796}
   includeInactive: 1
   ignoreButtons: []
+  reopenGuardSeconds: 0.2
 --- !u!1 &680106246
 GameObject:
   m_ObjectHideFlags: 0
@@ -5322,6 +5330,7 @@ MonoBehaviour:
   startClosed: 1
   autoMergeMinorUpgrades: 1
   minorUpgradesPanel: {fileID: 0}
+  tierHeaderLabel: {fileID: 0}
 --- !u!114 &1571608379
 MonoBehaviour:
   m_ObjectHideFlags: 0

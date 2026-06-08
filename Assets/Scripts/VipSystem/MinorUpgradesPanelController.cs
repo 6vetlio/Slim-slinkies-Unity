@@ -102,10 +102,14 @@ public class MinorUpgradesPanelController : MonoBehaviour
         }
         spawnedButtons.Clear();
 
+        // Make the container stack buttons cleanly at full column width.
+        UpgradeUiStyle.ConfigureColumn(buttonContainer);
+
         int count = GameManager.Instance.MinorUpgradeCount;
         for (int i = 0; i < count; i++)
         {
             GameObject go = Instantiate(buttonPrefab, buttonContainer);
+            UpgradeUiStyle.StyleButton(go); // big touch height + no-wrap label
             MinorUpgradeButton wrapper = go.GetComponent<MinorUpgradeButton>();
             if (wrapper == null)
             {
@@ -118,6 +122,10 @@ public class MinorUpgradesPanelController : MonoBehaviour
 
     private void RefreshAll()
     {
+        // Re-apply the column config so a GridLayoutGroup's cell width tracks the real
+        // container width once the layout has settled (it can be stale on first build).
+        UpgradeUiStyle.ConfigureColumn(buttonContainer);
+
         for (int i = 0; i < spawnedButtons.Count; i++)
         {
             if (spawnedButtons[i] != null)
@@ -192,32 +200,32 @@ public class MinorUpgradeButton : MonoBehaviour
         bool unlocked = GameManager.Instance.IsMinorUpgradeUnlocked(upgradeIndex);
         bool canBuy = GameManager.Instance.CanBuyMinorUpgrade(upgradeIndex);
 
+        // Build the cost/status fragment.
+        string costText = purchased
+            ? "Owned  (+EUR " + def.passiveIncomeBonusPerSecond + "/s)"
+            : (!unlocked ? "Locked"
+                         : "EUR " + def.cost + "  (+" + def.passiveIncomeBonusPerSecond + "/s)");
+        string prefix = purchased ? "" : (unlocked ? "" : "🔒 ");
+
         if (nameLabel != null)
         {
-            string prefix = purchased ? "" : (unlocked ? "" : "🔒 ");
-            string suffix = purchased ? " (Owned)" : "";
-            nameLabel.text = prefix + def.displayName + suffix;
+            // Button.prefab only carries ONE label, so fold name + cost onto it when
+            // there's no dedicated cost label; otherwise keep them split.
+            nameLabel.text = costLabel != null
+                ? prefix + def.displayName
+                : prefix + def.displayName + " — " + costText;
         }
 
         if (costLabel != null)
         {
-            if (purchased)
-            {
-                costLabel.text = "+EUR " + def.passiveIncomeBonusPerSecond + "/s";
-            }
-            else if (!unlocked)
-            {
-                costLabel.text = "Locked";
-            }
-            else
-            {
-                costLabel.text = "EUR " + def.cost + "  (+" + def.passiveIncomeBonusPerSecond + "/s)";
-            }
+            costLabel.text = costText;
         }
 
-        if (iconImage != null && def.icon != null)
+        // Hide the icon slot when there's no sprite, so it isn't a white box over the label.
+        if (iconImage != null)
         {
-            iconImage.sprite = def.icon;
+            iconImage.enabled = def.icon != null;
+            if (def.icon != null) iconImage.sprite = def.icon;
         }
 
         if (button != null)

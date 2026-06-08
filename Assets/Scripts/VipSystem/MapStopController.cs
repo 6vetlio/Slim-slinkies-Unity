@@ -185,9 +185,12 @@ public class MapStopController : MonoBehaviour
             }
         }
 
+        // The train-upgrade page is now its OWN panel with its OWN button (opened via
+        // UpgradePanelButton), NOT docked to the map. Only one panel is open at a time, so
+        // opening the map force-closes the upgrade page; the map never re-opens it.
         if (trainUpgradesPanel != null)
         {
-            trainUpgradesPanel.SetActive(visible);
+            trainUpgradesPanel.SetActive(false);
         }
     }
 

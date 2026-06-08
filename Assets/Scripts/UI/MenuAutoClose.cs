@@ -20,6 +20,17 @@ public class MenuAutoClose : MonoBehaviour
     [Tooltip("Optional: buttons listed here are ignored (won't close the menu).")]
     [SerializeField] private Button[] ignoreButtons;
 
+    [Tooltip("Ignore a close request within this many seconds of the menu opening, so the same click/tap that opened it can't immediately close it again (the classic 'need to double-click to open' bug).")]
+    [SerializeField] private float reopenGuardSeconds = 0.2f;
+
+    private float shownTime = -999f;
+
+    private void OnEnable()
+    {
+        // Stamp when the menu became visible so CloseMenu can ignore the opening click.
+        shownTime = Time.unscaledTime;
+    }
+
     private void Awake()
     {
         if (panelToClose == null)
@@ -57,6 +68,12 @@ public class MenuAutoClose : MonoBehaviour
 
     private void CloseMenu()
     {
+        // Don't let the very click/tap that opened the menu also close it.
+        if (Time.unscaledTime - shownTime < reopenGuardSeconds)
+        {
+            return;
+        }
+
         if (panelToClose != null)
         {
             panelToClose.SetActive(false);
