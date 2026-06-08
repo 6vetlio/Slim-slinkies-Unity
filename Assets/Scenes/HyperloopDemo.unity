@@ -4976,18 +4976,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trainVisuals:
-  - {fileID: 0}
+  - {fileID: 1346102045}
+  - {fileID: 778690565}
   - {fileID: 119381262}
   - {fileID: 453095707}
   - {fileID: 1191387978}
   transportSwitcher: {fileID: 1434170770}
-  trainMover: {fileID: 1434170768}
-  travelDurations:
-  - 18
-  - 12
-  - 6
-  - 3
-  passengerBonus: 000000000f0000002800000050000000
 --- !u!114 &1434170768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5048,7 +5042,7 @@ MonoBehaviour:
   - displayName: Arriva
     icon: {fileID: 0}
     cost: 0
-    secondsPerChunk: 2.5
+    secondsPerChunk: 3
     travelDuration: 25
     passengerBonus: 0
     incomeMultiplier: 1
@@ -5059,7 +5053,7 @@ MonoBehaviour:
   - displayName: Bullet Train
     icon: {fileID: 0}
     cost: 2000
-    secondsPerChunk: 2.5
+    secondsPerChunk: 2
     travelDuration: 12
     passengerBonus: 40
     incomeMultiplier: 1.5
@@ -5070,13 +5064,35 @@ MonoBehaviour:
   - displayName: Hyperloop
     icon: {fileID: 0}
     cost: 8000
-    secondsPerChunk: 2.5
+    secondsPerChunk: 1.3
     travelDuration: 5
     passengerBonus: 80
     incomeMultiplier: 2.5
     visualPrefab: {fileID: 0}
     topSpeedKmh: 700
     subtitle: Vacuum Tube
+    minorUpgrades: []
+  - displayName: Maglev
+    icon: {fileID: 0}
+    cost: 20000
+    secondsPerChunk: 0.85
+    travelDuration: 3
+    passengerBonus: 120
+    incomeMultiplier: 3.5
+    visualPrefab: {fileID: 0}
+    topSpeedKmh: 1100
+    subtitle: Magnetic Levitation
+    minorUpgrades: []
+  - displayName: Quantum Loop
+    icon: {fileID: 0}
+    cost: 50000
+    secondsPerChunk: 0.5
+    travelDuration: 2
+    passengerBonus: 200
+    incomeMultiplier: 5
+    visualPrefab: {fileID: 0}
+    topSpeedKmh: 2000
+    subtitle: Near-Light Speed
     minorUpgrades: []
   currentTrainTier: 0
   defaultTravelDuration: 25
