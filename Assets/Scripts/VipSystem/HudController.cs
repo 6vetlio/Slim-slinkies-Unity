@@ -9,7 +9,8 @@ public class HudController : MonoBehaviour
     [SerializeField] private TMP_Text moneyText;
     [SerializeField] private TMP_Text passengersText;
     [SerializeField] private TMP_Text incomeText;
-    [SerializeField] private TMP_Text onboardVipText;
+    [SerializeField] private TMP_Text onboardVipCountText;
+    [SerializeField] private TMP_Text onboardVipNamesText;
 
     [Header("Money Popup")]
     [SerializeField] private TMP_Text moneyPopupPrefab;
@@ -30,7 +31,8 @@ public class HudController : MonoBehaviour
         TMP_Text newMoneyText,
         TMP_Text newPassengersText,
         TMP_Text newIncomeText,
-        TMP_Text newOnboardVipText,
+        TMP_Text newOnboardVipCountText,
+        TMP_Text newOnboardVipNamesText,
         TMP_Text newMoneyPopupPrefab,
         Transform newMoneyPopupParent)
     {
@@ -46,9 +48,13 @@ public class HudController : MonoBehaviour
         {
             incomeText = newIncomeText;
         }
-        if (onboardVipText == null)
+        if (onboardVipCountText == null)
         {
-            onboardVipText = newOnboardVipText;
+            onboardVipCountText = newOnboardVipCountText;
+        }
+        if (onboardVipNamesText == null)
+        {
+            onboardVipNamesText = newOnboardVipNamesText;
         }
         if (moneyPopupPrefab == null)
         {
@@ -104,7 +110,7 @@ public class HudController : MonoBehaviour
 
         if (moneyText != null)
         {
-            moneyText.text = "Money: EUR " + GameManager.Instance.Money.ToString("F0");
+            moneyText.text = "EUR " + GameManager.Instance.Money.ToString("F0");
         }
 
         if (passengersText != null)
@@ -121,36 +127,56 @@ public class HudController : MonoBehaviour
     }
 
     private void RefreshOnboardVipTimer()
+{
+    if (GameManager.Instance == null)
     {
-        if (onboardVipText == null || GameManager.Instance == null)
-        {
-            return;
-        }
-
-        var onboard = GameManager.Instance.OnboardVips;
-        int max = GameManager.Instance.MaxOnboardVips;
-
-        if (onboard.Count == 0)
-        {
-            onboardVipText.text = "Onboard (0/" + max + "): empty";
-            return;
-        }
-
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-        sb.Append("Onboard (").Append(onboard.Count).Append('/').Append(max).Append("):\n");
-        for (int i = 0; i < onboard.Count; i++)
-        {
-            VipPassenger vip = onboard[i];
-            sb.Append("  ").Append(vip.PassengerName)
-              .Append(" → ").Append(vip.DestinationStationName)
-              .Append(" (").Append(Mathf.CeilToInt(vip.DeliveryTimeRemaining)).Append("s)");
-            if (i < onboard.Count - 1)
-            {
-                sb.Append('\n');
-            }
-        }
-        onboardVipText.text = sb.ToString();
+        return;
     }
+
+    var onboard = GameManager.Instance.OnboardVips;
+    int max = GameManager.Instance.MaxOnboardVips;
+
+    // Count text
+    if (onboardVipCountText != null)
+    {
+        onboardVipCountText.text = $"Onboard ({onboard.Count}/{max})";
+    }
+
+    // Names text
+    if (onboardVipNamesText == null)
+    {
+        return;
+    }
+
+    if (onboard.Count == 0)
+    {
+        onboardVipNamesText.text = "Empty";
+        return;
+    }
+
+    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+    for (int i = 0; i < onboard.Count; i++)
+    {
+        VipPassenger vip = onboard[i];
+
+        sb.Append(vip.PassengerName);
+
+        // Optional: keep destination + timer info
+        sb.Append(" → ")
+          .Append(vip.DestinationStationName)
+          .Append(" (")
+          .Append(Mathf.CeilToInt(vip.DeliveryTimeRemaining))
+          .Append("s)");
+
+        if (i < onboard.Count - 1)
+        {
+            sb.Append('\n');
+        }
+    }
+
+    onboardVipNamesText.text = sb.ToString();
+}
 
     private void HandleVipRewarded(VipPassenger vip, int amount)
     {
