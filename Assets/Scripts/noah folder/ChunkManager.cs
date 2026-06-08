@@ -15,16 +15,37 @@ public class ChunkManager : MonoBehaviour
     private float nextChunkLocalX = 0f; // Local position relative to worldContainer
     private int chunkCount = 0;
     
+    // True only when this legacy runtime-spawner is actually configured. When the
+    // worldContainer ref or the landscape prefab list is missing, the component
+    // no-ops instead of throwing an UnassignedReferenceException every frame.
+    // (The station world is now driven by WorldRouteStrip + TrainMovement; this
+    // spawner is retired and usually disabled on its scene object.)
+    private bool IsConfigured =>
+        worldContainer != null
+        && trainTransform != null
+        && landscapeChunkPrefabs != null
+        && landscapeChunkPrefabs.Length > 0;
+
     private void Start()
     {
+        if (!IsConfigured)
+        {
+            Debug.LogWarning("[ChunkManager] Disabled — no worldContainer/landscape prefabs assigned. " +
+                             "The station world is driven by WorldRouteStrip + TrainMovement now.");
+            enabled = false;
+            return;
+        }
+
         for (int i = 0; i < 3; i++)
         {
             SpawnNextChunk();
         }
     }
-    
+
     private void Update()
     {
+        if (!IsConfigured) return;
+
         // Distance between next spawn point and train (both in world space)
         float nextChunkWorldX = nextChunkLocalX + worldContainer.position.x;
         float distanceToNextChunk = nextChunkWorldX - trainTransform.position.x;

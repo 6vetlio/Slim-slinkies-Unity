@@ -79,14 +79,14 @@ public class HyperloopDemoBootstrap : MonoBehaviour
     private void EnsureCoreObjects()
     {
         GameObject gameManagerObject = GameObject.Find("GameManager");
-        if (gameManagerObject == null)
-        {
-            gameManagerObject = new GameObject("GameManager");
-        }
 
-        if (gameManagerObject.GetComponent<GameManager>() == null)
+        // GameManager is authored in the scene. We do NOT spawn one at runtime
+        // anymore (per the "no runtime-spawned objects" rule) — instead we warn so
+        // a missing scene reference is caught loudly rather than papered over.
+        if (gameManagerObject == null || gameManagerObject.GetComponent<GameManager>() == null)
         {
-            gameManagerObject.AddComponent<GameManager>();
+            Debug.LogError("[HyperloopDemoBootstrap] No scene GameManager found. " +
+                           "Add a GameManager object to the scene — runtime spawning is disabled.");
         }
     }
 

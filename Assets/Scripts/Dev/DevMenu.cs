@@ -25,6 +25,9 @@ public class DevMenu : MonoBehaviour
 
     private static MethodInfo addMoneyMethod;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    // Editor / dev builds only — production player builds spawn nothing, honouring
+    // the "no runtime-spawned objects" rule. This IMGUI cheat panel is a dev tool.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
     {
@@ -33,6 +36,7 @@ public class DevMenu : MonoBehaviour
         DontDestroyOnLoad(go);
         go.AddComponent<DevMenu>();
     }
+#endif
 
     // Window-level guard so a sustained 3-finger touch doesn't toggle every frame.
     private bool threeFingerLatch;
