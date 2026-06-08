@@ -241,7 +241,10 @@ public class TrainMover : MonoBehaviour
         travelStartPosition = transform.position;
         targetPosition = transform.position; // train stays put; field kept for legacy callers
         travelElapsed = 0f;
-        activeTravelDuration = Mathf.Max(0.85f, chunkCount * secondsPerChunk);
+        // Floor kept low (0.30) so the fastest tiers stay DISTINCT. The previous 0.85
+        // floor made Maglev (0.73s/chunk) and Quantum Loop (0.40s/chunk) clamp to the
+        // same duration on single-chunk legs, so they felt identical.
+        activeTravelDuration = Mathf.Max(0.30f, chunkCount * secondsPerChunk);
         lastProgressLog = 0f;
 
         // Hand off to the world-scroller. Preferred path: slide worldcontainer so
