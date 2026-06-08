@@ -54,6 +54,7 @@ MonoBehaviour:
   - {fileID: 0}
   markerPrefab: {fileID: 0}
   markerParent: {fileID: 0}
+  markerPool: []
   vipProfiles: []
   maleFirstNames:
   - Noah
@@ -129,6 +130,8 @@ MonoBehaviour:
   travelingBlockMessage: "You can't change destination while driving \u2014 this
     train goes 70 km/h, not 1100!"
   debugMapLogs: 1
+  gameplayElementsToHide: []
+  trainUpgradesPanel: {fileID: 0}
 --- !u!114 &8807368514912885225
 MonoBehaviour:
   m_ObjectHideFlags: 0

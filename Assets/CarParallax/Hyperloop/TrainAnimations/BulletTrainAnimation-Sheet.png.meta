@@ -1,10 +1,7 @@
 fileFormatVersion: 2
 guid: 22c9f796ce96ad44183b6a93d26ba006
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 2305195105071971633
-    second: BulletTrainAnimation-Sheet_11
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -42,7 +39,7 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -51,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 1
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,32 +93,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -130,19 +101,19 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 363
+        y: 528
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7c56951fcf53c7370800000000000000
-      internalID: 8321585571971032519
+      spriteID: ca483ef5807dc8c41840225aa511cee6
+      internalID: 807524027
       vertices: []
       indices: 
       edges: []
@@ -151,20 +122,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_1
       rect:
         serializedVersion: 2
-        x: 363
-        y: 0
-        width: 363
+        x: 0
+        y: 480
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 40a753268b0185de0800000000000000
-      internalID: -1344306104662394364
+      spriteID: ad1752d6092c0a241833286a4cf61872
+      internalID: 973986075
       vertices: []
       indices: 
       edges: []
@@ -173,20 +144,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_2
       rect:
         serializedVersion: 2
-        x: 726
-        y: 0
-        width: 363
+        x: 0
+        y: 432
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f89cab14a0262c3f0800000000000000
-      internalID: -882034780819240561
+      spriteID: a06581a52d3c6674895ac13dbf3d666a
+      internalID: 1486491155
       vertices: []
       indices: 
       edges: []
@@ -195,20 +166,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_3
       rect:
         serializedVersion: 2
-        x: 1089
-        y: 0
-        width: 363
+        x: 0
+        y: 384
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f6e4a62e911ec8bc0800000000000000
-      internalID: -3779398485981639057
+      spriteID: 4d69a28c39f56eb47a3504f81d23122d
+      internalID: -2143387891
       vertices: []
       indices: 
       edges: []
@@ -217,20 +188,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_4
       rect:
         serializedVersion: 2
-        x: 1452
-        y: 0
-        width: 363
+        x: 0
+        y: 336
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 41aba3cddbe3a28b0800000000000000
-      internalID: -5176255836544386540
+      spriteID: 0170c6707b753ba49a1fd420bfab754d
+      internalID: -391475439
       vertices: []
       indices: 
       edges: []
@@ -239,20 +210,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_5
       rect:
         serializedVersion: 2
-        x: 1815
-        y: 0
-        width: 363
+        x: 0
+        y: 288
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6a1d09ae328a80ec0800000000000000
-      internalID: -3600443029870030426
+      spriteID: 3cf21e53472387f4684bf3cdac95436a
+      internalID: 371612791
       vertices: []
       indices: 
       edges: []
@@ -261,20 +232,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_6
       rect:
         serializedVersion: 2
-        x: 2178
-        y: 0
-        width: 363
+        x: 0
+        y: 240
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7dde404115e12fa30800000000000000
-      internalID: 4247490732140850647
+      spriteID: d2b8bc6f96a68464d8cf50f8d01e9366
+      internalID: -548870332
       vertices: []
       indices: 
       edges: []
@@ -283,20 +254,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_7
       rect:
         serializedVersion: 2
-        x: 2541
-        y: 0
-        width: 363
+        x: 0
+        y: 192
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bfdcbed6e0da3c990800000000000000
-      internalID: -7366854287962681861
+      spriteID: 9c93cd81caac5d3499d32a5497b50ea6
+      internalID: 1267345621
       vertices: []
       indices: 
       edges: []
@@ -305,20 +276,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_8
       rect:
         serializedVersion: 2
-        x: 2904
-        y: 0
-        width: 363
+        x: 0
+        y: 144
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 56482ba6239ff02b0800000000000000
-      internalID: -5615996215373953947
+      spriteID: 021d3e4866830a046ad77cdce7840778
+      internalID: -1247368970
       vertices: []
       indices: 
       edges: []
@@ -327,20 +298,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_9
       rect:
         serializedVersion: 2
-        x: 3267
-        y: 0
-        width: 363
+        x: 0
+        y: 96
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0d6eaaaf25ce8f2c0800000000000000
-      internalID: -4397505194990311728
+      spriteID: 88322f458ec1c13419d508832991d1d2
+      internalID: -1158687409
       vertices: []
       indices: 
       edges: []
@@ -349,20 +320,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_10
       rect:
         serializedVersion: 2
-        x: 3630
-        y: 0
-        width: 363
+        x: 0
+        y: 48
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c4dc7062751e53e80800000000000000
-      internalID: -8199399782141670068
+      spriteID: ee49f5b80c1934d4e8eae5ce61281871
+      internalID: 71809798
       vertices: []
       indices: 
       edges: []
@@ -371,20 +342,20 @@ TextureImporter:
       name: BulletTrainAnimation-Sheet_11
       rect:
         serializedVersion: 2
-        x: 3993
+        x: 0
         y: 0
-        width: 363
+        width: 349
         height: 48
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 13db8cf0cb2bdff10800000000000000
-      internalID: 2305195105071971633
+      spriteID: d85f7c749cd7a0b4a860d8c26015c549
+      internalID: 638794084
       vertices: []
       indices: 
       edges: []
@@ -393,7 +364,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 10f3c5ce9e4ee3d4eaa027d7252dfa6a
     internalID: 0
     vertices: []
     indices: 
@@ -403,18 +374,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BulletTrainAnimation-Sheet_0: 8321585571971032519
-      BulletTrainAnimation-Sheet_1: -1344306104662394364
-      BulletTrainAnimation-Sheet_10: -8199399782141670068
-      BulletTrainAnimation-Sheet_11: 2305195105071971633
-      BulletTrainAnimation-Sheet_2: -882034780819240561
-      BulletTrainAnimation-Sheet_3: -3779398485981639057
-      BulletTrainAnimation-Sheet_4: -5176255836544386540
-      BulletTrainAnimation-Sheet_5: -3600443029870030426
-      BulletTrainAnimation-Sheet_6: 4247490732140850647
-      BulletTrainAnimation-Sheet_7: -7366854287962681861
-      BulletTrainAnimation-Sheet_8: -5615996215373953947
-      BulletTrainAnimation-Sheet_9: -4397505194990311728
+      BulletTrainAnimation-Sheet_0: 807524027
+      BulletTrainAnimation-Sheet_1: 973986075
+      BulletTrainAnimation-Sheet_10: 71809798
+      BulletTrainAnimation-Sheet_11: 638794084
+      BulletTrainAnimation-Sheet_2: 1486491155
+      BulletTrainAnimation-Sheet_3: -2143387891
+      BulletTrainAnimation-Sheet_4: -391475439
+      BulletTrainAnimation-Sheet_5: 371612791
+      BulletTrainAnimation-Sheet_6: -548870332
+      BulletTrainAnimation-Sheet_7: 1267345621
+      BulletTrainAnimation-Sheet_8: -1247368970
+      BulletTrainAnimation-Sheet_9: -1158687409
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
