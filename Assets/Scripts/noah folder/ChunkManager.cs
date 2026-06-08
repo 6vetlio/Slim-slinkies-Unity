@@ -10,7 +10,10 @@ public class ChunkManager : MonoBehaviour
     [SerializeField] private float spawnDistance = 1000f;
     [SerializeField] private float despawnDistance = 200f;
     [SerializeField] private int stationInterval = 5;
-    
+    [Tooltip("Local Y/Z spawned chunks are placed at, in worldContainer space. Must match the hand-placed seed chunks (they sit at 0,0) so spawned chunks line up with the track instead of floating above it.")]
+    [SerializeField] private float spawnLocalY = 0f;
+    [SerializeField] private float spawnLocalZ = 0f;
+
     private List<BackgroundChunk> activeChunks = new List<BackgroundChunk>();
     private float nextChunkLocalX = 0f; // Local position relative to worldContainer
     private int chunkCount = 0;
@@ -88,8 +91,9 @@ public class ChunkManager : MonoBehaviour
     
     chunkToSpawn.transform.SetParent(worldContainer);
     
-    float nextChunkLocalZ = (activeChunks.Count > 0) ? activeChunks[0].transform.localPosition.z : 230.875f;
-    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, 45.63698f, nextChunkLocalZ);
+    // Match the hand-placed seed chunks (they sit at worldContainer-local Y/Z = 0)
+    // so spawned chunks line up with the track instead of riding ~45u too high.
+    chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, spawnLocalY, spawnLocalZ);
     
     // Hide only the FIRST chunk if it's HillsChunk2
     if (chunkCount == 0 && chunkToSpawn.name.Contains("hillschunk2"))
