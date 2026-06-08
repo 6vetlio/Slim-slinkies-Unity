@@ -1,13 +1,23 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Wires a pre-placed "skip travel" dev button to <see cref="TrainMover.SkipToDestination"/>.
+///
+/// The button is now an authored Canvas object (no longer built from scratch at
+/// runtime — that violated the "no runtime-spawned objects" rule). Place a Button
+/// in the scene, assign it to <see cref="devButton"/>, and put this component on it
+/// (or anywhere persistent).
+///
+/// Setup (6vetlio, live in Unity):
+///  - Create a UI Button in the HUD canvas labelled "dev button".
+///  - Assign it to <see cref="devButton"/> and assign/auto-find <see cref="trainMover"/>.
+/// </summary>
 public class DevSkipButtonController : MonoBehaviour
 {
     [SerializeField] private TrainMover trainMover;
-    [SerializeField] private Canvas targetCanvas;
-
-    private Button button;
+    [Tooltip("The pre-placed dev button in the scene. No button is created at runtime.")]
+    [SerializeField] private Button devButton;
 
     private void Start()
     {
@@ -16,53 +26,20 @@ public class DevSkipButtonController : MonoBehaviour
             trainMover = FindFirstObjectByType<TrainMover>();
         }
 
-        if (targetCanvas == null)
+        if (devButton == null)
         {
-            targetCanvas = FindFirstObjectByType<Canvas>();
+            devButton = GetComponent<Button>();
         }
 
-        CreateButton();
-    }
-
-    private void CreateButton()
-    {
-        if (targetCanvas == null)
+        if (devButton != null)
         {
-            return;
+            devButton.onClick.RemoveListener(SkipTravel);
+            devButton.onClick.AddListener(SkipTravel);
         }
-
-        GameObject buttonObject = new GameObject("Dev Button");
-        buttonObject.transform.SetParent(targetCanvas.transform, false);
-
-        RectTransform rectTransform = buttonObject.AddComponent<RectTransform>();
-        rectTransform.anchorMin = new Vector2(0f, 1f);
-        rectTransform.anchorMax = new Vector2(0f, 1f);
-        rectTransform.pivot = new Vector2(0f, 1f);
-        rectTransform.anchoredPosition = new Vector2(18f, -18f);
-        rectTransform.sizeDelta = new Vector2(132f, 40f);
-
-        Image image = buttonObject.AddComponent<Image>();
-        image.color = new Color(0.08f, 0.22f, 0.32f, 0.95f);
-
-        button = buttonObject.AddComponent<Button>();
-        button.targetGraphic = image;
-        button.onClick.AddListener(SkipTravel);
-
-        GameObject labelObject = new GameObject("Label");
-        labelObject.transform.SetParent(buttonObject.transform, false);
-
-        RectTransform labelRectTransform = labelObject.AddComponent<RectTransform>();
-        labelRectTransform.anchorMin = Vector2.zero;
-        labelRectTransform.anchorMax = Vector2.one;
-        labelRectTransform.offsetMin = Vector2.zero;
-        labelRectTransform.offsetMax = Vector2.zero;
-
-        TextMeshProUGUI label = labelObject.AddComponent<TextMeshProUGUI>();
-        label.text = "dev button";
-        label.fontSize = 18f;
-        label.alignment = TextAlignmentOptions.Center;
-        label.color = Color.white;
-        label.raycastTarget = false;
+        else
+        {
+            Debug.LogWarning("[DevSkipButtonController] No devButton assigned — place a Button in the scene and assign it.");
+        }
     }
 
     private void SkipTravel()

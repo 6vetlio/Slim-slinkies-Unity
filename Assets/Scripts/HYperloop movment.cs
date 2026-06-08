@@ -244,14 +244,15 @@ public class TrainMover : MonoBehaviour
         activeTravelDuration = Mathf.Max(0.85f, chunkCount * secondsPerChunk);
         lastProgressLog = 0f;
 
-        // Hand off to Noah's chunk world-scroller: it lerps worldContainer left
-        // by `movementDistance` over activeTravelDuration. Train stays put; the
-        // chunks slide past it.
+        // Hand off to the world-scroller. Preferred path: slide worldcontainer so
+        // the destination station's region card parks centered under the static
+        // train (via WorldRouteStrip). Falls back to the relative `movementDistance`
+        // when the station isn't mapped yet. Train stays put; the world slides.
         float movementDistance = chunkCount * worldUnitsPerChunk;
         TrainMovement chunkMovementSystem = FindFirstObjectByType<TrainMovement>();
         if (chunkMovementSystem != null)
         {
-            chunkMovementSystem.InitializeChunkTravel(movementDistance);
+            chunkMovementSystem.InitializeChunkTravelTo(toId, movementDistance);
         }
 
         if (debugMovementLogs)
