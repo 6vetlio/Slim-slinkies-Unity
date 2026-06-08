@@ -86,6 +86,7 @@ public class TrainUpgradesMapController : MonoBehaviour
 
     private void OnEnable()
     {
+        EnsureDedicatedButtonContainer();
         if (forceLayoutOnEnable)
         {
             ApplyPanelLayout();
@@ -141,19 +142,18 @@ public class TrainUpgradesMapController : MonoBehaviour
 
     private void ApplyPanelLayout()
     {
-        // Anchor the whole upgrades panel to the configured screen region (default:
-        // right half) so it doesn't drown the rest of the HUD.
+        // Anchor the page to MOST of the screen via fractional anchors, NOT a fixed
+        // pixel size. The Canvas Scaler reference is 300×135 (pixel-art), so a fixed
+        // 720×500 sizeDelta was ~2.4 screens wide. Fractional anchors + zero offsets
+        // keep the panel screen-relative at any resolution.
         RectTransform panelRect = transform as RectTransform;
         if (panelRect != null)
         {
-            // Big, near-fullscreen and centred — this is its OWN page (not docked beside
-            // the map) and must be comfortable to tap on a phone. (The old right-half
-            // anchors are ignored on purpose.)
-            panelRect.anchorMin = new Vector2(0.04f, 0.05f);
-            panelRect.anchorMax = new Vector2(0.96f, 0.95f);
+            panelRect.anchorMin = new Vector2(0.06f, 0.08f);
+            panelRect.anchorMax = new Vector2(0.94f, 0.92f);
+            panelRect.pivot = new Vector2(0.5f, 0.5f);
             panelRect.offsetMin = Vector2.zero;
             panelRect.offsetMax = Vector2.zero;
-            panelRect.pivot = new Vector2(0.5f, 0.5f);
         }
 
         if (panelBackground == null)
@@ -182,7 +182,8 @@ public class TrainUpgradesMapController : MonoBehaviour
         }
 
         // Reserve the top strip of the panel for the header (TRAIN STAGE X/5).
-        const float headerHeight = 64f;
+        // Sizes are in the 300×135 reference space — keep them small.
+        const float headerHeight = 14f;
 
         // Header: full-width strip pinned to the top of the panel.
         if (tierHeaderLabel != null)
@@ -191,13 +192,13 @@ public class TrainUpgradesMapController : MonoBehaviour
             hr.anchorMin = new Vector2(0f, 1f);
             hr.anchorMax = new Vector2(1f, 1f);
             hr.pivot = new Vector2(0.5f, 1f);
-            hr.offsetMin = new Vector2(16f, -headerHeight);
-            hr.offsetMax = new Vector2(-16f, -8f);
+            hr.offsetMin = new Vector2(4f, -headerHeight);
+            hr.offsetMax = new Vector2(-4f, -2f);
             tierHeaderLabel.alignment = TextAlignmentOptions.Center;
             tierHeaderLabel.textWrappingMode = TextWrappingModes.NoWrap;
             tierHeaderLabel.enableAutoSizing = true;
-            tierHeaderLabel.fontSizeMin = 16f;
-            tierHeaderLabel.fontSizeMax = 40f;
+            tierHeaderLabel.fontSizeMin = 5f;
+            tierHeaderLabel.fontSizeMax = 9f;
         }
 
         // Train upgrades occupy the left column (below the header), minor upgrades the
@@ -207,8 +208,8 @@ public class TrainUpgradesMapController : MonoBehaviour
         {
             buttonContainer.anchorMin = new Vector2(0f, 0f);
             buttonContainer.anchorMax = new Vector2(trainColumnRightEdge, 1f);
-            buttonContainer.offsetMin = new Vector2(12f, 12f);
-            buttonContainer.offsetMax = new Vector2(-6f, -(headerHeight + 6f));
+            buttonContainer.offsetMin = new Vector2(4f, 4f);
+            buttonContainer.offsetMax = new Vector2(-2f, -(headerHeight + 2f));
             buttonContainer.pivot = new Vector2(0.5f, 0.5f);
         }
 
@@ -219,8 +220,8 @@ public class TrainUpgradesMapController : MonoBehaviour
             {
                 minorRect.anchorMin = new Vector2(trainColumnRightEdge, 0f);
                 minorRect.anchorMax = new Vector2(1f, 1f);
-                minorRect.offsetMin = new Vector2(6f, 12f);
-                minorRect.offsetMax = new Vector2(-12f, -(headerHeight + 6f));
+                minorRect.offsetMin = new Vector2(2f, 4f);
+                minorRect.offsetMax = new Vector2(-4f, -(headerHeight + 2f));
                 minorRect.pivot = new Vector2(0.5f, 0.5f);
             }
         }
@@ -248,12 +249,37 @@ public class TrainUpgradesMapController : MonoBehaviour
         }
     }
 
+    // The scene wires buttonContainer to the panel's OWN RectTransform (the controller,
+    // an Image, a stray Speedometer and this container all share one GameObject). If we
+    // spawn tier buttons there and then anchor "the container" to the left column, we end
+    // up re-anchoring the whole panel to its own left half and the buttons scatter to the
+    // bottom-left. Guarantee a real, dedicated child to hold the tier buttons instead.
+    private void EnsureDedicatedButtonContainer()
+    {
+        RectTransform self = transform as RectTransform;
+        if (buttonContainer == null || buttonContainer == self)
+        {
+            Transform existing = transform.Find("TierColumn");
+            if (existing != null)
+            {
+                buttonContainer = existing as RectTransform;
+                return;
+            }
+            GameObject go = new GameObject("TierColumn", typeof(RectTransform));
+            RectTransform rt = go.GetComponent<RectTransform>();
+            rt.SetParent(transform, false);
+            buttonContainer = rt;
+        }
+    }
+
     private void TrySubscribeAndBuild()
     {
         if (GameManager.Instance == null)
         {
             return;
         }
+
+        EnsureDedicatedButtonContainer();
 
         if (!subscribed)
         {

@@ -17,7 +17,7 @@ public static class UpgradeUiStyle
     /// Make a container lay its spawned buttons out as a clean vertical stack that
     /// fills the column width (so labels never collapse to 1 char wide).
     /// </summary>
-    public static void ConfigureColumn(RectTransform container, float spacing = 10f, int pad = 10, float buttonHeight = 84f)
+    public static void ConfigureColumn(RectTransform container, float spacing = 3f, int pad = 3, float buttonHeight = 16f)
     {
         if (container == null) return;
 
@@ -34,7 +34,7 @@ public static class UpgradeUiStyle
             grid.spacing = new Vector2(0f, spacing);
             grid.padding = new RectOffset(pad, pad, pad, pad);
             float w = container.rect.width - pad * 2f;
-            if (w < 80f) w = 240f; // fallback before the layout has settled; self-corrects on Refresh
+            if (w < 20f) w = 120f; // fallback before the layout has settled; self-corrects on Refresh
             grid.cellSize = new Vector2(w, buttonHeight);
             return;
         }
@@ -55,7 +55,7 @@ public static class UpgradeUiStyle
     /// Style one freshly-instantiated Button.prefab: give it a big touch height and
     /// a single no-wrap, auto-sizing label that fills the button.
     /// </summary>
-    public static void StyleButton(GameObject go, float minHeight = 78f)
+    public static void StyleButton(GameObject go, float minHeight = 15f)
     {
         if (go == null) return;
 
@@ -63,7 +63,7 @@ public static class UpgradeUiStyle
         if (le == null) le = go.AddComponent<LayoutElement>();
         le.minHeight = minHeight;
         le.preferredHeight = minHeight;
-        le.minWidth = 120f;
+        le.minWidth = 40f;
         le.flexibleWidth = 1f;
 
         TMP_Text[] labels = go.GetComponentsInChildren<TMP_Text>(true);
@@ -73,15 +73,15 @@ public static class UpgradeUiStyle
             t.textWrappingMode = TextWrappingModes.NoWrap; // never wrap to 1 char/line
             t.overflowMode = TextOverflowModes.Ellipsis;
             t.enableAutoSizing = true;
-            t.fontSizeMin = 12f;
-            t.fontSizeMax = 30f;
+            t.fontSizeMin = 5f;
+            t.fontSizeMax = 8f;
             t.alignment = TextAlignmentOptions.Center;
 
             RectTransform rt = t.rectTransform;
             rt.anchorMin = new Vector2(0f, 0f);
             rt.anchorMax = new Vector2(1f, 1f);
-            rt.offsetMin = new Vector2(12f, 6f);
-            rt.offsetMax = new Vector2(-12f, -6f);
+            rt.offsetMin = new Vector2(3f, 1f);
+            rt.offsetMax = new Vector2(-3f, -1f);
         }
     }
 }
