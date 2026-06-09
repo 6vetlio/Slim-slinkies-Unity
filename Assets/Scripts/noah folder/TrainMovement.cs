@@ -91,15 +91,36 @@ public class TrainMovement : MonoBehaviour
         Debug.Log($"TrainMovement: (fallback) local chunk scroll for distance {travelDistance}");
     }
 
+    private bool wasTravelling;
+
     private void Update()
     {
-        // Only run while the train is travelling.
-        if (trainMover == null || worldContainer == null ||
-            trainMover.MovementStatus != TrainMovementStatus.Travelling)
+        if (trainMover == null || worldContainer == null)
         {
             return;
         }
 
+        bool travelling = trainMover.MovementStatus == TrainMovementStatus.Travelling;
+
+        if (!travelling)
+        {
+            // Travel just ended. Snap the world to the EXACT end position so the train
+            // always parks dead-on the station. Without this, on the frame the mover flips
+            // to Stationary (its Update may run before ours) we'd skip the final Lerp and
+            // leave the world stopped short — and the faster the train, the fewer frames
+            // the leg took, so the missed last frame was a big fraction of the distance
+            // (the "fast trains run ~1/3 speed and stop before/after the station" bug).
+            if (wasTravelling)
+            {
+                Vector3 end = worldContainer.localPosition;
+                end.x = useStationTarget ? targetLocalX : (chunkLocalStartX - chunkTravelDistance);
+                worldContainer.localPosition = end;
+                wasTravelling = false;
+            }
+            return;
+        }
+
+        wasTravelling = true;
         float travelProgress = trainMover.TravelProgress;
 
         if (useStationTarget)
