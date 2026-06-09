@@ -211,7 +211,8 @@ public class VipMarkerUI : MonoBehaviour
             {
                 nameText.gameObject.SetActive(true);
                 nameText.text = vip.PassengerName;
-                nameText.fontSize = 10f;
+                nameText.fontSize = 7f;
+                nameText.enableAutoSizing = false;
                 nameText.color = Color.white;
                 nameText.alignment = TextAlignmentOptions.Center;
             }
@@ -219,7 +220,10 @@ public class VipMarkerUI : MonoBehaviour
             if (timerText != null)
             {
                 timerText.gameObject.SetActive(true);
-                timerText.fontSize = 14f;
+                // Small, fixed size so the countdown sits tucked under the pin instead of
+                // a giant number floating over the map.
+                timerText.fontSize = 7f;
+                timerText.enableAutoSizing = false;
                 timerText.alignment = TextAlignmentOptions.Center;
             }
         }

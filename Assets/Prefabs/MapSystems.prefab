@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1416176497168474532}
   - component: {fileID: 8807368514912885225}
   - component: {fileID: 7111111111111111111}
+  - component: {fileID: 7222222222222222222}
   m_Layer: 0
   m_Name: MapSystems
   m_TagString: Untagged
@@ -168,3 +169,20 @@ MonoBehaviour:
   colorLocked: {r: 0.2, g: 0.2, b: 0.22, a: 1}
   colorCurrent: {r: 0.15, g: 0.7, b: 0.3, a: 1}
   colorPassed: {r: 0.16, g: 0.22, b: 0.26, a: 1}
+--- !u!114 &7222222222222222222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001622470580252433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d8e2f1a9b67c3d5e8f0a1b2c3d4e5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  font: {fileID: 11400000, guid: 86faffab4914f014898ac9e3d6dc90a4, type: 2}
+  fontSize: 6.5
+  offset: {x: 0, y: -13}
+  lockedColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  openColor: {r: 0.6, g: 1, b: 0.6, a: 1}
