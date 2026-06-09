@@ -83,6 +83,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexZoom.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextSelector_B.cs" />
     <Compile Include="Assets/StarterAssets/Mobile/Scripts/Utilities/MobileDisableAutoSwitchControls.cs" />
+    <Compile Include="Assets/Scripts/VipSystem/VipNotificationDot.cs" />
     <Compile Include="Assets/Scripts/VipSystem/HudController.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/SkewTextExample.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/WarpTextExample.cs" />
@@ -94,8 +95,8 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets/Scripts/noah folder/ChunkManager.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexShakeA.cs" />
-    <Compile Include="Assets/Scripts/AutoScrollCamera.cs" />
     <Compile Include="Assets/Scripts/VipSystem/UpgradeUiStyle.cs" />
+    <Compile Include="Assets/Scripts/AutoScrollCamera.cs" />
     <Compile Include="Assets/Scripts/RouteLineUI.cs" />
     <Compile Include="Assets/Scripts/UI/SpeedometerWidget.cs" />
     <Compile Include="Assets/Scripts/noah folder/BackgroundChunk.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/CameraController.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
     <Compile Include="Assets/Scripts/VipSystem/VipSpawnManager.cs" />
+    <Compile Include="Assets/Scripts/VipSystem/StationPriceLabels.cs" />
     <Compile Include="Assets/Scripts/VipSystem/TrainTierDefinition.cs" />
     <Compile Include="Assets/Scripts/UI/CapacityBar.cs" />
     <Compile Include="Assets/Scripts/noah folder/not used/NoahsParallax.cs" />

@@ -72,28 +72,102 @@ public class ChunkManager : MonoBehaviour
 
         BuildBiomeGroups();
 
+        // Destroy hand-placed seed chunks (grainsbiome, hillsbiome etc.) so the
+        // spawner is the single source of truth. Seed chunks overlap with the
+        // spawn grid, causing visual glitches and confusing chunk positioning.
+        DestroyExistingChunks();
+
         if (autoAlignStationToTrain)
         {
-            // The first station is the (chunksPerLeg+1)-th chunk, at local
-            //   X_station0 = startPhaseX + chunksPerLeg * W.
-            // One leg later the world has scrolled LegScrollDistance = (chunksPerLeg+1)*W,
-            // so that chunk's centre reaches the train when:
-            //   startPhaseX = trainLocalX + LegScrollDistance - chunksPerLeg*W - W/2
-            //               = trainLocalX + W - W/2  (the +1 leg minus the N chunks),
-            // i.e. one extra chunk minus half a chunk to centre the 640-wide station.
-            // trainLocalX is the train's position in the container's own local space.
             float trainLocalX = TrainLocalX();
             float W = Mathf.Max(1f, referenceChunkWidth);
             startPhaseX = trainLocalX + W - (W * 0.5f) + stationAlignNudge;
             Debug.Log($"[ChunkManager] auto-align: trainLocalX={trainLocalX:0.0} startPhaseX={startPhaseX:0.0} leg={LegScrollDistance:0} nudge={stationAlignNudge:0}");
         }
 
-        nextChunkLocalX = startPhaseX;
+        // Pre-fill landscape chunks to the LEFT of startPhaseX so the screen is
+        // fully covered at t=0 (the spawner normally only fills to the right).
+        // We spawn without advancing leg counters, then restore them so the
+        // station cycle and alignment are unaffected.
+        float W2 = Mathf.Max(1f, referenceChunkWidth);
+        float trainX = TrainLocalX();
+        float leftEdge = trainX - Mathf.Max(spawnDistance, W2 * 2f);
 
+        float prefillX = startPhaseX;
+        while (prefillX - W2 >= leftEdge)
+            prefillX -= W2;
+
+        int savedChunkInLeg = chunkInLeg;
+        int savedMemberIndex = memberIndex;
+        int savedLegBiome = legBiomeIndex;
+
+        nextChunkLocalX = prefillX;
+        int prefillCount = 0;
+        while (nextChunkLocalX < startPhaseX)
+        {
+            SpawnLandscapeChunk();
+            prefillCount++;
+        }
+
+        chunkInLeg = savedChunkInLeg;
+        memberIndex = savedMemberIndex;
+        legBiomeIndex = savedLegBiome;
+
+        if (prefillCount > 0)
+            Debug.Log($"[ChunkManager] Pre-filled {prefillCount} chunks left of startPhaseX (from {prefillX:0} to {startPhaseX:0})");
+
+        // Initial right-side fill.
         for (int i = 0; i < 3; i++)
         {
             SpawnNextChunk();
         }
+    }
+
+    /// <summary>Destroy all existing chunk containers (hand-placed seeds) under worldContainer.</summary>
+    private void DestroyExistingChunks()
+    {
+        if (worldContainer == null) return;
+        for (int i = worldContainer.childCount - 1; i >= 0; i--)
+        {
+            Transform child = worldContainer.GetChild(i);
+            // Destroy anything that looks like a seed-chunk container (includes
+            // grainsbiome, hillsbiome, and any loose BackgroundChunk children).
+            if (child != null && child.GetComponent<BackgroundChunk>() != null)
+            {
+                Destroy(child.gameObject);
+            }
+            else if (child != null && child.childCount > 0)
+            {
+                // It's a container like grainsbiome/hillsbiome — destroy it too.
+                bool hasChunks = false;
+                for (int j = 0; j < child.childCount; j++)
+                {
+                    if (child.GetChild(j).GetComponent<BackgroundChunk>() != null)
+                    {
+                        hasChunks = true;
+                        break;
+                    }
+                }
+                if (hasChunks)
+                    Destroy(child.gameObject);
+            }
+        }
+    }
+
+    /// <summary>Spawn a landscape chunk WITHOUT advancing leg/biome counters. Used for pre-fill.</summary>
+    private void SpawnLandscapeChunk()
+    {
+        BackgroundChunk prefab = NextLandscapePrefab();
+        BackgroundChunk chunk = Instantiate(prefab);
+        chunk.chunkType = BackgroundChunk.ChunkType.Landscape;
+
+        chunk.transform.SetParent(worldContainer, false);
+        chunk.transform.localScale = Vector3.one;
+        chunk.transform.localPosition = new Vector3(nextChunkLocalX, spawnLocalY, spawnLocalZ);
+
+        activeChunks.Add(chunk);
+        nextChunkLocalX += chunk.ChunkWidth;
+        chunkCount++;
     }
 
     private void Update()
