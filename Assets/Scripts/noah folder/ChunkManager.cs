@@ -180,7 +180,10 @@ public class ChunkManager : MonoBehaviour
         // station chunks, so spawned chunks tile flush with no gaps.
         chunkToSpawn.transform.SetParent(worldContainer, false);
         chunkToSpawn.transform.localScale = Vector3.one;
-        chunkToSpawn.transform.localPosition = new Vector3(nextChunkLocalX, spawnLocalY, spawnLocalZ);
+        float placeX = nextChunkLocalX;
+        if (chunkToSpawn.chunkType == BackgroundChunk.ChunkType.Station)
+            placeX += 150f;
+        chunkToSpawn.transform.localPosition = new Vector3(placeX, spawnLocalY, spawnLocalZ);
 
         activeChunks.Add(chunkToSpawn);
         nextChunkLocalX += chunkToSpawn.ChunkWidth;
