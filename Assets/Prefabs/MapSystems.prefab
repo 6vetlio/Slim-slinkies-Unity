@@ -100,8 +100,8 @@ MonoBehaviour:
   maxSpawnInterval: 14
   normalTargetVipCount: 2
   chanceToAllowThirdVip: 0.15
-  pickupSeconds: 60
-  deliverySeconds: 90
+  pickupSeconds: 40
+  deliverySeconds: 60
   baseDeliveryReward: 250
   rewardPerStationDistance: 100
   missedPickupPenalty: 100

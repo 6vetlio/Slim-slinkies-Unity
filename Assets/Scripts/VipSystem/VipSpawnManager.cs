@@ -35,8 +35,8 @@ public class VipSpawnManager : MonoBehaviour
     [SerializeField] private float chanceToAllowThirdVip = 0.15f;
 
     [Header("VIP Rules")]
-    [SerializeField] private float pickupSeconds = 60f;
-    [SerializeField] private float deliverySeconds = 90f;
+    [SerializeField] private float pickupSeconds = 40f;
+    [SerializeField] private float deliverySeconds = 60f;
     [SerializeField] private int baseDeliveryReward = 250;
     [SerializeField] private int rewardPerStationDistance = 100;
     [SerializeField] private int missedPickupPenalty = 100;

@@ -54,6 +54,10 @@ public class TrainUpgradesMapController : MonoBehaviour
     [Tooltip("Optional. The 'TRAIN STAGE X/5' label. Auto-found by the child named 'TierHeader' if left null.")]
     [SerializeField] private TMP_Text tierHeaderLabel;
 
+    [Header("Close Button")]
+    [Tooltip("Optional. The X button that closes this panel. Auto-found by the child named 'TrainsButton (1)' if left null. Repositioned to the top-right corner and brought to the front so it's always tappable.")]
+    [SerializeField] private RectTransform closeButton;
+
     private readonly List<TrainUpgradeButton> spawnedButtons = new List<TrainUpgradeButton>();
     private bool subscribed;
 
@@ -68,15 +72,38 @@ public class TrainUpgradesMapController : MonoBehaviour
         }
     }
 
+    private void ResolveCloseButton()
+    {
+        if (closeButton == null)
+        {
+            Transform c = transform.Find("TrainsButton (1)");
+            if (c != null) closeButton = c as RectTransform;
+        }
+    }
+
+    // Pin the close (X) button to the top-right corner and bring it to the FRONT so it
+    // always receives the tap. It used to sit top-left (under the dev menu / EUR readout)
+    // and was the first sibling, so the header and tier columns rendered on top of it and
+    // swallowed the click — the panel "wouldn't close".
+    private void PlaceCloseButton()
+    {
+        if (closeButton == null) return;
+        closeButton.anchorMin = new Vector2(1f, 1f);
+        closeButton.anchorMax = new Vector2(1f, 1f);
+        closeButton.pivot = new Vector2(1f, 1f);
+        closeButton.anchoredPosition = new Vector2(-4f, -4f);
+        closeButton.sizeDelta = new Vector2(18f, 18f);
+        closeButton.SetAsLastSibling(); // render + raycast above the tier/minor columns
+    }
+
     private void Awake()
     {
-        if (startClosed && !startClosedApplied)
-        {
-            startClosedApplied = true;
-            // Defer until end-of-frame so MapStopController's wiring (which also
-            // toggles this panel) doesn't race us on Awake order.
-            gameObject.SetActive(false);
-        }
+        // NOTE: do NOT SetActive(false) here. Awake on a scene object that starts
+        // INACTIVE runs the first time something activates it (i.e. when the player
+        // opens the panel). Deactivating here cancelled that very first open, so the
+        // panel needed a SECOND tap — the "upgrade button needs a double-click" bug.
+        // The panel already starts inactive in the scene, so no Awake hiding is needed.
+        startClosedApplied = true;
     }
 
     private void Start()
@@ -94,12 +121,15 @@ public class TrainUpgradesMapController : MonoBehaviour
         BringSelfToTop();
         TryMergeMinorUpgradesPanel();
         ResolveHeader();
+        ResolveCloseButton();
         if (forceLayoutOnEnable)
         {
             ApplyColumnSplit();
         }
         TrySubscribeAndBuild();
         RefreshAll();
+        // After the columns and the runtime TierColumn exist, pin the X top-right and on top.
+        PlaceCloseButton();
     }
 
     private void BringSelfToTop()

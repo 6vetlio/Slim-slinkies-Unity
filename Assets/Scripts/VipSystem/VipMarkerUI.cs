@@ -122,9 +122,9 @@ public class VipMarkerUI : MonoBehaviour
         if (progressRing != null && vip != null)
         {
             float timeRemaining = vip.IsWaiting ? vip.PickupTimeRemaining : vip.DeliveryTimeRemaining;
-            
-            // Estimate progress based on typical VIP timers (60s for pickup, 90s for delivery)
-            float estimatedTotal = vip.IsWaiting ? 60f : 90f;
+
+            // Use the VIP's real starting duration so the ring is accurate for any timer value.
+            float estimatedTotal = vip.IsWaiting ? vip.PickupSecondsTotal : vip.DeliverySecondsTotal;
             float progress = estimatedTotal > 0 ? Mathf.Clamp01(timeRemaining / estimatedTotal) : 0f;
             
             progressRing.fillAmount = progress;
@@ -156,6 +156,41 @@ public class VipMarkerUI : MonoBehaviour
         }
     }
 
+    // Guarantee a visible name label even if the prefab's "Name" child didn't propagate
+    // to a pre-placed pool instance. Finds the authored child first; only builds one as a
+    // last resort, reusing the timer's font so it always renders.
+    private void EnsureNameLabel()
+    {
+        if (nameText != null) return;
+
+        Transform existing = transform.Find("Name");
+        if (existing != null)
+        {
+            nameText = existing.GetComponent<TMP_Text>();
+            if (nameText != null) return;
+        }
+
+        if (timerText == null) return; // need a font to render with
+
+        GameObject go = new GameObject("Name", typeof(RectTransform));
+        RectTransform rt = go.GetComponent<RectTransform>();
+        rt.SetParent(transform, false);
+        rt.anchorMin = new Vector2(0.5f, 1f);
+        rt.anchorMax = new Vector2(0.5f, 1f);
+        rt.pivot = new Vector2(0.5f, 0f);
+        rt.anchoredPosition = new Vector2(0f, 4f);
+        rt.sizeDelta = new Vector2(72f, 12f);
+
+        TextMeshProUGUI t = go.AddComponent<TextMeshProUGUI>();
+        t.font = timerText.font;
+        t.fontSize = 10f;
+        t.color = Color.white;
+        t.alignment = TextAlignmentOptions.Center;
+        t.textWrappingMode = TextWrappingModes.NoWrap;
+        t.raycastTarget = false;
+        nameText = t;
+    }
+
     public void Bind(VipPassenger passenger, Station origin)
     {
         vip = passenger;
@@ -165,6 +200,8 @@ public class VipMarkerUI : MonoBehaviour
         {
             rectTransform = GetComponent<RectTransform>();
         }
+
+        EnsureNameLabel();
 
         if (useCompactIconMode)
         {

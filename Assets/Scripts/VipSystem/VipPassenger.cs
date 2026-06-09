@@ -22,6 +22,9 @@ public class VipPassenger
     public string DestinationStationName;
     public float PickupTimeRemaining;
     public float DeliveryTimeRemaining;
+    // Starting durations, kept so UI (progress ring) can show true progress for any timer value.
+    public float PickupSecondsTotal;
+    public float DeliverySecondsTotal;
     public int DeliveryReward;
     public int MissedPickupPenalty;
     public int MissedDeliveryPenalty;
@@ -53,6 +56,8 @@ public class VipPassenger
         DestinationStationName = destination.DisplayName;
         PickupTimeRemaining = pickupSeconds;
         DeliveryTimeRemaining = deliverySeconds;
+        PickupSecondsTotal = Mathf.Max(0.01f, pickupSeconds);
+        DeliverySecondsTotal = Mathf.Max(0.01f, deliverySeconds);
         DeliveryReward = deliveryReward;
         MissedPickupPenalty = missedPickupPenalty;
         MissedDeliveryPenalty = missedDeliveryPenalty;

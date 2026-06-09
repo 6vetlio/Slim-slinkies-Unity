@@ -24,11 +24,13 @@ public class MenuAutoClose : MonoBehaviour
     [SerializeField] private float reopenGuardSeconds = 0.2f;
 
     private float shownTime = -999f;
+    private bool closePending;
 
     private void OnEnable()
     {
         // Stamp when the menu became visible so CloseMenu can ignore the opening click.
         shownTime = Time.unscaledTime;
+        closePending = false;
     }
 
     private void Awake()
@@ -74,6 +76,21 @@ public class MenuAutoClose : MonoBehaviour
             return;
         }
 
+        // Defer the actual deactivation to LateUpdate (end of frame). Deactivating the
+        // panel here — inside the button's onClick, mid-pointer-event — leaves the
+        // EventSystem's press/selection state pointing at a now-disabled object, which
+        // swallows the NEXT tap (the "some buttons need a double-click" bug). Closing
+        // after the EventSystem finishes this frame keeps the next click clean.
+        closePending = true;
+    }
+
+    private void LateUpdate()
+    {
+        if (!closePending)
+        {
+            return;
+        }
+        closePending = false;
         if (panelToClose != null)
         {
             panelToClose.SetActive(false);

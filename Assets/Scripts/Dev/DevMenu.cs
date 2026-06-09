@@ -13,7 +13,7 @@ public class DevMenu : MonoBehaviour
 {
     private const KeyCode ToggleKey = KeyCode.F1;
 
-    private bool open = true;
+    private bool open = false;
     private Rect window = new Rect(20, 20, 560, 760);
     private string moneyInput = "1000";
     private string vipInput = "1";
