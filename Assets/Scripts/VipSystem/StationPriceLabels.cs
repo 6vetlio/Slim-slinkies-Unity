@@ -16,8 +16,10 @@ public class StationPriceLabels : MonoBehaviour
     [SerializeField] private float fontSize = 6.5f;
     [Tooltip("Label offset from the station centre, in canvas units. Negative Y sits it below the pin.")]
     [SerializeField] private Vector2 offset = new Vector2(0f, -13f);
-    [SerializeField] private Color lockedColor = new Color(1f, 0.85f, 0.3f, 1f);
-    [SerializeField] private Color openColor = new Color(0.6f, 1f, 0.6f, 1f);
+
+    // Both colors set to white
+    [SerializeField] private Color lockedColor = Color.white;
+    [SerializeField] private Color openColor = Color.white;
 
     private readonly List<Station> stations = new List<Station>();
     private readonly List<TMP_Text> stationLabels = new List<TMP_Text>();
@@ -71,8 +73,10 @@ public class StationPriceLabels : MonoBehaviour
         {
             Station s = found[i];
             if (s == null) continue;
+
             TMP_Text label = GetOrCreateLabel(s);
             if (label == null) continue;
+
             stations.Add(s);
             stationLabels.Add(label);
         }
@@ -91,6 +95,7 @@ public class StationPriceLabels : MonoBehaviour
 
         GameObject go = new GameObject("PriceLabel", typeof(RectTransform));
         RectTransform rt = go.GetComponent<RectTransform>();
+
         rt.SetParent(s.transform, false);
         rt.anchorMin = new Vector2(0.5f, 0.5f);
         rt.anchorMax = new Vector2(0.5f, 0.5f);
@@ -100,12 +105,16 @@ public class StationPriceLabels : MonoBehaviour
         rt.localScale = Vector3.one;
 
         TextMeshProUGUI t = go.AddComponent<TextMeshProUGUI>();
-        if (font != null) t.font = font;
+
+        if (font != null)
+            t.font = font;
+
         t.fontSize = fontSize;
         t.enableAutoSizing = false;
         t.alignment = TextAlignmentOptions.Center;
         t.textWrappingMode = TextWrappingModes.NoWrap;
         t.raycastTarget = false;
+
         return t;
     }
 
@@ -115,17 +124,19 @@ public class StationPriceLabels : MonoBehaviour
         {
             Station s = stations[i];
             TMP_Text t = stationLabels[i];
-            if (s == null || t == null) continue;
+
+            if (s == null || t == null)
+                continue;
 
             if (s.IsUnlocked)
             {
                 t.text = "OPEN";
-                t.color = openColor;
+                t.color = Color.white;
             }
             else
             {
                 t.text = "EUR " + s.UnlockCost.ToString("0");
-                t.color = lockedColor;
+                t.color = Color.white;
             }
         }
     }
