@@ -27,7 +27,7 @@ public class ChunkManager : MonoBehaviour
 
     [Tooltip("Fine offset (world units) added to the auto-aligned strip so the station sits dead-centre " +
              "under the train. Tune live while watching an arrival. Ignored if auto-align is off.")]
-    [SerializeField] private float stationAlignNudge = 0f;
+    [SerializeField] private float stationAlignNudge = 150f;
 
     [Tooltip("Manual strip offset, used only when auto-align is OFF.")]
     [SerializeField] private float startPhaseX = 0f;

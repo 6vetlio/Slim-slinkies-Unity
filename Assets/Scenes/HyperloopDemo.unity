@@ -1755,7 +1755,7 @@ MonoBehaviour:
   chunksPerLeg: 3
   referenceChunkWidth: 640
   autoAlignStationToTrain: 1
-  stationAlignNudge: 0
+  stationAlignNudge: 150
   startPhaseX: 0
   spawnLocalY: 0
   spawnLocalZ: 0
